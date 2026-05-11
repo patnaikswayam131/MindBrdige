@@ -7,6 +7,9 @@ import json
 from datetime import datetime
 import os
 import csv
+from dotenv import load_dotenv
+
+load_dotenv()
 import httpx
 from langgraph.graph import StateGraph, END, START
 from typing_extensions import Annotated, TypedDict
@@ -56,8 +59,8 @@ def get_messages(thread_id):
     conn.close()
     return [{"role": r[0], "content": r[1], "timestamp": r[2]} for r in rows]
 
-GEMINI_API_KEY = "AIzaSyA_AVX4EakMc9hWayiaxqGv3kElJBdXUxs"
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={GEMINI_API_KEY}"
 
 # Load some dataset context for training/better risk identification
 dataset_context = ""
