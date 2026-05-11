@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counselor Dashboard - MindBridge</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (!user || user.role !== 'counselor') {
+            window.location.href = 'student_login.html';
+        }
+    </script>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --primary-50: #eff6ff;
+            --primary-500: #3b82f6;
+            --secondary-50: #f8fafc;
+            --secondary-500: #6366f1;
+            --secondary-600: #4f46e5;
+            --accent: #10b981;
+            --error: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-surface: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #475569;
+            --primary-50: #1e293b;
+            --primary-500: #60a5fa;
+            --secondary-50: #1e293b;
+            --secondary-500: #818cf8;
+            --secondary-600: #6366f1;
+            --accent: #34d399;
+            --error: #f87171;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .card-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
+                        <p class="text-xs text-text-secondary">Counselor Portal</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="admin_analytics_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">
+                        Admin Portal
+                    </a>
+                </nav>
+
+                <!-- Counselor Profile -->
+                <div class="flex items-center space-x-4">
+                    <select id="languageSelector" class="text-sm border border-border-light rounded px-2 py-1 text-text-primary bg-white dark:bg-gray-800 mr-4" onchange="translatePage(this.value)">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी (Hindi)</option>
+                        <option value="hinglish">Hinglish</option>
+                    </select>
+                    <div class="hidden md:flex items-center space-x-3">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-text-primary">Dr. Emily Counselor</p>
+                            <p class="text-xs text-text-secondary">Senior Therapist</p>
+                        </div>
+                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+        <!-- Dashboard Header -->
+        <section class="bg-gradient-to-r from-primary-50 to-secondary-50 border-b border-border-light">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
+                    <div>
+                        <h2 class="text-3xl font-heading font-semibold text-text-primary mb-2">
+                            My Appointments & Patients
+                        </h2>
+                        <p class="text-text-secondary">
+                            View upcoming sessions and recent student assessments.
+                        </p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <button class="btn-secondary flex items-center space-x-2" onclick="exportReport()">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            <span>Download Report</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Content -->
+        <section class="py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Appointments Table -->
+                <div class="card-surface p-6 mb-8 border border-border-light rounded-xl">
+                    <h3 class="text-lg font-heading font-semibold text-text-primary mb-6">Upcoming Appointments</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full" id="appointments-table">
+                            <thead>
+                                <tr class="text-left text-text-secondary text-sm border-b border-border-light">
+                                    <th class="pb-3 font-medium">Student / Mode</th>
+                                    <th class="pb-3 font-medium">Date & Time</th>
+                                    <th class="pb-3 font-medium">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Recent Assessments -->
+                <div class="card-surface p-6 border border-border-light rounded-xl">
+                    <h3 class="text-lg font-heading font-semibold text-text-primary mb-6">Student Mental Health Risk</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full" id="assessments-table">
+                            <thead>
+                                <tr class="text-left text-text-secondary text-sm border-b border-border-light">
+                                    <th class="pb-3 font-medium">Assessment Type</th>
+                                    <th class="pb-3 font-medium">Score</th>
+                                    <th class="pb-3 font-medium">Severity</th>
+                                    <th class="pb-3 font-medium">Date Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border-light py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="text-sm text-text-secondary">
+                    © 2025 MindBridge. All Rights Reserved.
+                </div>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="student_login.html" class="text-text-secondary hover:text-primary transition-colors">Logout</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function renderDashboard() {
+            // Load Appointments
+            let appointments = JSON.parse(localStorage.getItem('userAppointments') || '[]');
+            const tbodyApp = document.querySelector('#appointments-table tbody');
+            tbodyApp.innerHTML = '';
+            
+            if (appointments.length === 0) {
+                tbodyApp.innerHTML = '<tr><td colspan="3" class="py-4 text-text-secondary">No appointments scheduled.</td></tr>';
+            } else {
+                appointments.forEach(app => {
+                    tbodyApp.innerHTML += `
+                        <tr class="border-b border-border-light last:border-0">
+                            <td class="py-4">
+                                <p class="font-medium text-text-primary">Unknown Student</p>
+                                <p class="text-xs text-text-secondary">${app.type || 'Video Consultation'}</p>
+                            </td>
+                            <td class="py-4">
+                                <p class="text-text-primary">${new Date(app.date).toLocaleDateString()}</p>
+                                <p class="text-xs text-text-secondary">${app.time}</p>
+                            </td>
+                            <td class="py-4">
+                                <span class="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">Scheduled</span>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            // Load Assessments
+            let assessments = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
+            const tbodyAss = document.querySelector('#assessments-table tbody');
+            tbodyAss.innerHTML = '';
+            
+            if (assessments.length === 0) {
+                tbodyAss.innerHTML = '<tr><td colspan="4" class="py-4 text-text-secondary">No assessments taken recently.</td></tr>';
+            } else {
+                // sort by date descending
+                assessments.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                assessments.forEach(ass => {
+                    let sevClass = 'text-accent';
+                    if(ass.severity.includes('Moderate')) sevClass = 'text-secondary';
+                    if(ass.severity.includes('Significant') || ass.severity.includes('Severe')) sevClass = 'text-error';
+                    
+                    tbodyAss.innerHTML += `
+                        <tr class="border-b border-border-light last:border-0">
+                            <td class="py-4 font-medium text-text-primary">${ass.type}</td>
+                            <td class="py-4 text-text-primary">${ass.score}</td>
+                            <td class="py-4 font-semibold ${sevClass}">${ass.severity}</td>
+                            <td class="py-4 text-text-secondary">${new Date(ass.timestamp).toLocaleString()}</td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        function exportReport() {
+            let assessments = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
+            let appointments = JSON.parse(localStorage.getItem('userAppointments') || '[]');
+            
+            const reportData = {
+                timestamp: new Date().toISOString(),
+                appointments: appointments,
+                studentAssessments: assessments
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `mindbridge-counselor-report-${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        document.addEventListener('DOMContentLoaded', renderDashboard);
+    </script>
+    
+    <!-- Dark Mode Script -->
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/language.js"></script>
+</body>
+</html>

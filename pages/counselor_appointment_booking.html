@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Counselor Appointment - MindBridge</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <style>
+        /* Dark Mode CSS Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --primary-50: #eff6ff;
+            --primary-500: #3b82f6;
+            --secondary-50: #f8fafc;
+            --secondary-500: #6366f1;
+            --secondary-600: #4f46e5;
+            --accent: #10b981;
+            --error: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-surface: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #475569;
+            --primary-50: #1e293b;
+            --primary-500: #60a5fa;
+            --secondary-50: #1e293b;
+            --secondary-500: #818cf8;
+            --secondary-600: #6366f1;
+            --accent: #34d399;
+            --error: #f87171;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .card-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .bg-white\/50 {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .text-text-primary {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .border-border-light {
+            border-color: var(--border-light) !important;
+        }
+        
+        .dark-mode-toggle {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark-mode-toggle:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-500);
+            transform: scale(1.05);
+        }
+        
+        .dark-mode-toggle svg {
+            width: 20px;
+            height: 20px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
+                        <p class="text-xs text-text-secondary">Mental Health Support</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="student_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                    <a href="ai_mental_health_chatbot.html" class="text-text-secondary hover:text-primary transition-colors">AI Support</a>
+                    <a href="mental_health_assessments.html" class="text-text-secondary hover:text-primary transition-colors">Assessments</a>
+                    <a href="counselor_appointment_booking.html" class="text-primary font-medium">Book Appointment</a>
+                </nav>
+
+                <!-- Dark Mode Toggle & Emergency Contact -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <button
+                        id="darkModeToggle"
+                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        title="Toggle Dark Mode"
+                    >
+                        <svg
+                            id="darkModeIcon"
+                            class="w-5 h-5 text-text-secondary"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                            />
+                        </svg>
+                    </button>
+                    
+                    <!-- Emergency Contact -->
+                    <div class="flex items-center space-x-2 text-sm">
+                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+                        <span class="text-text-secondary">Crisis Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">
+                            1800-599-0019
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Controls -->
+                <div class="md:hidden flex items-center space-x-2">
+                    <!-- Mobile Dark Mode Toggle -->
+                    <button
+                        id="darkModeToggleMobile"
+                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        title="Toggle Dark Mode"
+                        onclick="toggleDarkMode()"
+                    >
+                        <svg
+                            id="darkModeIconMobile"
+                            class="w-5 h-5 text-text-secondary"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                            />
+                        </svg>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="p-2" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6 text-text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden border-t border-border-light py-4">
+                <div class="space-y-3">
+                    <a href="student_dashboard.html" class="block text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                    <a href="ai_mental_health_chatbot.html" class="block text-text-secondary hover:text-primary transition-colors">AI Support</a>
+                    <a href="mental_health_assessments.html" class="block text-text-secondary hover:text-primary transition-colors">Assessments</a>
+                    <a href="counselor_appointment_booking.html" class="block text-primary font-medium">Book Appointment</a>
+                    <div class="pt-3 border-t border-border-light">
+                        <div class="flex items-center space-x-2 text-sm">
+                            <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+                            <span class="text-text-secondary">Crisis:</span>
+                            <a href="tel:1800-599-0019" class="text-error font-medium">1800-599-0019</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Page Header -->
+            <div class="mb-8">
+                <div class="flex items-center space-x-2 text-sm text-text-secondary mb-2">
+                    <a href="student_dashboard.html" class="hover:text-primary transition-colors">Dashboard</a>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                    <span>Book Appointment</span>
+                </div>
+                <h2 class="text-3xl font-heading font-semibold text-text-primary mb-2">
+                    Schedule Your Counseling Session
+                </h2>
+                <p class="text-lg text-text-secondary">
+                    Connect with qualified mental health professionals in a safe, confidential environment
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Main Booking Area -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Available Counselors -->
+                    <section class="card-surface p-6">
+                        <h3 class="text-xl font-heading font-semibold text-text-primary mb-6 flex items-center">
+                            <svg class="w-6 h-6 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            Available Counselors
+                        </h3>
+
+                        <div class="space-y-6">
+                            <!-- Counselor 1 -->
+                            <div class="counselor-card border border-border rounded-lg p-6 hover:border-primary hover:shadow-elevated transition-all cursor-pointer" onclick="selectCounselor('dr-sharma')">
+                                <div class="flex flex-col md:flex-row md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                                    <div class="flex-shrink-0">
+                                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dr. Priya Sharma" class="w-20 h-20 rounded-full object-cover" onerror="this.src='https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                                            <div class="mb-4 md:mb-0">
+                                                <h4 class="text-lg font-heading font-semibold text-text-primary">Dr. Priya Sharma</h4>
+                                                <p class="text-text-secondary mb-2">Clinical Psychologist â€¢ 8+ years experience</p>
+                                                <div class="flex items-center space-x-4 text-sm text-text-secondary mb-3">
+                                                    <div class="flex items-center">
+                                                        <svg class="w-4 h-4 text-accent mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                        </svg>
+                                                        <span>4.9 (127 reviews)</span>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <div class="w-2 h-2 bg-secondary rounded-full mr-2"></div>
+                                                        <span>Available Today</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-wrap gap-2 mb-3">
+                                                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">Anxiety</span>
+                                                    <span class="px-2 py-1 bg-secondary/10 text-secondary text-xs rounded-full">Depression</span>
+                                                    <span class="px-2 py-1 bg-accent/10 text-accent text-xs rounded-full">Academic Stress</span>
+                                                </div>
+                                                <div class="flex items-center space-x-4 text-sm">
+                                                    <div class="flex items-center text-text-secondary">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                                                        </svg>
+                                                        English, Hindi, Bengali
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm text-text-secondary mb-1">Next Available</p>
+                                                <p class="font-medium text-text-primary">Today, 2:00 PM</p>
+                                                <button class="mt-2 btn-primary text-sm px-4 py-2">Select</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Counselor 2 -->
+                            <div class="counselor-card border border-border rounded-lg p-6 hover:border-primary hover:shadow-elevated transition-all cursor-pointer" onclick="selectCounselor('dr-kumar')">
+                                <div class="flex flex-col md:flex-row md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                                    <div class="flex-shrink-0">
+                                        <img src="https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Dr. Rajesh Kumar" class="w-20 h-20 rounded-full object-cover" onerror="this.src='https://images.pixabay.com/photo/2017/03/14/03/20/woman-2141808_1280.jpg'; this.onerror=null;" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                                            <div class="mb-4 md:mb-0">
+                                                <h4 class="text-lg font-heading font-semibold text-text-primary">Dr. Rajesh Kumar</h4>
+                                                <p class="text-text-secondary mb-2">Counseling Psychologist â€¢ 12+ years experience</p>
+                                                <div class="flex items-center space-x-4 text-sm text-text-secondary mb-3">
+                                                    <div class="flex items-center">
+                                                        <svg class="w-4 h-4 text-accent mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                        </svg>
+                                                        <span>4.8 (89 reviews)</span>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <div class="w-2 h-2 bg-accent rounded-full mr-2"></div>
+                                                        <span>Available Tomorrow</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-wrap gap-2 mb-3">
+                                                    <span class="px-2 py-1 bg-secondary/10 text-secondary text-xs rounded-full">Relationship Issues</span>
+                                                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">Social Anxiety</span>
+                                                    <span class="px-2 py-1 bg-accent/10 text-accent text-xs rounded-full">Career Counseling</span>
+                                                </div>
+                                                <div class="flex items-center space-x-4 text-sm">
+                                                    <div class="flex items-center text-text-secondary">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                                                        </svg>
+                                                        English, Hindi, Tamil
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm text-text-secondary mb-1">Next Available</p>
+                                                <p class="font-medium text-text-primary">Tomorrow, 10:00 AM</p>
+                                                <button class="mt-2 btn-primary text-sm px-4 py-2">Select</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Counselor 3 -->
+                            <div class="counselor-card border border-border rounded-lg p-6 hover:border-primary hover:shadow-elevated transition-all cursor-pointer" onclick="selectCounselor('dr-patel')">
+                                <div class="flex flex-col md:flex-row md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                                    <div class="flex-shrink-0">
+                                        <img src="https://images.pixabay.com/photo/2017/08/01/01/33/woman-2563491_1280.jpg" alt="Dr. Meera Patel" class="w-20 h-20 rounded-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                                            <div class="mb-4 md:mb-0">
+                                                <h4 class="text-lg font-heading font-semibold text-text-primary">Dr. Meera Patel</h4>
+                                                <p class="text-text-secondary mb-2">Licensed Therapist â€¢ 6+ years experience</p>
+                                                <div class="flex items-center space-x-4 text-sm text-text-secondary mb-3">
+                                                    <div class="flex items-center">
+                                                        <svg class="w-4 h-4 text-accent mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                        </svg>
+                                                        <span>4.7 (64 reviews)</span>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <div class="w-2 h-2 bg-secondary rounded-full mr-2"></div>
+                                                        <span>Available Today</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-wrap gap-2 mb-3">
+                                                    <span class="px-2 py-1 bg-accent/10 text-accent text-xs rounded-full">Trauma Therapy</span>
+                                                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">PTSD</span>
+                                                    <span class="px-2 py-1 bg-secondary/10 text-secondary text-xs rounded-full">Mindfulness</span>
+                                                </div>
+                                                <div class="flex items-center space-x-4 text-sm">
+                                                    <div class="flex items-center text-text-secondary">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                                                        </svg>
+                                                        English, Hindi, Gujarati
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm text-text-secondary mb-1">Next Available</p>
+                                                <p class="font-medium text-text-primary">Today, 4:30 PM</p>
+                                                <button class="mt-2 btn-primary text-sm px-4 py-2">Select</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Calendar & Time Slots -->
+                    <section id="bookingCalendar" class="card-surface p-6 hidden">
+                        <h3 class="text-xl font-heading font-semibold text-text-primary mb-6 flex items-center">
+                            <svg class="w-6 h-6 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            Select Date & Time
+                        </h3>
+
+                        <!-- Calendar -->
+                        <div class="grid grid-cols-7 gap-2 mb-6">
+                            <div class="text-center text-sm font-medium text-text-secondary p-2">Sun</div>
+                            <div class="text-center text-sm font-medium text-text-secondary p-2">Mon</div>
+                            <div class="text-center text-sm font-medium text-text-secondary p-2">Tue</div>
+                            <div class="text-center text-sm font-medium text-text-secondary p-2">Wed</div>
+                            <div class="text-center text-sm font-medium text-text-secondary p-2">Thu</div>
+                            <div class="text-center text-sm font-medium text-text-secondary p-2">Fri</div>
+                            <div class="text-center text-sm font-medium text-text-secondary p-2">Sat</div>
+                            
+                            <!-- Calendar Days -->
+                            <div class="text-center p-2 text-text-secondary">1</div>
+                            <div class="text-center p-2 text-text-secondary">2</div>
+                            <div class="text-center p-2 text-text-secondary">3</div>
+                            <div class="text-center p-2 bg-primary text-white rounded-lg cursor-pointer hover:bg-primary-700 transition-colors" onclick="selectDate('2025-09-04')">4</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-05')">5</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-06')">6</div>
+                            <div class="text-center p-2 text-text-secondary">7</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-08')">8</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-09')">9</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-10')">10</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-11')">11</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-12')">12</div>
+                            <div class="text-center p-2 bg-secondary/10 text-secondary rounded-lg cursor-pointer hover:bg-secondary/20 transition-colors" onclick="selectDate('2025-09-13')">13</div>
+                            <div class="text-center p-2 text-text-secondary">14</div>
+                        </div>
+
+                        <!-- Time Slots -->
+                        <div id="timeSlots" class="space-y-4">
+                            <h4 class="font-medium text-text-primary">Available Time Slots - Today, September 4th</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-center" onclick="selectTime('10:00 AM')">
+                                    <div class="font-medium text-text-primary">10:00 AM</div>
+                                    <div class="text-sm text-text-secondary">60 min</div>
+                                </button>
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-center" onclick="selectTime('2:00 PM')">
+                                    <div class="font-medium text-text-primary">2:00 PM</div>
+                                    <div class="text-sm text-text-secondary">60 min</div>
+                                </button>
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-center" onclick="selectTime('4:30 PM')">
+                                    <div class="font-medium text-text-primary">4:30 PM</div>
+                                    <div class="text-sm text-text-secondary">60 min</div>
+                                </button>
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-center" onclick="selectTime('6:00 PM')">
+                                    <div class="font-medium text-text-primary">6:00 PM</div>
+                                    <div class="text-sm text-text-secondary">60 min</div>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Booking Form -->
+                    <section id="bookingForm" class="card-surface p-6 hidden">
+                        <h3 class="text-xl font-heading font-semibold text-text-primary mb-6 flex items-center">
+                            <svg class="w-6 h-6 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Appointment Details
+                        </h3>
+
+                        <form class="space-y-6" onsubmit="bookAppointment(event)">
+                            <!-- Appointment Type -->
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-3">Appointment Type</label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <label class="flex items-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary transition-colors">
+                                        <input type="radio" name="appointmentType" value="in-person" class="mr-3" checked />
+                                        <div>
+                                            <div class="font-medium text-text-primary">In-Person</div>
+                                            <div class="text-sm text-text-secondary">Campus counseling center</div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary transition-colors">
+                                        <input type="radio" name="appointmentType" value="video" class="mr-3" />
+                                        <div>
+                                            <div class="font-medium text-text-primary">Video Call</div>
+                                            <div class="text-sm text-text-secondary">Secure online session</div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary transition-colors">
+                                        <input type="radio" name="appointmentType" value="phone" class="mr-3" />
+                                        <div>
+                                            <div class="font-medium text-text-primary">Phone Call</div>
+                                            <div class="text-sm text-text-secondary">Voice-only session</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Reason for Visit -->
+                            <div>
+                                <label for="reason" class="block text-sm font-medium text-text-primary mb-2">
+                                    Reason for Visit (Optional)
+                                </label>
+                                <textarea id="reason" name="reason" rows="3" class="input-field w-full resize-none" placeholder="Briefly describe what you'd like to discuss (this helps your counselor prepare)"></textarea>
+                                <p class="text-xs text-text-secondary mt-1">This information is confidential and helps provide better support</p>
+                            </div>
+
+                            <!-- Special Accommodations -->
+                            <div>
+                                <label for="accommodations" class="block text-sm font-medium text-text-primary mb-2">
+                                    Special Accommodations
+                                </label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="accommodations" value="wheelchair" class="mr-2" />
+                                        <span class="text-text-secondary">Wheelchair accessible room</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="accommodations" value="interpreter" class="mr-2" />
+                                        <span class="text-text-secondary">Sign language interpreter</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="accommodations" value="quiet" class="mr-2" />
+                                        <span class="text-text-secondary">Quiet/low-stimulation environment</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Reminder Preferences -->
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-3">Reminder Preferences</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="reminders" value="email" class="mr-2" checked />
+                                        <span class="text-text-secondary">Email reminder (24 hours before)</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="reminders" value="sms" class="mr-2" />
+                                        <span class="text-text-secondary">SMS reminder (2 hours before)</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="reminders" value="calendar" class="mr-2" checked />
+                                        <span class="text-text-secondary">Add to calendar</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button type="button" onclick="goBack()" class="flex-1 px-6 py-3 border border-border rounded-lg text-text-primary hover:bg-gray-50 transition-colors">
+                                    Back
+                                </button>
+                                <button type="submit" class="flex-1 btn-primary">
+                                    Confirm Appointment
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Appointment Preparation -->
+                    <div class="card-surface p-6">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-secondary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Preparing for Your Session
+                        </h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-start space-x-2">
+                                <div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                                <p class="text-text-secondary">Think about what you'd like to discuss or any specific concerns</p>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                                <p class="text-text-secondary">Bring any relevant medical records or previous assessments</p>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                                <p class="text-text-secondary">Arrive 10 minutes early for in-person appointments</p>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <div class="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                                <p class="text-text-secondary">Ensure a quiet, private space for virtual sessions</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- What to Expect -->
+                    <div class="card-surface p-6">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-accent mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            What to Expect
+                        </h4>
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="font-medium text-text-primary mb-1">First Session</h5>
+                                <p class="text-sm text-text-secondary">Initial assessment, goal setting, and building rapport with your counselor</p>
+                            </div>
+                            <div>
+                                <h5 class="font-medium text-text-primary mb-1">Duration</h5>
+                                <p class="text-sm text-text-secondary">Sessions typically last 50-60 minutes</p>
+                            </div>
+                            <div>
+                                <h5 class="font-medium text-text-primary mb-1">Confidentiality</h5>
+                                <p class="text-sm text-text-secondary">All sessions are completely confidential and secure</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cancellation Policy -->
+                    <div class="card-surface p-6 border-l-4 border-accent">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-accent mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Cancellation Policy
+                        </h4>
+                        <div class="space-y-2 text-sm text-text-secondary">
+                            <p>â€¢ Cancel up to 24 hours in advance without penalty</p>
+                            <p>â€¢ Same-day cancellations may result in a missed appointment fee</p>
+                            <p>â€¢ Emergency situations are handled case-by-case</p>
+                            <p>â€¢ Reschedule easily through your dashboard</p>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Support -->
+                    <div class="card-surface p-6 border-l-4 border-error">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-error mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                            Need Immediate Help?
+                        </h4>
+                        <div class="space-y-3">
+                            <a href="tel:1800-599-0019" class="flex items-center justify-between p-3 bg-error/5 rounded-lg hover:bg-error/10 transition-colors">
+                                <div>
+                                    <p class="font-medium text-text-primary">Crisis Helpline</p>
+                                    <p class="text-sm text-text-secondary">24/7 Support</p>
+                                </div>
+                                <div class="text-error font-medium">Call Now</div>
+                            </a>
+                            <a href="ai_mental_health_chatbot.html" class="flex items-center justify-between p-3 bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors">
+                                <div>
+                                    <p class="font-medium text-text-primary">AI Support</p>
+                                    <p class="text-sm text-text-secondary">Immediate assistance</p>
+                                </div>
+                                <div class="text-primary font-medium">Chat Now</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border-light py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="text-sm text-text-secondary">
+                    Â© 2025 MindBridge. All Rights Reserved. | Confidential Mental Health Support
+                </div>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Terms of Service</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="card-surface p-8 max-w-md w-full">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-heading font-semibold text-text-primary mb-2">Appointment Confirmed!</h3>
+                <p class="text-text-secondary mb-6">Your counseling session has been successfully scheduled. You'll receive a confirmation email shortly.</p>
+                <div class="space-y-3">
+                    <button onclick="closeModal()" class="w-full btn-primary">
+                        Return to Dashboard
+                    </button>
+                    <button onclick="addToCalendar()" class="w-full px-4 py-2 border border-border rounded-lg text-text-primary hover:bg-gray-50 transition-colors">
+                        Add to Calendar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedCounselor = null;
+        let selectedDate = null;
+        let selectedTime = null;
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function selectCounselor(counselorId) {
+            selectedCounselor = counselorId;
+            
+            // Remove previous selections
+            document.querySelectorAll('.counselor-card').forEach(card => {
+                card.classList.remove('border-primary', 'bg-primary/5');
+                card.classList.add('border-border');
+            });
+            
+            // Highlight selected counselor
+            event.currentTarget.classList.remove('border-border');
+            event.currentTarget.classList.add('border-primary', 'bg-primary/5');
+            
+            // Show calendar section
+            document.getElementById('bookingCalendar').classList.remove('hidden');
+            
+            // Scroll to calendar
+            document.getElementById('bookingCalendar').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            
+            // Update time slots based on selected date
+            const timeSlots = document.getElementById('timeSlots');
+            const dateObj = new Date(date);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = dateObj.toLocaleDateString('en-US', options);
+            
+            timeSlots.querySelector('h4').textContent = `Available Time Slots - ${formattedDate}`;
+            
+            // Remove previous date selections
+            document.querySelectorAll('.grid.grid-cols-7 > div').forEach(day => {
+                if (day.classList.contains('bg-primary')) {
+                    day.classList.remove('bg-primary', 'text-white');
+                    day.classList.add('bg-secondary/10', 'text-secondary');
+                }
+            });
+            
+            // Highlight selected date
+            event.currentTarget.classList.remove('bg-secondary/10', 'text-secondary');
+            event.currentTarget.classList.add('bg-primary', 'text-white');
+        }
+
+        function selectTime(time) {
+            selectedTime = time;
+            
+            // Remove previous time selections
+            document.querySelectorAll('#timeSlots button').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-primary/5');
+                btn.classList.add('border-border');
+            });
+            
+            // Highlight selected time
+            event.currentTarget.classList.remove('border-border');
+            event.currentTarget.classList.add('border-primary', 'bg-primary/5');
+            
+            // Show booking form
+            document.getElementById('bookingForm').classList.remove('hidden');
+            
+            // Scroll to form
+            document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function goBack() {
+            document.getElementById('bookingForm').classList.add('hidden');
+        }
+
+        function bookAppointment(event) {
+            event.preventDefault();
+            
+            // Show loading state
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Booking...
+            `;
+            submitBtn.disabled = true;
+            
+            // Save to localStorage
+            const appointments = JSON.parse(localStorage.getItem('userAppointments') || '[]');
+            appointments.push({
+                counselor: selectedCounselor,
+                date: selectedDate,
+                time: selectedTime,
+                type: event.target.appointmentType.value,
+                bookedAt: new Date().toISOString()
+            });
+            localStorage.setItem('userAppointments', JSON.stringify(appointments));
+            
+            // Simulate booking process
+            setTimeout(() => {
+                document.getElementById('confirmationModal').classList.remove('hidden');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        function closeModal() {
+            document.getElementById('confirmationModal').classList.add('hidden');
+            window.location.href = 'student_dashboard.html';
+        }
+
+        function addToCalendar() {
+            // Create calendar event
+            const startDate = new Date(selectedDate + 'T' + convertTo24Hour(selectedTime));
+            const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour
+            
+            const event = {
+                title: 'Counseling Session - MindBridge',
+                start: startDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z',
+                end: endDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z',
+                description: 'Confidential counseling session with mental health professional'
+            };
+            
+            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start}/${event.end}&details=${encodeURIComponent(event.description)}`;
+            window.open(calendarUrl, '_blank');
+            
+            closeModal();
+        }
+
+        function convertTo24Hour(time12h) {
+            const [time, modifier] = time12h.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (hours === '12') {
+                hours = '00';
+            }
+            if (modifier === 'PM') {
+                hours = parseInt(hours, 10) + 12;
+            }
+            return `${hours}:${minutes}:00`;
+        }
+
+        // Auto-select today's date on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const todayElement = document.querySelector('[onclick="selectDate(\'2025-09-04\')"]');
+            if (todayElement) {
+                selectedDate = '2025-09-04';
+            }
+        });
+        
+        // Simple dark mode toggle for mobile button
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // Update mobile icon
+            const mobileIcon = document.getElementById('darkModeIconMobile');
+            if (mobileIcon) {
+                if (isDark) {
+                    mobileIcon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    `;
+                } else {
+                    mobileIcon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    `;
+                }
+            }
+        }
+    </script>
+    
+    <!-- Dark Mode Script -->
+    <script src="../js/dark-mode.js"></script>
+<script src="../js/language.js"></script>
+</body>
+</html>

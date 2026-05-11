@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mental Health Assessments - MindBridge</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Dark Mode CSS Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --primary-50: #eff6ff;
+            --primary-500: #3b82f6;
+            --secondary-50: #f8fafc;
+            --secondary-500: #6366f1;
+            --secondary-600: #4f46e5;
+            --accent: #10b981;
+            --error: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-surface: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #475569;
+            --primary-50: #1e293b;
+            --primary-500: #60a5fa;
+            --secondary-50: #1e293b;
+            --secondary-500: #818cf8;
+            --secondary-600: #6366f1;
+            --accent: #34d399;
+            --error: #f87171;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .card-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .bg-white\/50 {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .text-text-primary {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .border-border-light {
+            border-color: var(--border-light) !important;
+        }
+        
+        .dark-mode-toggle {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark-mode-toggle:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-500);
+            transform: scale(1.05);
+        }
+        
+        .dark-mode-toggle svg {
+            width: 20px;
+            height: 20px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
+                        <p class="text-xs text-text-secondary">Mental Health Support</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="student_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                    <a href="ai_mental_health_chatbot.html" class="text-text-secondary hover:text-primary transition-colors">AI Support</a>
+                    <a href="mental_health_assessments.html" class="text-primary font-medium">Assessments</a>
+                    <a href="counselor_appointment_booking.html" class="text-text-secondary hover:text-primary transition-colors">Book Counselor</a>
+                </nav>
+
+                <!-- Right Section -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                        <svg id="sunIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <svg id="moonIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Emergency Contact -->
+                    <div class="flex items-center space-x-2 text-sm">
+                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+                        <span class="text-text-secondary">Crisis Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">
+                            1800-599-0019
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6 text-text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden border-t border-border-light py-4">
+                <div class="space-y-2">
+                    <a href="student_dashboard.html" class="block px-4 py-2 text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                    <a href="ai_mental_health_chatbot.html" class="block px-4 py-2 text-text-secondary hover:text-primary transition-colors">AI Support</a>
+                    <a href="mental_health_assessments.html" class="block px-4 py-2 text-primary font-medium">Assessments</a>
+                    <a href="counselor_appointment_booking.html" class="block px-4 py-2 text-text-secondary hover:text-primary transition-colors">Book Counselor</a>
+                    <div class="px-4 py-2 border-t border-border-light mt-2">
+                        <div class="flex items-center space-x-2 text-sm">
+                            <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+                            <span class="text-text-secondary">Crisis:</span>
+                            <a href="tel:1800-599-0019" class="text-error font-medium">1800-599-0019</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Page Header -->
+            <div class="mb-8">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-heading font-semibold text-text-primary">Mental Health Assessments</h2>
+                        <p class="text-text-secondary">Professional-grade screening tools for self-evaluation and progress tracking</p>
+                    </div>
+                </div>
+
+                <!-- Privacy Notice -->
+                <div class="card-surface p-4 border-l-4 border-secondary">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-5 h-5 text-secondary mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                        <div>
+                            <h4 class="font-medium text-text-primary mb-1">Your Privacy is Protected</h4>
+                            <p class="text-sm text-text-secondary">All assessment data is encrypted and stored securely. You control who can access your results.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Main Assessment Area -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Assessment Selection -->
+                    <div id="assessmentSelection" class="space-y-6">
+                        <h3 class="text-xl font-heading font-semibold text-text-primary mb-4">Available Assessments</h3>
+                        
+                        <!-- PHQ-9 Assessment -->
+                        <div class="card-surface p-6 hover:shadow-elevated transition-all group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-heading font-semibold text-text-primary mb-2">PHQ-9 Depression Screening</h4>
+                                        <p class="text-text-secondary mb-3">Patient Health Questionnaire for depression assessment. Widely used clinical tool for measuring depression severity.</p>
+                                        <div class="flex items-center space-x-4 text-sm text-text-secondary">
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                <span>5-7 minutes</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                                <span>9 questions</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm text-text-secondary mb-2">Last taken</div>
+                                    <div class="text-sm font-medium text-text-primary">2 weeks ago</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Clinical Standard</span>
+                                    <span class="px-2 py-1 bg-secondary/10 text-secondary text-xs font-medium rounded-full">Self-Assessment</span>
+                                </div>
+                                <button onclick="startAssessment('phq9')" class="btn-primary px-6 py-2 text-sm">
+                                    Start Assessment
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- GAD-7 Assessment -->
+                        <div class="card-surface p-6 hover:shadow-elevated transition-all group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                                        <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-heading font-semibold text-text-primary mb-2">GAD-7 Anxiety Assessment</h4>
+                                        <p class="text-text-secondary mb-3">Generalized Anxiety Disorder scale for measuring anxiety symptoms and severity levels.</p>
+                                        <div class="flex items-center space-x-4 text-sm text-text-secondary">
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                <span>3-5 minutes</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                                <span>7 questions</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm text-text-secondary mb-2">Last taken</div>
+                                    <div class="text-sm font-medium text-text-primary">Never</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Clinical Standard</span>
+                                    <span class="px-2 py-1 bg-accent/10 text-accent text-xs font-medium rounded-full">Recommended</span>
+                                </div>
+                                <button onclick="startAssessment('gad7')" class="btn-primary px-6 py-2 text-sm">
+                                    Start Assessment
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- GHQ Assessment -->
+                        <div class="card-surface p-6 hover:shadow-elevated transition-all group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-heading font-semibold text-text-primary mb-2">GHQ-12 General Health</h4>
+                                        <p class="text-text-secondary mb-3">General Health Questionnaire for overall psychological well-being and mental health screening.</p>
+                                        <div class="flex items-center space-x-4 text-sm text-text-secondary">
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                <span>4-6 minutes</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                                <span>12 questions</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm text-text-secondary mb-2">Last taken</div>
+                                    <div class="text-sm font-medium text-text-primary">1 month ago</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Clinical Standard</span>
+                                    <span class="px-2 py-1 bg-secondary/10 text-secondary text-xs font-medium rounded-full">Comprehensive</span>
+                                </div>
+                                <button onclick="startAssessment('ghq12')" class="btn-primary px-6 py-2 text-sm">
+                                    Start Assessment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assessment Interface (Hidden by default) -->
+                    <div id="assessmentInterface" class="hidden">
+                        <div class="card-surface p-6">
+                            <!-- Assessment Header -->
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 id="assessmentTitle" class="text-xl font-heading font-semibold text-text-primary">PHQ-9 Depression Screening</h3>
+                                    <p class="text-text-secondary">Answer honestly based on how you've been feeling over the past 2 weeks</p>
+                                </div>
+                                <button onclick="exitAssessment()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <div class="mb-8">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm text-text-secondary">Progress</span>
+                                    <span id="progressText" class="text-sm font-medium text-text-primary">1 of 9</span>
+                                </div>
+                                <div class="progress-indicator">
+                                    <div id="progressBar" class="progress-bar" style="width: 11%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Question Display -->
+                            <div id="questionContainer" class="mb-8">
+                                <div class="mb-6">
+                                    <h4 id="questionText" class="text-lg font-medium text-text-primary mb-4">
+                                        Little interest or pleasure in doing things
+                                    </h4>
+                                    <div id="answerOptions" class="space-y-3">
+                                        <!-- Options will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <div class="flex items-center justify-between">
+                                <button id="prevButton" onclick="previousQuestion()" class="btn-secondary px-6 py-2 text-sm opacity-50 cursor-not-allowed" disabled>
+                                    Previous
+                                </button>
+                                <div class="flex items-center space-x-3">
+                                    <button onclick="saveAndExit()" class="text-text-secondary hover:text-text-primary transition-colors text-sm">
+                                        Save & Exit
+                                    </button>
+                                    <button id="nextButton" onclick="nextQuestion()" class="btn-primary px-6 py-2 text-sm opacity-50 cursor-not-allowed" disabled>
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Display (Hidden by default) -->
+                    <div id="resultsDisplay" class="hidden">
+                        <div class="card-surface p-6">
+                            <div class="text-center mb-8">
+                                <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-heading font-semibold text-text-primary mb-2">Assessment Complete</h3>
+                                <p class="text-text-secondary">Your results have been calculated and saved securely</p>
+                            </div>
+
+                            <!-- Score Display -->
+                            <div class="bg-gradient-to-r from-secondary-50 to-primary-50 rounded-lg p-6 mb-6">
+                                <div class="text-center">
+                                    <div class="text-3xl font-heading font-semibold text-text-primary mb-2" id="scoreValue">8</div>
+                                    <div class="text-lg font-medium text-text-primary mb-2" id="severityLevel">Mild Depression</div>
+                                    <div class="text-sm text-text-secondary" id="scoreRange">Score range: 5-9</div>
+                                </div>
+                            </div>
+
+                            <!-- Interpretation -->
+                            <div class="space-y-4 mb-6">
+                                <h4 class="font-heading font-semibold text-text-primary">What This Means</h4>
+                                <div id="interpretation" class="text-text-secondary">
+                                    Your score suggests mild depression symptoms. While these feelings are manageable, it's important to monitor your mental health and consider speaking with a counselor for support and coping strategies.
+                                </div>
+                            </div>
+
+                            <!-- Recommendations -->
+                            <div class="space-y-4 mb-6">
+                                <h4 class="font-heading font-semibold text-text-primary">Recommended Next Steps</h4>
+                                <div class="grid gap-3">
+                                    <div class="flex items-center space-x-3 p-3 bg-primary/5 rounded-lg">
+                                        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                        </svg>
+                                        <span class="text-text-primary">Try our AI chatbot for immediate support</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-secondary/5 rounded-lg">
+                                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 9l2 2 4-4"/>
+                                        </svg>
+                                        <span class="text-text-primary">Schedule a counselor appointment</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <a href="counselor_appointment_booking.html" class="btn-primary flex-1 text-center">
+                                    Book Counselor Appointment
+                                </a>
+                                <a href="ai_mental_health_chatbot.html" class="btn-secondary flex-1 text-center">
+                                    Talk to AI Support
+                                </a>
+                                <button onclick="shareResults()" class="px-6 py-3 border border-border rounded-lg hover:bg-gray-50 transition-colors">
+                                    Share Results
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Assessment History -->
+                    <div class="card-surface p-6">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                            Assessment History
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="font-medium text-text-primary text-sm">PHQ-9</p>
+                                    <p class="text-xs text-text-secondary">Dec 20, 2024</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-text-primary">Score: 8</p>
+                                    <p class="text-xs text-accent">Mild</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="font-medium text-text-primary text-sm">GHQ-12</p>
+                                    <p class="text-xs text-text-secondary">Nov 15, 2024</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-text-primary">Score: 4</p>
+                                    <p class="text-xs text-secondary">Normal</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full mt-4 text-sm text-primary hover:text-primary-700 transition-colors">
+                            View Full History
+                        </button>
+                    </div>
+
+                    <!-- Progress Chart -->
+                    <div class="card-surface p-6">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-secondary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            Progress Tracking
+                        </h4>
+                        <div class="h-48 mb-4">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                        <p class="text-xs text-text-secondary">Your mental health scores over the past 6 months</p>
+                    </div>
+
+                    <!-- Educational Resources -->
+                    <div class="card-surface p-6">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-accent mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                            Understanding Assessments
+                        </h4>
+                        <div class="space-y-3">
+                            <a href="javascript:void(0)" class="block p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <p class="font-medium text-text-primary text-sm mb-1">What is PHQ-9?</p>
+                                <p class="text-xs text-text-secondary">Learn about depression screening</p>
+                            </a>
+                            <a href="javascript:void(0)" class="block p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <p class="font-medium text-text-primary text-sm mb-1">Understanding GAD-7</p>
+                                <p class="text-xs text-text-secondary">Anxiety assessment explained</p>
+                            </a>
+                            <a href="javascript:void(0)" class="block p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                                <p class="font-medium text-text-primary text-sm mb-1">Interpreting Results</p>
+                                <p class="text-xs text-text-secondary">What your scores mean</p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Controls -->
+                    <div class="card-surface p-6">
+                        <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            Privacy Settings
+                        </h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-text-primary">Share with Counselors</p>
+                                    <p class="text-xs text-text-secondary">Allow counselors to view results</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked />
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-text-primary">Anonymous Analytics</p>
+                                    <p class="text-xs text-text-secondary">Help improve mental health services</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked />
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border-light py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="text-sm text-text-secondary">
+                    Â© 2025 MindBridge. All Rights Reserved. | Confidential Mental Health Support
+                </div>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Terms of Service</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Emergency Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-error text-white p-3 z-50">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                <span class="text-sm font-medium">Crisis Support Available</span>
+            </div>
+            <a href="tel:1800-599-0019" class="bg-white text-error px-3 py-1 rounded-full text-sm font-medium">
+                Call Now
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Assessment data
+        const assessments = {
+            phq9: {
+                title: "PHQ-9 Depression Screening",
+                questions: [
+                    "Little interest or pleasure in doing things",
+                    "Feeling down, depressed, or hopeless",
+                    "Trouble falling or staying asleep, or sleeping too much",
+                    "Feeling tired or having little energy",
+                    "Poor appetite or overeating",
+                    "Feeling bad about yourself or that you are a failure or have let yourself or your family down",
+                    "Trouble concentrating on things, such as reading the newspaper or watching television",
+                    "Moving or speaking so slowly that other people could have noticed, or the opposite being so fidgety or restless that you have been moving around a lot more than usual",
+                    "Thoughts that you would be better off dead, or of hurting yourself"
+                ],
+                options: [
+                    { text: "Not at all", value: 0 },
+                    { text: "Several days", value: 1 },
+                    { text: "More than half the days", value: 2 },
+                    { text: "Nearly every day", value: 3 }
+                ]
+            },
+            gad7: {
+                title: "GAD-7 Anxiety Assessment",
+                questions: [
+                    "Feeling nervous, anxious, or on edge",
+                    "Not being able to stop or control worrying",
+                    "Worrying too much about different things",
+                    "Trouble relaxing",
+                    "Being so restless that it is hard to sit still",
+                    "Becoming easily annoyed or irritable",
+                    "Feeling afraid, as if something awful might happen"
+                ],
+                options: [
+                    { text: "Not at all", value: 0 },
+                    { text: "Several days", value: 1 },
+                    { text: "More than half the days", value: 2 },
+                    { text: "Nearly every day", value: 3 }
+                ]
+            },
+            ghq12: {
+                title: "GHQ-12 General Health",
+                questions: [
+                    "Been able to concentrate on whatever you're doing",
+                    "Lost much sleep over worry",
+                    "Felt that you were playing a useful part in things",
+                    "Felt capable of making decisions about things",
+                    "Felt constantly under strain",
+                    "Felt you couldn't overcome your difficulties",
+                    "Been able to enjoy your normal day-to-day activities",
+                    "Been able to face up to problems",
+                    "Been feeling unhappy or depressed",
+                    "Been losing confidence in yourself",
+                    "Been thinking of yourself as a worthless person",
+                    "Been feeling reasonably happy, all things considered"
+                ],
+                options: [
+                    { text: "Better than usual", value: 0 },
+                    { text: "Same as usual", value: 1 },
+                    { text: "Less than usual", value: 2 },
+                    { text: "Much less than usual", value: 3 }
+                ]
+            }
+        };
+
+        let currentAssessment = null;
+        let currentQuestion = 0;
+        let answers = [];
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function startAssessment(type) {
+            currentAssessment = type;
+            currentQuestion = 0;
+            answers = [];
+            
+            document.getElementById('assessmentSelection').classList.add('hidden');
+            document.getElementById('assessmentInterface').classList.remove('hidden');
+            document.getElementById('resultsDisplay').classList.add('hidden');
+            
+            document.getElementById('assessmentTitle').textContent = assessments[type].title;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const assessment = assessments[currentAssessment];
+            const question = assessment.questions[currentQuestion];
+            const options = assessment.options;
+            
+            document.getElementById('questionText').textContent = question;
+            document.getElementById('progressText').textContent = `${currentQuestion + 1} of ${assessment.questions.length}`;
+            document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / assessment.questions.length) * 100}%`;
+            
+            const optionsContainer = document.getElementById('answerOptions');
+            optionsContainer.innerHTML = '';
+            
+            options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'flex items-center space-x-3 p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer';
+                optionDiv.onclick = () => selectAnswer(index, option.value);
+                
+                optionDiv.innerHTML = `
+                    <input type="radio" name="answer" value="${option.value}" class="w-4 h-4 text-primary focus:ring-primary border-border">
+                    <label class="flex-1 cursor-pointer text-text-primary">${option.text}</label>
+                `;
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            updateNavigationButtons();
+        }
+
+        function selectAnswer(optionIndex, value) {
+            answers[currentQuestion] = value;
+            
+            // Update radio button
+            const radios = document.querySelectorAll('input[name="answer"]');
+            radios[optionIndex].checked = true;
+            
+            // Update visual selection
+            const options = document.querySelectorAll('#answerOptions > div');
+            options.forEach((option, index) => {
+                if (index === optionIndex) {
+                    option.classList.add('border-primary', 'bg-primary/5');
+                    option.classList.remove('border-border');
+                } else {
+                    option.classList.remove('border-primary', 'bg-primary/5');
+                    option.classList.add('border-border');
+                }
+            });
+            
+            updateNavigationButtons();
+        }
+
+        function updateNavigationButtons() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            
+            // Previous button
+            if (currentQuestion > 0) {
+                prevButton.disabled = false;
+                prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                prevButton.disabled = true;
+                prevButton.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            
+            // Next button
+            if (answers[currentQuestion] !== undefined) {
+                nextButton.disabled = false;
+                nextButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                
+                if (currentQuestion === assessments[currentAssessment].questions.length - 1) {
+                    nextButton.textContent = 'Complete';
+                } else {
+                    nextButton.textContent = 'Next';
+                }
+            } else {
+                nextButton.disabled = true;
+                nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestion] !== undefined) {
+                if (currentQuestion < assessments[currentAssessment].questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    completeAssessment();
+                }
+            }
+        }
+
+        function completeAssessment() {
+            const totalScore = answers.reduce((sum, answer) => sum + answer, 0);
+            showResults(totalScore);
+        }
+
+        function showResults(score) {
+            document.getElementById('assessmentInterface').classList.add('hidden');
+            document.getElementById('resultsDisplay').classList.remove('hidden');
+            
+            let severity, interpretation;
+            
+            if (currentAssessment === 'phq9') {
+                if (score <= 4) {
+                    severity = 'Minimal Depression';
+                    interpretation = 'Your score suggests minimal depression symptoms. Continue monitoring your mental health and maintain healthy habits.';
+                } else if (score <= 9) {
+                    severity = 'Mild Depression';
+                    interpretation = 'Your score suggests mild depression symptoms. While these feelings are manageable, consider speaking with a counselor for support and coping strategies.';
+                } else if (score <= 14) {
+                    severity = 'Moderate Depression';
+                    interpretation = 'Your score indicates moderate depression symptoms. We recommend scheduling an appointment with a mental health professional for proper evaluation and support.';
+                } else if (score <= 19) {
+                    severity = 'Moderately Severe Depression';
+                    interpretation = 'Your score suggests moderately severe depression. Professional help is strongly recommended. Please consider booking an appointment with a counselor or psychiatrist.';
+                } else {
+                    severity = 'Severe Depression';
+                    interpretation = 'Your score indicates severe depression symptoms. Immediate professional help is recommended. Please contact a mental health professional or crisis helpline.';
+                }
+            } else if (currentAssessment === 'gad7') {
+                if (score <= 4) {
+                    severity = 'Minimal Anxiety';
+                    interpretation = 'Your score suggests minimal anxiety symptoms. Continue practicing stress management and healthy coping strategies.';
+                } else if (score <= 9) {
+                    severity = 'Mild Anxiety';
+                    interpretation = 'Your score indicates mild anxiety symptoms. Consider learning relaxation techniques and speaking with a counselor if symptoms persist.';
+                } else if (score <= 14) {
+                    severity = 'Moderate Anxiety';
+                    interpretation = 'Your score suggests moderate anxiety symptoms. Professional support can help you develop effective coping strategies and manage your anxiety.';
+                } else {
+                    severity = 'Severe Anxiety';
+                    interpretation = 'Your score indicates severe anxiety symptoms. We strongly recommend seeking professional help from a mental health provider.';
+                }
+            } else if (currentAssessment === 'ghq12') {
+                if (score <= 2) {
+                    severity = 'Good Mental Health';
+                    interpretation = 'Your score suggests good overall mental health. Continue maintaining healthy habits and stress management practices.';
+                } else if (score <= 5) {
+                    severity = 'Mild Distress';
+                    interpretation = 'Your score indicates mild psychological distress. Consider stress reduction techniques and monitor your mental health.';
+                } else {
+                    severity = 'Significant Distress';
+                    interpretation = 'Your score suggests significant psychological distress. Professional support may be beneficial for your mental health and well-being.';
+                }
+            }
+            
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('severityLevel').textContent = severity;
+            document.getElementById('interpretation').textContent = interpretation;
+            
+            // Save to local storage for admin dashboard
+            let pastResults = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
+            pastResults.push({
+                assessment: currentAssessment,
+                score: score,
+                severity: severity,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('assessmentResults', JSON.stringify(pastResults));
+        }
+
+        function exitAssessment() {
+            if (confirm('Are you sure you want to exit? Your progress will be lost.')) {
+                document.getElementById('assessmentInterface').classList.add('hidden');
+                document.getElementById('assessmentSelection').classList.remove('hidden');
+                document.getElementById('resultsDisplay').classList.add('hidden');
+                currentAssessment = null;
+                currentQuestion = 0;
+                answers = [];
+            }
+        }
+
+        function saveAndExit() {
+            alert('Your progress has been saved. You can continue this assessment later.');
+            exitAssessment();
+        }
+
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mental Health Assessment Results',
+                    text: 'I completed a mental health assessment on MindBridge.',
+                    url: window.location.href
+                });
+            } else {
+                alert('Results sharing functionality would be implemented here.');
+            }
+        }
+
+        // Initialize progress chart
+        function initProgressChart() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'PHQ-9 Score',
+                        data: [12, 10, 8, 9, 7, 8],
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'GAD-7 Score',
+                        data: [8, 7, 6, 5, 4, 5],
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 20,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Auto-hide mobile emergency bar after 10 seconds
+        setTimeout(() => {
+            const mobileBar = document.querySelector('.md\\:hidden.fixed.bottom-0');
+            if (mobileBar) {
+                mobileBar.style.transform = 'translateY(100%)';
+                mobileBar.style.transition = 'transform 300ms ease-out';
+            }
+        }, 10000);
+
+        // Initialize chart when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initProgressChart();
+        });
+    </script>
+    
+    <!-- Dark Mode Script -->
+    <script src="../js/dark-mode.js"></script>
+<script src="../js/language.js"></script>
+</body>
+</html>

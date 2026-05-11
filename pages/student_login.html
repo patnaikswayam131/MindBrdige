@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - MindBridge</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <style>
+        /* Dark Mode CSS Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --primary-50: #eff6ff;
+            --primary-500: #3b82f6;
+            --secondary-50: #f8fafc;
+            --secondary-500: #6366f1;
+            --secondary-600: #4f46e5;
+            --accent: #10b981;
+            --error: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-surface: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #475569;
+            --primary-50: #1e293b;
+            --primary-500: #60a5fa;
+            --secondary-50: #1e293b;
+            --secondary-500: #818cf8;
+            --secondary-600: #6366f1;
+            --accent: #34d399;
+            --error: #f87171;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .card-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .bg-white\/50 {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .text-text-primary {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .border-border-light {
+            border-color: var(--border-light) !important;
+        }
+        
+        .dark-mode-toggle {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark-mode-toggle:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-500);
+            transform: scale(1.05);
+        }
+        
+        .dark-mode-toggle svg {
+            width: 20px;
+            height: 20px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
+                        <p class="text-xs text-text-secondary">Mental Health Support</p>
+                    </div>
+                </div>
+
+                <!-- Right Section -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                        <svg id="sunIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <svg id="moonIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Emergency Contact -->
+                    <div class="flex items-center space-x-2 text-sm">
+                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+                        <span class="text-text-secondary">Crisis Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">
+                            1800-599-0019
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div class="max-w-6xl w-full">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                
+                <!-- Left Panel - Login Form -->
+                <div class="order-2 lg:order-1">
+                    <div class="card-surface p-8 lg:p-10 max-w-md mx-auto lg:mx-0">
+                        <!-- Form Header -->
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-heading font-semibold text-text-primary mb-2">
+                                Welcome Back
+                            </h2>
+                            <p class="text-text-secondary">
+                                Sign in to access your dashboard. Sample credentials:
+                                <br/>Student: <b>student/student</b>
+                                <br/>Admin: <b>admin/admin</b>
+                                <br/>Counselor: <b>counselor/counselor</b>
+                            </p>
+                        </div>
+
+                        <!-- Login Form -->
+                        <form class="space-y-6" id="loginForm">
+                            <!-- Email Field -->
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-text-primary mb-2">
+                                    Email Address
+                                </label>
+                                <div class="relative">
+                                    <input type="email" id="email" name="email" value="student@university.edu" class="input-field w-full pl-10 pr-4" placeholder="Enter your email" required />
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-text-primary mb-2">
+                                    Password
+                                </label>
+                                <div class="relative">
+                                    <input type="password" id="password" name="password" value="password123" class="input-field w-full pl-10 pr-12" placeholder="Enter your password" required />
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                        </svg>
+                                    </div>
+                                    <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="togglePassword()">
+                                        <svg id="eyeIcon" class="w-5 h-5 text-text-secondary hover:text-text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-border rounded" />
+                                    <label for="remember-me" class="ml-2 block text-sm text-text-secondary">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <div class="text-sm">
+                                    <a href="javascript:void(0)" class="text-primary hover:text-primary-700 transition-colors font-medium">
+                                        Forgot password?
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Sign In Button -->
+                            <button type="submit" class="btn-primary w-full flex items-center justify-center space-x-2 group" onclick="handleLogin(event)">
+                                <span>Sign In</span>
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </button>
+
+                            <!-- Biometric Authentication -->
+                            <div class="relative">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-border"></div>
+                                </div>
+                                <div class="relative flex justify-center text-sm">
+                                    <span class="px-2 bg-white text-text-secondary">or continue with</span>
+                                </div>
+                            </div>
+
+                            <button type="button" class="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-border rounded-lg hover:bg-gray-50 transition-colors" onclick="handleBiometric()">
+                                <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/>
+                                </svg>
+                                <span class="text-text-secondary">Biometric Sign In</span>
+                            </button>
+                        </form>
+
+                        <!-- Additional Options -->
+                        <div class="mt-8 space-y-4">
+                            <!-- Guest Access -->
+                            <div class="text-center">
+                                <p class="text-sm text-text-secondary mb-3">
+                                    Need immediate support?
+                                </p>
+                                <a href="ai_mental_health_chatbot.html" class="inline-flex items-center space-x-2 text-secondary hover:text-secondary-700 font-medium transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                    <span>Continue as Guest - AI Chatbot</span>
+                                </a>
+                            </div>
+
+                            <!-- Create Account -->
+                            <div class="text-center pt-4 border-t border-border-light">
+                                <p class="text-sm text-text-secondary">
+                                    Don't have an account? 
+                                    <a href="student_register.html" class="text-primary hover:text-primary-700 font-medium transition-colors">
+                                        Create Account
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Assurance -->
+                    <div class="mt-6 text-center">
+                        <div class="flex items-center justify-center space-x-2 text-sm text-text-secondary">
+                            <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            <span>Your privacy and data are completely secure</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Support Information -->
+                <div class="order-1 lg:order-2">
+                    <div class="space-y-8">
+                        <!-- Welcome Message -->
+                        <div class="text-center lg:text-left">
+                            <h3 class="text-2xl lg:text-3xl font-heading font-semibold text-text-primary mb-4">
+                                Your Mental Health Journey Starts Here
+                            </h3>
+                            <p class="text-lg text-text-secondary leading-relaxed">
+                                Access personalized support, connect with counselors, and find resources tailored to your needs in a safe, confidential environment.
+                            </p>
+                        </div>
+
+                        <!-- Emergency Resources -->
+                        <div class="card-surface p-6 border-l-4 border-error">
+                            <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                                <svg class="w-5 h-5 text-error mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                                </svg>
+                                Need Immediate Help?
+                            </h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-error/5 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-text-primary">National Crisis Helpline</p>
+                                        <p class="text-sm text-text-secondary">24/7 Support Available</p>
+                                    </div>
+                                    <a href="tel:1800-599-0019" class="btn-primary bg-error hover:bg-red-600 px-4 py-2 text-sm">
+                                        Call Now
+                                    </a>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-primary/5 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-text-primary">Campus Counselor</p>
+                                        <p class="text-sm text-text-secondary">On-campus support</p>
+                                    </div>
+                                    <a href="counselor_appointment_booking.html" class="btn-primary px-4 py-2 text-sm">
+                                        Book Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Language Options -->
+                        <div class="card-surface p-6">
+                            <h4 class="font-heading font-semibold text-text-primary mb-4 flex items-center">
+                                <svg class="w-5 h-5 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                                </svg>
+                                Multilingual Support
+                            </h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                                    <p class="font-medium text-text-primary">English</p>
+                                    <p class="text-sm text-text-secondary">Default</p>
+                                </button>
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                                    <p class="font-medium text-text-primary">हिंदी</p>
+                                    <p class="text-sm text-text-secondary">Hindi</p>
+                                </button>
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                                    <p class="font-medium text-text-primary">বাংলা</p>
+                                    <p class="text-sm text-text-secondary">Bengali</p>
+                                </button>
+                                <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                                    <p class="font-medium text-text-primary">தமிழ்</p>
+                                    <p class="text-sm text-text-secondary">Tamil</p>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Access Features -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <a href="mental_health_assessments.html" class="card-surface p-4 hover:shadow-elevated transition-all group">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-text-primary">Self Assessment</p>
+                                        <p class="text-sm text-text-secondary">Quick mental health check</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="ai_mental_health_chatbot.html" class="card-surface p-4 hover:shadow-elevated transition-all group">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                                        <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-text-primary">AI Support</p>
+                                        <p class="text-sm text-text-secondary">24/7 chatbot assistance</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border-light py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="text-sm text-text-secondary">
+                    © 2025 MindBridge. All Rights Reserved. | Confidential Mental Health Support
+                </div>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Terms of Service</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Emergency Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-error text-white p-3 z-50">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                <span class="text-sm font-medium">Crisis Support Available</span>
+            </div>
+            <a href="tel:1800-599-0019" class="bg-white text-error px-3 py-1 rounded-full text-sm font-medium">
+                Call Now
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                `;
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.toLowerCase();
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                const button = event.target;
+                const originalText = button.innerHTML;
+                button.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Signing In...
+                `;
+                button.disabled = true;
+                
+                // Store accounts in local storage
+                let users = JSON.parse(localStorage.getItem('users') || '{}');
+                if(!users[email]) {
+                    users[email] = { password: password, role: email.includes('admin') ? 'admin' : (email.includes('counselor') ? 'counselor' : 'student') };
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                
+                const userObj = users[email];
+                localStorage.setItem('currentUser', JSON.stringify({ email: email, role: userObj.role, firstName: userObj.firstName || 'Student', lastName: userObj.lastName || '', profilePic: userObj.profilePic || null }));
+                
+                sessionStorage.setItem('showWelcomeQuote', 'true');
+                
+                setTimeout(() => {
+                    if(userObj.role === 'admin') {
+                        window.location.href = 'admin_analytics_dashboard.html';
+                    } else if(userObj.role === 'counselor') {
+                        window.location.href = 'counselor_dashboard.html';
+                    } else {
+                        window.location.href = 'student_dashboard.html';
+                    }
+                }, 1000);
+            }
+        }
+
+        function handleBiometric() {
+            if ('credentials' in navigator) {
+                // Simulate biometric authentication
+                alert('Biometric authentication would be implemented here using WebAuthn API');
+            } else {
+                alert('Biometric authentication not supported on this device');
+            }
+        }
+
+        // Auto-hide mobile emergency bar after 10 seconds
+        setTimeout(() => {
+            const mobileBar = document.querySelector('.md\\:hidden.fixed.bottom-0');
+            if (mobileBar) {
+                mobileBar.style.transform = 'translateY(100%)';
+                mobileBar.style.transition = 'transform 300ms ease-out';
+            }
+        }, 10000);
+    </script>
+
+    <!-- Dark Mode Script -->
+    <script src="../js/dark-mode.js"></script>
+<script src="../js/language.js"></script>
+</body>
+</html>

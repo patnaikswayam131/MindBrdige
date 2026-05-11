@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Mental Health Chatbot - MindBridge</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <style>
+        /* Dark Mode CSS Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --primary-50: #eff6ff;
+            --primary-500: #3b82f6;
+            --secondary-50: #f8fafc;
+            --secondary-500: #6366f1;
+            --secondary-600: #4f46e5;
+            --accent: #10b981;
+            --error: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-surface: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #475569;
+            --primary-50: #1e293b;
+            --primary-500: #60a5fa;
+            --secondary-50: #1e293b;
+            --secondary-500: #818cf8;
+            --secondary-600: #6366f1;
+            --accent: #34d399;
+            --error: #f87171;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .card-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .bg-white\/50 {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .text-text-primary {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .border-border-light {
+            border-color: var(--border-light) !important;
+        }
+        
+        .dark-mode-toggle {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark-mode-toggle:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-500);
+            transform: scale(1.05);
+        }
+        
+        .dark-mode-toggle svg {
+            width: 20px;
+            height: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Chat-specific dark mode fixes */
+        [data-theme="dark"] .bg-white {
+            background-color: var(--bg-surface) !important;
+        }
+        
+        [data-theme="dark"] .bg-gray-50 {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        [data-theme="dark"] .bg-primary-50 {
+            background-color: var(--primary-50) !important;
+        }
+        
+        /* Chat message bubbles */
+        [data-theme="dark"] .chat-message-ai {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        [data-theme="dark"] .chat-message-user {
+            background-color: var(--primary-500) !important;
+        }
+        
+        /* Input fields */
+        [data-theme="dark"] .input-field {
+            background-color: var(--bg-surface) !important;
+            border-color: var(--border-light) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .input-field::placeholder {
+            color: var(--text-secondary) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
+                        <p class="text-xs text-text-secondary">AI Mental Health Support</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="student_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                    <a href="mental_health_assessments.html" class="text-text-secondary hover:text-primary transition-colors">Assessments</a>
+                    <a href="counselor_appointment_booking.html" class="text-text-secondary hover:text-primary transition-colors">Book Counselor</a>
+                </nav>
+
+                <!-- Right Section -->
+                <div class="flex items-center space-x-4">
+                    <!-- Language Selector -->
+                    <select id="languageSelector" class="text-sm border border-border-light rounded px-2 py-1 text-text-primary bg-white dark:bg-gray-800" onchange="translatePage(this.value)">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी (Hindi)</option>
+                        <option value="hinglish">Hinglish</option>
+                    </select>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                        <svg id="sunIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <svg id="moonIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Emergency Contact -->
+                    <div class="hidden md:flex items-center space-x-2 text-sm">
+                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+                        <span class="text-text-secondary">Crisis:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">
+                            1800-599-0019
+                        </a>
+                    </div>
+                    <button class="md:hidden p-2 text-text-secondary hover:text-primary" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-border-light">
+            <div class="px-4 py-3 space-y-3">
+                <a href="student_dashboard.html" class="block text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                <a href="mental_health_assessments.html" class="block text-text-secondary hover:text-primary transition-colors">Assessments</a>
+                <a href="counselor_appointment_booking.html" class="block text-text-secondary hover:text-primary transition-colors">Book Counselor</a>
+                <div class="pt-3 border-t border-border-light">
+                    <div class="flex items-center space-x-2 text-sm">
+                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+                        <span class="text-text-secondary">Crisis Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium">1800-599-0019</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Chat Interface -->
+    <main class="flex-1 flex h-screen" style="height: calc(100vh - 64px);">
+        <div class="flex-1 flex flex-col lg:flex-row max-w-7xl mx-auto">
+            
+            <!-- Chat Area -->
+            <div class="flex-1 flex flex-col bg-white">
+                <!-- Chat Header -->
+                <div class="px-4 lg:px-6 py-4 border-b border-border-light bg-gradient-to-r from-primary-50 to-secondary-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="font-heading font-semibold text-text-primary">O.R.I.S</h2>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
+                                    <span class="text-sm text-text-secondary">Online</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <select id="chatPersonality" class="text-sm bg-white border border-border-light rounded px-2 py-1 text-text-primary mr-2" style="background-color: var(--bg-surface);">
+                                <option value="supportive">Supportive</option>
+                                <option value="charming">Charming</option>
+                                <option value="cheering">Cheering</option>
+                                <option value="helpful">Helpful</option>
+                            </select>
+                            <button onclick="exportConversation()" class="p-2 text-text-secondary hover:text-primary transition-colors" title="Export Conversation">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </button>
+                            <button id="clearChat" class="p-2 text-text-secondary hover:text-error transition-colors" title="Clear Chat">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4">
+                    <!-- Welcome Message -->
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <div class="bg-gray-50 rounded-lg p-4 max-w-md">
+                                <p class="text-text-primary">Hello! I'm O.R.I.S. I'm here to provide support, coping strategies, and a safe space to talk. How are you feeling today?</p>
+                            </div>
+                            <p class="text-xs text-text-secondary mt-1">Today, 04:17 PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suggested Responses -->
+                <div id="suggestedResponses" class="px-4 lg:px-6 py-3 border-t border-border-light bg-gray-50">
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="sendSuggestedResponse('Let\'s try the grounding exercise')" class="px-3 py-2 bg-white border border-border rounded-full text-sm text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-colors">
+                            Let's try the grounding exercise
+                        </button>
+                        <button onclick="sendSuggestedResponse('Tell me more about exam strategies')" class="px-3 py-2 bg-white border border-border rounded-full text-sm text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-colors">
+                            Tell me more about exam strategies
+                        </button>
+                        <button onclick="sendSuggestedResponse('I need breathing exercises')" class="px-3 py-2 bg-white border border-border rounded-full text-sm text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-colors">
+                            I need breathing exercises
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Message Input -->
+                <div class="px-4 lg:px-6 py-4 border-t border-border-light bg-white">
+                    <div class="flex items-end space-x-3">
+                        <div class="flex-1">
+                            <div class="relative">
+                                <textarea id="messageInput" placeholder="Type your message here... I'm here to listen and help." class="input-field w-full resize-none pr-12" rows="1" onkeypress="handleKeyPress(event)" oninput="adjustTextareaHeight(this)"></textarea>
+                                <button id="voiceButton" onclick="toggleVoiceInput()" class="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 text-text-secondary hover:text-primary transition-colors" title="Voice Input">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button id="sendMessage" class="btn-primary px-6 py-3 flex items-center space-x-2">
+                            <span>Send</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Panel -->
+            <div class="w-full lg:w-80 bg-gray-50 border-l border-border-light">
+                <!-- Quick Actions -->
+                <div class="p-4 lg:p-6">
+                    <h3 class="font-heading font-semibold text-text-primary mb-4">Quick Support</h3>
+                    <div class="space-y-3">
+                        <button onclick="quickAction('anxiety')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                                    <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-text-primary">Anxiety Support</p>
+                                    <p class="text-sm text-text-secondary">Calming techniques & coping strategies</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="quickAction('breathing')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                                    <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-text-primary">Breathing Exercises</p>
+                                    <p class="text-sm text-text-secondary">Guided breathing for relaxation</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="quickAction('mood')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-text-primary">Mood Check-in</p>
+                                    <p class="text-sm text-text-secondary">Track and understand your feelings</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="quickAction('stress')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-error/10 rounded-lg flex items-center justify-center group-hover:bg-error/20 transition-colors">
+                                    <svg class="w-5 h-5 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-text-primary">Stress Relief</p>
+                                    <p class="text-sm text-text-secondary">Techniques to manage stress</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Crisis Support -->
+                <div class="p-4 lg:p-6 border-t border-border">
+                    <div class="card-surface p-4 border-l-4 border-error">
+                        <h4 class="font-heading font-semibold text-text-primary mb-3 flex items-center">
+                            <svg class="w-5 h-5 text-error mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                            Crisis Support
+                        </h4>
+                        <p class="text-sm text-text-secondary mb-3">If you're in immediate danger or having thoughts of self-harm, please reach out for help immediately.</p>
+                        <div class="space-y-2">
+                            <a href="tel:1800-599-0019" class="btn-primary bg-error hover:bg-red-600 w-full text-center block">
+                                Call Crisis Helpline
+                            </a>
+                            <a href="counselor_appointment_booking.html" class="btn-secondary w-full text-center block">
+                                Book Emergency Session
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Support -->
+                <div class="p-4 lg:p-6 border-t border-border">
+                    <h4 class="font-heading font-semibold text-text-primary mb-3">Professional Support</h4>
+                    <div class="space-y-3">
+                        <a href="counselor_appointment_booking.html" class="w-full card-surface p-3 text-left hover:shadow-elevated transition-all flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-1 12a2 2 0 002 2h6a2 2 0 002-2L15 7"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-medium text-text-primary text-sm">Book Counselor</p>
+                                <p class="text-xs text-text-secondary">Professional guidance</p>
+                            </div>
+                        </a>
+
+                        <a href="mental_health_assessments.html" class="w-full card-surface p-3 text-left hover:shadow-elevated transition-all flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-medium text-text-primary text-sm">Take Assessment</p>
+                                <p class="text-xs text-text-secondary">Understand your mental health</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Privacy Notice -->
+                <div class="p-4 lg:p-6 border-t border-border">
+                    <div class="bg-primary-50 rounded-lg p-3">
+                        <div class="flex items-start space-x-2">
+                            <svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-medium text-primary">Your Privacy is Protected</p>
+                                <p class="text-xs text-text-secondary mt-1">This conversation is confidential and encrypted. You can export or delete it anytime.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Emergency Bar -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-error text-white p-3 z-50" id="mobileEmergencyBar">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                <span class="text-sm font-medium">Crisis Support Available</span>
+            </div>
+            <div class="flex space-x-2">
+                <a href="tel:1800-599-0019" class="bg-white text-error px-3 py-1 rounded-full text-sm font-medium">
+                    Call
+                </a>
+                <button onclick="hideMobileEmergencyBar()" class="text-white/80 hover:text-white">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the chat integration script -->
+    <script src="../js/chat-integration.js"></script>
+    <script>
+        let isVoiceRecording = false;
+        let recognition = null;
+
+        // Initialize speech recognition if available
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('messageInput').value = transcript;
+                adjustTextareaHeight(document.getElementById('messageInput'));
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                isVoiceRecording = false;
+                updateVoiceButton();
+            };
+
+            recognition.onend = function() {
+                isVoiceRecording = false;
+                updateVoiceButton();
+            };
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function adjustTextareaHeight(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                // The sendMessage function is now handled by chat-integration.js
+                const sendEvent = new Event('click');
+                document.getElementById('sendMessage').dispatchEvent(sendEvent);
+            }
+        }
+
+        function sendSuggestedResponse(message) {
+            document.getElementById('messageInput').value = message;
+            const sendEvent = new Event('click');
+            document.getElementById('sendMessage').dispatchEvent(sendEvent);
+        }
+
+        function quickAction(type) {
+            const actions = {
+                anxiety: "I'd like help with managing my anxiety",
+                breathing: "Can you guide me through some breathing exercises?",
+                mood: "I'd like to do a mood check-in",
+                stress: "I need help with stress management"
+            };
+
+            document.getElementById('messageInput').value = actions[type];
+            const sendEvent = new Event('click');
+            document.getElementById('sendMessage').dispatchEvent(sendEvent);
+        }
+
+        function toggleVoiceInput() {
+            if (!recognition) {
+                alert('Voice input is not supported in your browser');
+                return;
+            }
+
+            if (isVoiceRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
+                isVoiceRecording = true;
+                updateVoiceButton();
+            }
+        }
+
+        function updateVoiceButton() {
+            const button = document.getElementById('voiceButton');
+            if (isVoiceRecording) {
+                button.innerHTML = `
+                    <svg class="w-5 h-5 text-error animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                    </svg>
+                `;
+                button.title = 'Stop Recording';
+            } else {
+                button.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                    </svg>
+                `;
+                button.title = 'Voice Input';
+            }
+        }
+
+        function exportConversation() {
+            const messages = document.querySelectorAll('#chatMessages > div');
+            let conversation = 'MindBridge AI Conversation Export\n';
+            conversation += '=====================================\n\n';
+
+            messages.forEach(message => {
+                const isUser = message.querySelector('.bg-blue-500') || message.querySelector('.bg-primary');
+                const textElement = message.querySelector('p');
+                if (!textElement) return;
+                
+                const text = textElement.textContent;
+                const timestamp = message.querySelector('.text-xs');
+                
+                if (isUser) {
+                    conversation += `You: ${text}\n`;
+                } else {
+                    conversation += `AI Assistant: ${text}\n`;
+                }
+                
+                if (timestamp) {
+                    conversation += `Time: ${timestamp.textContent}\n`;
+                }
+                conversation += '\n';
+            });
+
+            const blob = new Blob([conversation], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mindbridge-conversation-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function hideMobileEmergencyBar() {
+            const bar = document.getElementById('mobileEmergencyBar');
+            if (bar) {
+                bar.style.transform = 'translateY(100%)';
+                bar.style.transition = 'transform 300ms ease-out';
+            }
+        }
+
+        // Auto-hide mobile emergency bar after 15 seconds
+        setTimeout(() => {
+            hideMobileEmergencyBar();
+        }, 15000);
+
+        // Focus on input when page loads
+        window.addEventListener('load', () => {
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+    
+    <!-- Dark Mode Script -->
+    <script src="../js/dark-mode.js"></script>
+    
+    <!-- Chat API and Integration -->
+    <script src="../js/chat-integration.js"></script>
+    <script src="../js/language.js"></script>
+</body>
+</html>

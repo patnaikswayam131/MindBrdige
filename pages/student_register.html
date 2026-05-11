@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account - MindBridge</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <style>
+        /* Dark Mode CSS Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --primary-50: #eff6ff;
+            --primary-500: #3b82f6;
+            --secondary-50: #f8fafc;
+            --secondary-500: #6366f1;
+            --secondary-600: #4f46e5;
+            --accent: #10b981;
+            --error: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-surface: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #475569;
+            --primary-50: #1e293b;
+            --primary-500: #60a5fa;
+            --secondary-50: #1e293b;
+            --secondary-500: #818cf8;
+            --secondary-600: #6366f1;
+            --accent: #34d399;
+            --error: #f87171;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .card-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.location.href='index.html'">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
+                        <p class="text-xs text-text-secondary">Mental Health Support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full">
+            <div class="card-surface p-8 lg:p-10 rounded-xl shadow-lg border border-border-light">
+                <div id="registerStep1">
+                    <h3 class="text-3xl font-heading font-semibold text-text-primary mb-2 text-center">Create Account</h3>
+                    <p class="text-text-secondary mb-6 text-center text-sm">Join MindBridge to start your mental wellness journey.</p>
+                    
+                    <form id="registerForm" onsubmit="handleRegisterNext(event)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-1">First Name</label>
+                                <input type="text" id="regFirstName" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-1">Last Name</label>
+                                <input type="text" id="regLastName" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-1">Email</label>
+                                <input type="email" id="regEmail" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-1">Password</label>
+                                <input type="password" id="regPassword" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-primary-500 text-white font-medium rounded-lg p-3 mt-8 hover:bg-primary-600 transition shadow-md hover:shadow-lg">Next</button>
+                    </form>
+                    
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-text-secondary">
+                            Already have an account? 
+                            <a href="student_login.html" class="text-primary-500 hover:text-primary-700 font-medium transition-colors">
+                                Sign In
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                
+                <div id="registerStep2" class="hidden">
+                    <h3 class="text-2xl font-heading font-semibold text-text-primary mb-2 text-center">Brief Assessment</h3>
+                    <p class="text-text-secondary mb-6 text-center text-sm">Help us understand how to support you better. You can skip this.</p>
+                    
+                    <div class="space-y-5 mb-8">
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">How are you feeling today?</label>
+                            <select id="regFeeling" class="w-full border border-border-light rounded-lg p-3 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
+                                <option value="good">Good / Stable</option>
+                                <option value="anxious">Anxious / Stressed</option>
+                                <option value="down">Feeling Down</option>
+                                <option value="overwhelmed">Overwhelmed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">What brings you here?</label>
+                            <textarea id="regReason" rows="3" class="w-full border border-border-light rounded-lg p-3 bg-transparent text-text-primary focus:ring-primary focus:border-primary placeholder-gray-400" placeholder="Optional brief note..."></textarea>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button onclick="finishRegistration(true)" class="flex-1 border border-border-light text-text-secondary font-medium rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition">Skip</button>
+                        <button onclick="finishRegistration(false)" class="flex-1 bg-primary-500 text-white font-medium rounded-lg p-3 hover:bg-primary-600 transition shadow-md">Complete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border-light py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-sm text-text-secondary">
+                    © 2025 MindBridge. All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let tempUser = {};
+        
+        function handleRegisterNext(e) {
+            e.preventDefault();
+            tempUser = {
+                firstName: document.getElementById('regFirstName').value,
+                lastName: document.getElementById('regLastName').value,
+                email: document.getElementById('regEmail').value.toLowerCase(),
+                password: document.getElementById('regPassword').value,
+                role: document.getElementById('regEmail').value.toLowerCase().includes('counselor') ? 'counselor' : (document.getElementById('regEmail').value.toLowerCase().includes('admin') ? 'admin' : 'student')
+            };
+            
+            document.getElementById('registerStep1').classList.add('hidden');
+            document.getElementById('registerStep2').classList.remove('hidden');
+        }
+
+        function finishRegistration(skipped) {
+            if (!skipped) {
+                tempUser.assessment = {
+                    feeling: document.getElementById('regFeeling').value,
+                    reason: document.getElementById('regReason').value
+                };
+            }
+            
+            let users = JSON.parse(localStorage.getItem('users') || '{}');
+            users[tempUser.email] = tempUser;
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Log them in immediately
+            localStorage.setItem('currentUser', JSON.stringify({ 
+                email: tempUser.email, 
+                role: tempUser.role, 
+                firstName: tempUser.firstName, 
+                lastName: tempUser.lastName, 
+                profilePic: null 
+            }));
+            
+            // set a flag so dashboard shows the quote
+            sessionStorage.setItem('showWelcomeQuote', 'true');
+            
+            alert('Account created successfully! Redirecting to dashboard...');
+            
+            setTimeout(() => {
+                if(tempUser.role === 'admin') {
+                    window.location.href = 'admin_analytics_dashboard.html';
+                } else if(tempUser.role === 'counselor') {
+                    window.location.href = 'counselor_dashboard.html';
+                } else {
+                    window.location.href = 'student_dashboard.html';
+                }
+            }, 1000);
+        }
+    </script>
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/language.js"></script>
+</body>
+</html>

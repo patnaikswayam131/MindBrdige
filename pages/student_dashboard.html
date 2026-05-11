@@ -1,0 +1,2354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard - MindBridge</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (!user || user.role !== 'student') {
+            window.location.href = 'student_login.html';
+        }
+    </script>
+    <style>
+        /* Dark Mode CSS Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --primary-50: #eff6ff;
+            --primary-500: #3b82f6;
+            --secondary-50: #f8fafc;
+            --secondary-500: #6366f1;
+            --secondary-600: #4f46e5;
+            --accent: #10b981;
+            --error: #ef4444;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-surface: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #475569;
+            --primary-50: #1e293b;
+            --primary-500: #60a5fa;
+            --secondary-50: #1e293b;
+            --secondary-500: #818cf8;
+            --secondary-600: #6366f1;
+            --accent: #34d399;
+            --error: #f87171;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .card-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .bg-white\/50 {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .text-text-primary {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .border-border-light {
+            border-color: var(--border-light) !important;
+        }
+        
+        .dark-mode-toggle {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark-mode-toggle:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-500);
+            transform: scale(1.05);
+        }
+        
+        .dark-mode-toggle svg {
+            width: 20px;
+            height: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* Fix Tailwind utilities in dark mode */
+        [data-theme="dark"] .bg-white { background-color: var(--bg-surface) !important; }
+        [data-theme="dark"] .bg-white\/80 { background-color: var(--bg-surface) !important; }
+        [data-theme="dark"] .bg-white\/50 { background-color: var(--bg-surface) !important; }
+        [data-theme="dark"] .bg-gradient-to-br { background: var(--bg-primary) !important; }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 transition-colors duration-300">
+    <!-- Top Bar -->
+    <div class="bg-primary-600 text-white py-1 px-4 sm:px-6 lg:px-8 text-sm flex justify-end items-center space-x-4 dark:bg-gray-800 border-b border-border-light">
+        <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+            <span>Crisis:</span>
+            <a href="tel:1800-599-0019" class="font-medium hover:text-gray-200 transition-colors">1800-599-0019</a>
+        </div>
+        <select id="languageSelector" class="text-xs bg-transparent border border-white/30 rounded px-2 py-1 text-white" onchange="translatePage(this.value)">
+            <option value="en" class="text-black">English</option>
+            <option value="hi" class="text-black">हिंदी (Hindi)</option>
+            <option value="hinglish" class="text-black">Hinglish</option>
+        </select>
+        <button id="darkModeToggle" class="p-1 rounded hover:bg-white/10 transition-colors" title="Toggle Dark Mode">
+            <svg id="darkModeIcon" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50 transition-colors duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-xl font-heading font-semibold text-text-primary">
+                MindBridge
+              </h1>
+              <p class="text-xs text-text-secondary">Mental Health Support</p>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <a
+              href="student_dashboard.html"
+              class="text-primary font-medium border-b-2 border-primary pb-1"
+              >Dashboard</a
+            >
+            <a
+              href="ai_mental_health_chatbot.html"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >AI Support</a
+            >
+            <a
+              href="counselor_appointment_booking.html"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Appointments</a
+            >
+            <a
+              href="mental_health_assessments.html"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Assessments</a
+            >
+            <a
+              href="javascript:void(0)"
+              onclick="openJournal()"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Journal</a
+            >
+            <a
+              href="javascript:void(0)"
+              onclick="openCommunity()"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Community</a
+            >
+            <a
+              href="javascript:void(0)"
+              onclick="openResources()"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Resources</a
+            >
+          </nav>
+
+          <!-- User Profile & Controls -->
+          <div class="flex items-center space-x-4">
+            <!-- User Profile -->
+            <div class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg p-2 transition-colors" onclick="openSettings()" title="Open Settings">
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-full flex items-center justify-center border-2 border-primary/20"
+              >
+                <span id="headerProfileInitials" class="text-white text-base font-medium">AS</span>
+              </div>
+              <div class="hidden sm:block">
+                <p id="headerProfileName" class="text-sm font-medium text-text-primary">Arjun Singh</p>
+                <p class="text-xs text-text-secondary">Student</p>
+              </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <button class="md:hidden p-2" onclick="toggleMobileMenu()">
+              <svg
+                class="w-6 h-6 text-text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div
+        id="mobileMenu"
+        class="md:hidden hidden bg-white border-t border-border-light"
+      >
+        <div class="px-4 py-3 space-y-3">
+          <a
+            href="student_dashboard.html"
+            class="block text-primary font-medium"
+            >Dashboard</a
+          >
+          <a
+            href="ai_mental_health_chatbot.html"
+            class="block text-text-secondary"
+            >AI Support</a
+          >
+          <a
+            href="counselor_appointment_booking.html"
+            class="block text-text-secondary"
+            >Appointments</a
+          >
+          <a
+            href="mental_health_assessments.html"
+            class="block text-text-secondary"
+            >Assessments</a
+          >
+          <a
+            href="javascript:void(0)"
+            onclick="openJournal()"
+            class="block text-text-secondary"
+            >Journal</a
+          >
+          <a
+            href="javascript:void(0)"
+            onclick="openCommunity()"
+            class="block text-text-secondary"
+            >Community</a
+          >
+          <a
+            href="javascript:void(0)"
+            onclick="openResources()"
+            class="block text-text-secondary"
+            >Resources</a
+          >
+          <div class="pt-3 border-t border-border-light">
+            <div class="flex items-center space-x-2 text-sm">
+              <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+              <span class="text-text-secondary">Crisis Helpline:</span>
+              <a href="tel:1800-599-0019" class="text-error font-medium"
+                >1800-599-0019</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Welcome Section -->
+      <section class="mb-8">
+        <div
+          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+        >
+          <!-- Personalized Greeting -->
+          <div>
+            <h2
+              class="text-3xl font-heading font-semibold text-text-primary mb-2"
+              id="greeting"
+            >
+              Good Afternoon, Arjun! 👋
+            </h2>
+            <p class="text-lg text-text-secondary">
+              How are you feeling today? Let's check in on your mental wellness
+              journey.
+            </p>
+          </div>
+
+          <!-- Current Date & Time -->
+          <div class="card-surface p-4 lg:p-6">
+            <div class="text-center">
+              <p
+                class="text-2xl font-heading font-semibold text-text-primary"
+                id="currentDate"
+              >
+                September 4, 2025
+              </p>
+              <p class="text-sm text-text-secondary" id="currentTime">
+                12:13 PM
+              </p>
+              <div class="mt-2 flex items-center justify-center space-x-2">
+                <div
+                  class="w-2 h-2 bg-secondary rounded-full animate-pulse"
+                ></div>
+                <span class="text-xs text-secondary font-medium"
+                  >Online & Secure</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions & Mood Check-in -->
+      <section class="mb-8">
+        <div class="grid lg:grid-cols-3 gap-6">
+          <!-- Mood Check-in Widget -->
+          <div class="lg:col-span-2">
+            <div class="card-surface p-6">
+              <div class="flex items-center justify-between mb-6">
+                <h3
+                  class="text-xl font-heading font-semibold text-text-primary"
+                >
+                  Daily Mood Check-in
+                </h3>
+                <div
+                  class="flex items-center space-x-2 text-sm text-text-secondary"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>Last check-in: Yesterday</span>
+                </div>
+              </div>
+
+              <!-- Mood Selection -->
+              <div class="grid grid-cols-5 gap-3 mb-6">
+                <button
+                  class="mood-btn p-4 rounded-lg border-2 border-border hover:border-primary transition-colors text-center"
+                  onclick="selectMood('excellent', this)"
+                >
+                  <div class="text-3xl mb-2">😄</div>
+                  <p class="text-xs font-medium text-text-secondary">
+                    Excellent
+                  </p>
+                </button>
+                <button
+                  class="mood-btn p-4 rounded-lg border-2 border-border hover:border-primary transition-colors text-center"
+                  onclick="selectMood('good', this)"
+                >
+                  <div class="text-3xl mb-2">🙂</div>
+                  <p class="text-xs font-medium text-text-secondary">Good</p>
+                </button>
+                <button
+                  class="mood-btn p-4 rounded-lg border-2 border-border hover:border-primary transition-colors text-center"
+                  onclick="selectMood('okay', this)"
+                >
+                  <div class="text-3xl mb-2">😐</div>
+                  <p class="text-xs font-medium text-text-secondary">Okay</p>
+                </button>
+                <button
+                  class="mood-btn p-4 rounded-lg border-2 border-border hover:border-primary transition-colors text-center"
+                  onclick="selectMood('low', this)"
+                >
+                  <div class="text-3xl mb-2">😔</div>
+                  <p class="text-xs font-medium text-text-secondary">Low</p>
+                </button>
+                <button
+                  class="mood-btn p-4 rounded-lg border-2 border-border hover:border-primary transition-colors text-center"
+                  onclick="selectMood('struggling', this)"
+                >
+                  <div class="text-3xl mb-2">😣</div>
+                  <p class="text-xs font-medium text-text-secondary">
+                    Struggling
+                  </p>
+                </button>
+              </div>
+
+              <!-- Quick Note -->
+              <div class="mb-4">
+                <textarea
+                  id="moodNote"
+                  placeholder="Add a quick note about how you're feeling today (optional)..."
+                  class="input-field w-full h-20 resize-none"
+                ></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <button class="btn-primary w-full" onclick="submitMoodCheckin()">
+                <span>Log Today's Mood</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Action Cards -->
+          <div class="space-y-4">
+            <!-- AI Chatbot -->
+            <a
+              href="ai_mental_health_chatbot.html"
+              class="card-surface p-6 block hover:shadow-elevated transition-all group"
+            >
+              <div class="flex items-center space-x-4">
+                <div
+                  class="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors"
+                >
+                  <svg
+                    class="w-6 h-6 text-accent"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-heading font-semibold text-text-primary">
+                    AI Support
+                  </h4>
+                  <p class="text-sm text-text-secondary">
+                    24/7 mental health assistance
+                  </p>
+                </div>
+              </div>
+            </a>
+
+            <!-- Crisis Resources -->
+            <div class="card-surface p-6 border-l-4 border-error">
+              <div class="flex items-center space-x-4">
+                <div
+                  class="w-12 h-12 bg-error/10 rounded-lg flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-error"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-heading font-semibold text-text-primary">
+                    Crisis Support
+                  </h4>
+                  <p class="text-sm text-text-secondary">
+                    Immediate help available
+                  </p>
+                  <a
+                    href="tel:1800-599-0019"
+                    class="text-error font-medium text-sm hover:text-error/80 transition-colors"
+                  >
+                    Call 1800-599-0019
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Book Appointment -->
+            <a
+              href="counselor_appointment_booking.html"
+              class="card-surface p-6 block hover:shadow-elevated transition-all group"
+            >
+              <div class="flex items-center space-x-4">
+                <div
+                  class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center group-hover:bg-secondary/20 transition-colors"
+                >
+                  <svg
+                    class="w-6 h-6 text-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-heading font-semibold text-text-primary">
+                    Book Session
+                  </h4>
+                  <p class="text-sm text-text-secondary">
+                    Schedule with counselor
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Dashboard Content -->
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Left Column - Main Content -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Mood Tracking Visualization -->
+          <section>
+            <div class="card-surface p-6">
+              <div class="flex items-center justify-between mb-6">
+                <h3
+                  class="text-xl font-heading font-semibold text-text-primary"
+                >
+                  Mood Tracking Progress
+                </h3>
+                <div class="flex items-center space-x-2">
+                  <button
+                    class="px-3 py-1 text-sm bg-primary text-white rounded-lg"
+                    onclick="changePeriod('week')"
+                  >
+                    Week
+                  </button>
+                  <button
+                    class="px-3 py-1 text-sm text-text-secondary hover:bg-gray-100 rounded-lg"
+                    onclick="changePeriod('month')"
+                  >
+                    Month
+                  </button>
+                </div>
+              </div>
+
+              <!-- Chart Container -->
+              <div class="h-64 mb-6">
+                <canvas id="moodChart"></canvas>
+              </div>
+
+              <!-- Progress Indicators -->
+              <div class="grid grid-cols-3 gap-4">
+                <div class="text-center">
+                  <div
+                    class="text-2xl font-heading font-semibold text-secondary"
+                  >
+                    7
+                  </div>
+                  <p class="text-sm text-text-secondary">Days Tracked</p>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-heading font-semibold text-primary">
+                    4.2
+                  </div>
+                  <p class="text-sm text-text-secondary">Avg. Mood Score</p>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-heading font-semibold text-accent">
+                    85%
+                  </div>
+                  <p class="text-sm text-text-secondary">Goal Achievement</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Recent Activity -->
+          <section>
+            <div class="card-surface p-6">
+              <h3
+                class="text-xl font-heading font-semibold text-text-primary mb-6"
+              >
+                Recent Activity
+              </h3>
+
+              <div class="space-y-4">
+                <!-- Activity Item -->
+                <div
+                  class="flex items-start space-x-4 p-4 bg-primary/5 rounded-lg"
+                >
+                  <div
+                    class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0"
+                  >
+                    <svg
+                      class="w-5 h-5 text-primary"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-medium text-text-primary">
+                      Completed PHQ-9 Assessment
+                    </p>
+                    <p class="text-sm text-text-secondary">
+                      Score: Mild symptoms - Recommended resources shared
+                    </p>
+                    <p class="text-xs text-text-secondary mt-1">2 hours ago</p>
+                  </div>
+                </div>
+
+                <!-- Activity Item -->
+                <div
+                  class="flex items-start space-x-4 p-4 bg-secondary/5 rounded-lg"
+                >
+                  <div
+                    class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center flex-shrink-0"
+                  >
+                    <svg
+                      class="w-5 h-5 text-secondary"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-medium text-text-primary">
+                      AI Chatbot Session
+                    </p>
+                    <p class="text-sm text-text-secondary">
+                      Discussed coping strategies for exam stress
+                    </p>
+                    <p class="text-xs text-text-secondary mt-1">
+                      Yesterday, 3:45 PM
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Activity Item -->
+                <div
+                  class="flex items-start space-x-4 p-4 bg-accent/5 rounded-lg"
+                >
+                  <div
+                    class="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center flex-shrink-0"
+                  >
+                    <svg
+                      class="w-5 h-5 text-accent"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                      />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-medium text-text-primary">
+                      Journal Entry Added
+                    </p>
+                    <p class="text-sm text-text-secondary">
+                      Reflected on mindfulness practice benefits
+                    </p>
+                    <p class="text-xs text-text-secondary mt-1">2 days ago</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 text-center">
+                <button
+                  class="text-primary hover:text-primary-700 font-medium text-sm transition-colors"
+                >
+                  View All Activity
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column - Sidebar -->
+        <div class="space-y-6">
+          <!-- Upcoming Appointments -->
+          <section>
+            <div class="card-surface p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3
+                  class="text-lg font-heading font-semibold text-text-primary"
+                >
+                  Upcoming Sessions
+                </h3>
+                <a
+                  href="counselor_appointment_booking.html"
+                  class="text-primary hover:text-primary-700 text-sm font-medium transition-colors"
+                >
+                  Book New
+                </a>
+              </div>
+
+              <div class="space-y-4">
+                <!-- Appointment Card -->
+                <div class="p-4 border border-border-light rounded-lg">
+                  <div class="flex items-start justify-between mb-2">
+                    <div>
+                      <p class="font-medium text-text-primary">
+                        Dr. Priya Sharma
+                      </p>
+                      <p class="text-sm text-text-secondary">
+                        Clinical Psychologist
+                      </p>
+                    </div>
+                    <span
+                      class="px-2 py-1 bg-secondary/10 text-secondary text-xs font-medium rounded-full"
+                    >
+                      Confirmed
+                    </span>
+                  </div>
+                  <div
+                    class="flex items-center space-x-4 text-sm text-text-secondary"
+                  >
+                    <div class="flex items-center space-x-1">
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>Sep 6, 2025</span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <span>2:00 PM</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- No more appointments message -->
+                <div class="text-center py-4">
+                  <p class="text-sm text-text-secondary">
+                    No other appointments scheduled
+                  </p>
+                  <a
+                    href="counselor_appointment_booking.html"
+                    class="text-primary hover:text-primary-700 text-sm font-medium transition-colors"
+                  >
+                    Schedule a session
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Peer Forum Notifications -->
+          <section>
+            <div class="card-surface p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3
+                  class="text-lg font-heading font-semibold text-text-primary"
+                >
+                  Community Updates
+                </h3>
+                <div class="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+              </div>
+
+              <div class="space-y-4">
+                <!-- Forum Notification -->
+                <div class="p-3 bg-accent/5 rounded-lg">
+                  <p class="text-sm font-medium text-text-primary">
+                    New reply to your post
+                  </p>
+                  <p class="text-xs text-text-secondary mt-1">
+                    "Managing exam anxiety" - 3 new responses
+                  </p>
+                  <button
+                    onclick="openCommunity()"
+                    class="text-accent hover:text-accent-600 text-xs font-medium mt-2 transition-colors"
+                  >
+                    View Discussion
+                  </button>
+                </div>
+
+                <!-- Forum Notification -->
+                <div class="p-3 bg-primary/5 rounded-lg">
+                  <p class="text-sm font-medium text-text-primary">
+                    Weekly Support Group
+                  </p>
+                  <p class="text-xs text-text-secondary mt-1">
+                    Join tomorrow's mindfulness session at 4 PM
+                  </p>
+                  <button
+                    onclick="openCommunity()"
+                    class="text-primary hover:text-primary-700 text-xs font-medium mt-2 transition-colors"
+                  >
+                    Join Group
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Recommended Resources -->
+          <section>
+            <div class="card-surface p-6">
+              <h3
+                class="text-lg font-heading font-semibold text-text-primary mb-4"
+              >
+                Recommended for You
+              </h3>
+
+              <div class="space-y-4">
+                <!-- Resource Item -->
+                <a
+                  href="javascript:void(0)"
+                  onclick="openResources()"
+                  class="block p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <div class="flex items-start space-x-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="Mindfulness meditation"
+                      class="w-12 h-12 object-cover rounded-lg"
+                      loading="lazy"
+                      onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                    />
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-text-primary">
+                        5-Minute Breathing Exercise
+                      </p>
+                      <p class="text-xs text-text-secondary">
+                        Guided meditation for stress relief
+                      </p>
+                      <div class="flex items-center space-x-2 mt-1">
+                        <span class="text-xs text-accent">Audio</span>
+                        <span class="text-xs text-text-secondary">â€¢</span>
+                        <span class="text-xs text-text-secondary">5 min</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                <!-- Resource Item -->
+                <a
+                  href="javascript:void(0)"
+                  onclick="openResources()"
+                  class="block p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <div class="flex items-start space-x-3">
+                    <img
+                      src="https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                      alt="Study tips"
+                      class="w-12 h-12 object-cover rounded-lg"
+                      loading="lazy"
+                      onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                    />
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-text-primary">
+                        Healthy Study Habits
+                      </p>
+                      <p class="text-xs text-text-secondary">
+                        Tips for managing academic stress
+                      </p>
+                      <div class="flex items-center space-x-2 mt-1">
+                        <span class="text-xs text-secondary">Article</span>
+                        <span class="text-xs text-text-secondary">â€¢</span>
+                        <span class="text-xs text-text-secondary"
+                          >8 min read</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                <!-- Resource Item -->
+                <a
+                  href="mental_health_assessments.html"
+                  class="block p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <div class="flex items-start space-x-3">
+                    <div
+                      class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center"
+                    >
+                      <svg
+                        class="w-6 h-6 text-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                        />
+                      </svg>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-text-primary">
+                        Take GAD-7 Assessment
+                      </p>
+                      <p class="text-xs text-text-secondary">
+                        Check your anxiety levels
+                      </p>
+                      <div class="flex items-center space-x-2 mt-1">
+                        <span class="text-xs text-primary">Assessment</span>
+                        <span class="text-xs text-text-secondary">â€¢</span>
+                        <span class="text-xs text-text-secondary">3 min</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Navigation -->
+          <section>
+            <div class="card-surface p-6">
+              <h3
+                class="text-lg font-heading font-semibold text-text-primary mb-4"
+              >
+                Quick Access
+              </h3>
+
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  onclick="openJournal()"
+                  class="p-3 text-center hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <svg
+                    class="w-6 h-6 text-accent mx-auto mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                  <p class="text-xs font-medium text-text-primary">Journal</p>
+                </button>
+                <button
+                  onclick="openCommunity()"
+                  class="p-3 text-center hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <svg
+                    class="w-6 h-6 text-secondary mx-auto mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  <p class="text-xs font-medium text-text-primary">Community</p>
+                </button>
+                <button
+                  onclick="openResources()"
+                  class="p-3 text-center hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <svg
+                    class="w-6 h-6 text-primary mx-auto mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                  <p class="text-xs font-medium text-text-primary">Resources</p>
+                </button>
+                <button
+                  onclick="openSettings()"
+                  class="p-3 text-center hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <svg
+                    class="w-6 h-6 text-error mx-auto mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  <p class="text-xs font-medium text-text-primary">Settings</p>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="bg-white border-t border-border-light py-6 mt-12 transition-colors duration-300"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+        >
+          <div class="text-sm text-text-secondary">
+            Â© 2025 MindBridge. All Rights Reserved. | Confidential Mental Health
+            Support
+          </div>
+          <div class="flex items-center space-x-6 text-sm">
+            <a
+              href="javascript:void(0)"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Privacy Policy</a
+            >
+            <a
+              href="javascript:void(0)"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Terms of Service</a
+            >
+            <a
+              href="javascript:void(0)"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Support</a
+            >
+            <a
+              href="student_login.html"
+              class="text-text-secondary hover:text-primary transition-colors"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal Overlays for Features -->
+    <div
+      id="modalOverlay"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"
+    >
+      <!-- Journal Modal -->
+      <div
+        id="journalModal"
+        class="hidden fixed inset-0 flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        >
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-xl font-heading font-semibold text-text-primary">
+                Personal Journal
+              </h3>
+              <button
+                onclick="closeModal()"
+                class="text-text-secondary hover:text-text-primary"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div class="space-y-6">
+              <!-- New Entry -->
+              <div class="card-surface p-4">
+                <h4 class="font-semibold text-text-primary mb-3">New Entry</h4>
+                <textarea
+                  id="journalEntry"
+                  class="input-field w-full h-32 resize-none"
+                  placeholder="How are you feeling today? Write about your thoughts, experiences, or reflections..."
+                ></textarea>
+                <div class="mt-2">
+                  <label class="text-sm text-text-secondary">Add a picture (optional):</label>
+                  <input type="file" id="journalImage" accept="image/*" class="block w-full text-sm text-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary hover:file:bg-primary-100" />
+                </div>
+                <div class="mt-3 flex justify-between items-center">
+                  <span class="text-sm text-text-secondary" id="journalDateDisplay"
+                    >Today</span
+                  >
+                  <button class="btn-primary" onclick="saveJournalEntry()">Save Entry</button>
+                </div>
+              </div>
+
+              <!-- Previous Entries -->
+              <div>
+                <h4 class="font-semibold text-text-primary mb-4">
+                  Recent Entries
+                </h4>
+                <div class="space-y-3" id="journalEntriesList">
+                  <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-start mb-2">
+                      <span class="text-sm font-medium text-text-primary"
+                        >September 3, 2025</span
+                      >
+                      <span class="text-xs text-text-secondary">8:30 PM</span>
+                    </div>
+                    <p class="text-sm text-text-secondary">
+                      "Had a good conversation with my friend today about
+                      managing stress. Feeling more optimistic about the
+                      upcoming exams..."
+                    </p>
+                  </div>
+
+                  <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-start mb-2">
+                      <span class="text-sm font-medium text-text-primary"
+                        >September 2, 2025</span
+                      >
+                      <span class="text-xs text-text-secondary">7:15 PM</span>
+                    </div>
+                    <p class="text-sm text-text-secondary">
+                      "Tried the breathing exercise from the app today. It
+                      really helped me calm down before the presentation..."
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Modal -->
+      <div
+        id="communityModal"
+        class="hidden fixed inset-0 flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+        >
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-xl font-heading font-semibold text-text-primary">
+                Community Support
+              </h3>
+              <button
+                onclick="closeModal()"
+                class="text-text-secondary hover:text-text-primary"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+              <!-- Discussion Topics -->
+              <div class="md:col-span-2">
+                <div class="flex justify-between items-center mb-4">
+                  <h4 class="font-semibold text-text-primary">
+                    Active Discussions
+                  </h4>
+                  <button class="text-sm btn-primary px-3 py-1" onclick="document.getElementById('newDiscussionForm').classList.toggle('hidden')">New Topic</button>
+                </div>
+                
+                <div id="newDiscussionForm" class="hidden mb-4 p-4 card-surface">
+                  <input type="text" id="newDiscTitle" placeholder="Discussion Title" class="input-field w-full mb-2 text-sm">
+                  <textarea id="newDiscContent" placeholder="What's on your mind?" class="input-field w-full h-20 resize-none text-sm mb-2"></textarea>
+                  <button class="btn-primary w-full" onclick="postDiscussion()">Post Discussion</button>
+                </div>
+
+                <div class="space-y-4" id="discussionsList">
+                  <!-- Discussions will be populated here by JS -->
+                </div>
+              </div>
+
+              <!-- Support Groups -->
+              <div>
+                <h4 class="font-semibold text-text-primary mb-4">
+                  Support Groups
+                </h4>
+                <div class="space-y-3">
+                  <div class="p-3 bg-primary/5 rounded-lg">
+                    <h5 class="text-sm font-medium text-text-primary">
+                      Daily Check-in Circle
+                    </h5>
+                    <p class="text-xs text-text-secondary mt-1">
+                      Share your daily mood and connect with peers
+                    </p>
+                    <span
+                      class="inline-block mt-2 px-2 py-1 bg-primary text-white text-xs rounded-full"
+                      >Active Now</span
+                    >
+                  </div>
+
+                  <div class="p-3 bg-secondary/5 rounded-lg">
+                    <h5 class="text-sm font-medium text-text-primary">
+                      Mindfulness Monday
+                    </h5>
+                    <p class="text-xs text-text-secondary mt-1">
+                      Weekly guided meditation sessions
+                    </p>
+                    <span
+                      class="inline-block mt-2 px-2 py-1 bg-secondary text-white text-xs rounded-full cursor-pointer hover:bg-secondary-600 transition"
+                      onclick="joinSupportGroup(this)"
+                      >Join Group</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resources Modal -->
+      <div
+        id="resourcesModal"
+        class="hidden fixed inset-0 flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-white rounded-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto"
+        >
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-xl font-heading font-semibold text-text-primary">
+                Mental Health Resources
+              </h3>
+              <button
+                onclick="closeModal()"
+                class="text-text-secondary hover:text-text-primary"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- Self-Care Resources -->
+              <div class="card-surface p-4">
+                <div
+                  class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4"
+                >
+                  <svg
+                    class="w-6 h-6 text-primary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
+                  </svg>
+                </div>
+                <h4 class="font-semibold text-text-primary mb-2">
+                  Self-Care Activities
+                </h4>
+                <p class="text-sm text-text-secondary mb-4">
+                  Daily practices to improve your mental wellbeing
+                </p>
+                <ul class="text-sm space-y-2">
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Breathing exercises</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Progressive muscle relaxation</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Mindfulness meditation</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Educational Content & Quotes -->
+              <div class="card-surface p-4">
+                <div
+                  class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mb-4"
+                >
+                  <svg
+                    class="w-6 h-6 text-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </div>
+                <h4 class="font-semibold text-text-primary mb-2">
+                  Articles, Videos & Quotes
+                </h4>
+                <p class="text-sm text-text-secondary mb-4">
+                  Learn about mental health, watch guided videos, and find inspiration
+                </p>
+                <ul class="text-sm space-y-2">
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-secondary rounded-full"></div>
+                    <span>Article: Understanding anxiety</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-secondary rounded-full"></div>
+                    <span>Video: Guided 10-minute meditation</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-secondary rounded-full"></div>
+                    <span class="italic">"You don't have to control your thoughts. You just have to stop letting them control you."</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Crisis Resources -->
+              <div class="card-surface p-4 border-l-4 border-error">
+                <div
+                  class="w-12 h-12 bg-error/10 rounded-lg flex items-center justify-center mb-4"
+                >
+                  <svg
+                    class="w-6 h-6 text-error"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
+                  </svg>
+                </div>
+                <h4 class="font-semibold text-text-primary mb-2">
+                  Crisis Support
+                </h4>
+                <p class="text-sm text-text-secondary mb-4">
+                  Immediate help when you need it most
+                </p>
+                <ul class="text-sm space-y-2">
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-error rounded-full"></div>
+                    <span>24/7 Crisis Hotline</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-error rounded-full"></div>
+                    <span>Emergency contacts</span>
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-error rounded-full"></div>
+                    <span>Safety planning tools</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Modal -->
+      <div
+        id="settingsModal"
+        class="hidden fixed inset-0 flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        >
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-xl font-heading font-semibold text-text-primary">
+                Settings
+              </h3>
+              <button
+                onclick="closeModal()"
+                class="text-text-secondary hover:text-text-primary"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Profile Settings -->
+              <div class="card-surface p-4">
+                <h4 class="font-semibold text-text-primary mb-4">
+                  Profile Information
+                </h4>
+                <div class="flex items-center space-x-4 mb-4">
+                  <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-200" id="settingsProfilePicPreview">
+                     <span class="w-full h-full flex items-center justify-center text-gray-500" id="settingsProfileInitials">AS</span>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-text-primary mb-1">Profile Picture</label>
+                    <input type="file" id="settingsProfilePic" accept="image/*" class="text-sm">
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-text-primary mb-1"
+                      >First Name</label
+                    >
+                    <input
+                      id="settingsFirstName"
+                      type="text"
+                      value="Arjun"
+                      class="input-field w-full bg-transparent text-text-primary border-border-light"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-text-primary mb-1"
+                      >Last Name</label
+                    >
+                    <input
+                      id="settingsLastName"
+                      type="text"
+                      value="Singh"
+                      class="input-field w-full bg-transparent text-text-primary border-border-light"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      class="block text-sm font-medium text-text-primary mb-1"
+                      >Email</label
+                    >
+                    <input
+                      id="settingsEmail"
+                      type="email"
+                      value="arjun.singh@student.edu"
+                      class="input-field w-full bg-transparent text-text-primary border-border-light"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notification Settings -->
+              <div class="card-surface p-4">
+                <h4 class="font-semibold text-text-primary mb-4">
+                  Notifications
+                </h4>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-text-primary"
+                      >Daily mood reminders</span
+                    >
+                    <label
+                      class="relative inline-flex items-center cursor-pointer"
+                    >
+                      <input type="checkbox" class="sr-only peer" checked />
+                      <div
+                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+                      ></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-text-primary"
+                      >Appointment reminders</span
+                    >
+                    <label
+                      class="relative inline-flex items-center cursor-pointer"
+                    >
+                      <input type="checkbox" class="sr-only peer" checked />
+                      <div
+                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+                      ></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-text-primary"
+                      >Community updates</span
+                    >
+                    <label
+                      class="relative inline-flex items-center cursor-pointer"
+                    >
+                      <input type="checkbox" class="sr-only peer" />
+                      <div
+                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+                      ></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Privacy Settings -->
+              <div class="card-surface p-4">
+                <h4 class="font-semibold text-text-primary mb-4">
+                  Privacy & Security
+                </h4>
+                <div class="space-y-4">
+                  <button
+                    class="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-text-primary"
+                        >Change Password</span
+                      >
+                      <svg
+                        class="w-4 h-4 text-text-secondary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+                  <button
+                    class="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-text-primary"
+                        >Two-Factor Authentication</span
+                      >
+                      <svg
+                        class="w-4 h-4 text-text-secondary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+                  <button
+                    class="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-text-primary">Data Export</span>
+                      <svg
+                        class="w-4 h-4 text-text-secondary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Save Button -->
+              <div class="flex justify-end space-x-3">
+                <button
+                  onclick="closeModal()"
+                  class="px-6 py-2 border border-border rounded-lg text-text-secondary hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      // Dark mode functionality
+      function initializeDarkMode() {
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        const darkModeIcon = document.getElementById("darkModeIcon");
+
+        // Check for saved theme preference (shared across pages)
+        const savedTheme = localStorage.getItem("theme");
+        const isDarkMode = savedTheme ? savedTheme === "dark" : false;
+
+        if (isDarkMode) {
+          document.documentElement.classList.add("dark");
+        }
+        updateDarkModeIcon(isDarkMode);
+
+        darkModeToggle.addEventListener("click", () => {
+          const isDark = document.documentElement.classList.toggle("dark");
+          localStorage.setItem("theme", isDark ? "dark" : "light");
+          updateDarkModeIcon(isDark);
+        });
+      }
+
+      function updateDarkModeIcon(isDark) {
+        const darkModeIcon = document.getElementById("darkModeIcon");
+        if (isDark) {
+          darkModeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                `;
+        } else {
+          darkModeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                `;
+        }
+      }
+
+      // Modal functionality
+      function openJournal() {
+        document.getElementById("modalOverlay").classList.remove("hidden");
+        document.getElementById("journalModal").classList.remove("hidden");
+      }
+
+      function openCommunity() {
+        document.getElementById("modalOverlay").classList.remove("hidden");
+        document.getElementById("communityModal").classList.remove("hidden");
+      }
+
+      function openResources() {
+        document.getElementById("modalOverlay").classList.remove("hidden");
+        document.getElementById("resourcesModal").classList.remove("hidden");
+      }
+
+      function openSettings() {
+        document.getElementById("modalOverlay").classList.remove("hidden");
+        document.getElementById("settingsModal").classList.remove("hidden");
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").classList.add("hidden");
+        document.getElementById("journalModal").classList.add("hidden");
+        document.getElementById("communityModal").classList.add("hidden");
+        document.getElementById("resourcesModal").classList.add("hidden");
+        document.getElementById("settingsModal").classList.add("hidden");
+      }
+
+      let profilePicDataUrl = null;
+
+      document.getElementById('settingsProfilePic').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profilePicDataUrl = e.target.result;
+                document.getElementById('settingsProfilePicPreview').innerHTML = `<img src="${profilePicDataUrl}" class="w-full h-full object-cover">`;
+            }
+            reader.readAsDataURL(file);
+        }
+      });
+
+      function saveSettings() {
+          const fn = document.getElementById('settingsFirstName').value;
+          const ln = document.getElementById('settingsLastName').value;
+          const email = document.getElementById('settingsEmail').value;
+          
+          if(user) {
+              user.firstName = fn;
+              user.lastName = ln;
+              if (email) user.email = email;
+              if (profilePicDataUrl) user.profilePic = profilePicDataUrl;
+              
+              localStorage.setItem('currentUser', JSON.stringify(user));
+              
+              let users = JSON.parse(localStorage.getItem('users') || '{}');
+              if(users[user.email]) {
+                  users[user.email].firstName = fn;
+                  users[user.email].lastName = ln;
+                  if (profilePicDataUrl) users[user.email].profilePic = profilePicDataUrl;
+                  localStorage.setItem('users', JSON.stringify(users));
+              }
+              
+              alert('Settings saved!');
+              updateUIWithUser();
+              closeModal();
+          }
+      }
+      
+      function updateUIWithUser() {
+          if(!user) return;
+          const fn = user.firstName || 'Student';
+          const ln = user.lastName || '';
+          const fullName = `${fn} ${ln}`.trim();
+          const initials = fn.charAt(0).toUpperCase() + (ln ? ln.charAt(0).toUpperCase() : '');
+          
+          document.getElementById('settingsFirstName').value = fn;
+          document.getElementById('settingsLastName').value = ln;
+          document.getElementById('settingsEmail').value = user.email;
+          
+          // Update profile pictures in UI
+          const profileImages = document.querySelectorAll('.rounded-full.bg-gradient-to-br');
+          profileImages.forEach(img => {
+              if (user.profilePic) {
+                  img.innerHTML = `<img src="${user.profilePic}" class="w-full h-full rounded-full object-cover">`;
+                  img.classList.remove('bg-gradient-to-br', 'from-secondary-400', 'to-secondary-600');
+              } else {
+                  img.innerHTML = `<span class="text-white text-sm font-medium">${initials}</span>`;
+              }
+          });
+          
+          // Update setting preview
+          if (user.profilePic) {
+              document.getElementById('settingsProfilePicPreview').innerHTML = `<img src="${user.profilePic}" class="w-full h-full object-cover">`;
+          } else {
+              document.getElementById('settingsProfilePicPreview').innerHTML = `<span class="w-full h-full flex items-center justify-center text-gray-500">${initials}</span>`;
+          }
+          
+          // Update greeting
+          const now = new Date();
+          const hour = now.getHours();
+          document.getElementById("greeting").textContent = `${getGreeting(hour)}, ${fn}! 👋`;
+          
+          // Update sidebar name if exists
+          const sidebarNames = document.querySelectorAll('.text-sm.font-medium.text-text-primary');
+          sidebarNames.forEach(nameEl => {
+              if(nameEl.textContent.includes('Singh') || nameEl.textContent === fullName || nameEl.textContent === 'Student') {
+                  nameEl.textContent = fullName;
+              }
+          });
+      }
+
+      // Call this on load
+      window.addEventListener('load', updateUIWithUser);
+
+      // Close modal when clicking overlay
+      document
+        .getElementById("modalOverlay")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeModal();
+          }
+        });
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById("mobileMenu");
+        mobileMenu.classList.toggle("hidden");
+      }
+
+      // Function to get appropriate greeting based on current hour
+      function getGreeting(hour) {
+        if (hour < 12) {
+          return "Good Morning";
+        } else if (hour < 17) {
+          return "Good Afternoon";
+        } else {
+          return "Good Evening";
+        }
+      }
+
+      // Update current date
+      function updateDate() {
+        const now = new Date();
+        const dateString = now.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        document.getElementById("currentDate").textContent = dateString;
+      }
+
+      // Update current time
+      function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+        document.getElementById("currentTime").textContent = timeString;
+      }
+
+      // Update greeting based on current time
+      function updateGreeting() {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const greetingText = getGreeting(currentHour);
+        const userName = user && user.firstName ? user.firstName : 'Student';
+        document.getElementById(
+          "greeting"
+        ).textContent = `${greetingText}, ${userName}! 👋`;
+      }
+
+      // Update header profile
+      function updateHeaderProfile() {
+        if (user) {
+          const nameEl = document.getElementById('headerProfileName');
+          const initialsEl = document.getElementById('headerProfileInitials');
+          if (nameEl) nameEl.textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Student';
+          if (initialsEl) {
+             const firstInit = (user.firstName && user.firstName[0]) ? user.firstName[0].toUpperCase() : 'S';
+             const lastInit = (user.lastName && user.lastName[0]) ? user.lastName[0].toUpperCase() : '';
+             initialsEl.textContent = firstInit + lastInit;
+          }
+        }
+      }
+
+      // Update all elements
+      function updateAll() {
+        updateDate();
+        updateTime();
+        updateGreeting();
+      }
+
+      // Initialize on page load
+      updateAll();
+      updateHeaderProfile();
+
+      // Update time every minute (1000ms * 60 = 60000ms)
+      setInterval(updateTime, 60000);
+
+      // Update greeting every minute (in case user stays on page past greeting time boundaries)
+      setInterval(updateGreeting, 60000);
+
+      // Update date at midnight (optional - for users who keep page open overnight)
+      setInterval(updateDate, 60000);
+
+      // Mood selection
+      let selectedMood = null;
+
+      function selectMood(mood, element) {
+        // Remove previous selection
+        document.querySelectorAll(".mood-btn").forEach((btn) => {
+          btn.classList.remove("border-primary", "bg-primary/5");
+          btn.classList.add("border-border");
+        });
+
+        // Add selection to clicked button
+        element.classList.remove("border-border");
+        element.classList.add("border-primary", "bg-primary/5");
+        selectedMood = mood;
+      }
+
+      function submitMoodCheckin() {
+        if (!selectedMood) {
+          alert("Please select your current mood first.");
+          return;
+        }
+
+        const note = document.getElementById("moodNote").value;
+        
+        // Save to local storage
+        let moods = JSON.parse(localStorage.getItem('userMoods') || '[]');
+        const moodScores = {
+            'excellent': 5,
+            'good': 4,
+            'okay': 3,
+            'low': 2,
+            'struggling': 1
+        };
+        
+        moods.push({
+            mood: selectedMood,
+            score: moodScores[selectedMood],
+            note: note,
+            date: new Date().toISOString()
+        });
+        localStorage.setItem('userMoods', JSON.stringify(moods));
+
+        // Update chart data locally
+        updateMoodChartLocal();
+
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Logging Mood...
+            `;
+        button.disabled = true;
+
+        setTimeout(() => {
+          button.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Mood Logged Successfully!
+                `;
+
+          setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+
+            // Reset form
+            selectedMood = null;
+            document.getElementById("moodNote").value = "";
+            document.querySelectorAll(".mood-btn").forEach((btn) => {
+              btn.classList.remove("border-primary", "bg-primary/5");
+              btn.classList.add("border-border");
+            });
+          }, 2000);
+        }, 500);
+      }
+      
+      function updateMoodChartLocal() {
+          let moods = JSON.parse(localStorage.getItem('userMoods') || '[]');
+          if(moods.length > 0 && moodChart) {
+              // Group by last 7 days
+              const last7Days = [];
+              for(let i=6; i>=0; i--) {
+                  const d = new Date();
+                  d.setDate(d.getDate() - i);
+                  last7Days.push(d.toLocaleDateString('en-US', {weekday: 'short'}));
+              }
+              // Basic mock update to show interactivity
+              const recentScores = moods.slice(-7).map(m => m.score);
+              while(recentScores.length < 7) recentScores.unshift(3); // Default to okay if not enough data
+              
+              moodChart.data.labels = last7Days;
+              moodChart.data.datasets[0].data = recentScores;
+              moodChart.update();
+          }
+      }
+      
+      // Journal Logic
+      function loadJournalEntries() {
+          const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+          const container = document.getElementById('journalEntriesList');
+          if(!container) return;
+          
+          if(entries.length === 0) {
+              container.innerHTML = '<p class="text-sm text-text-secondary">No entries yet. Write your first journal entry above!</p>';
+              return;
+          }
+          
+          container.innerHTML = entries.sort((a,b) => new Date(b.date) - new Date(a.date)).map(entry => `
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="text-sm font-medium text-text-primary">${new Date(entry.date).toLocaleDateString()}</span>
+                  <span class="text-xs text-text-secondary">${new Date(entry.date).toLocaleTimeString()}</span>
+                </div>
+                <p class="text-sm text-text-secondary whitespace-pre-wrap">${entry.text}</p>
+                ${entry.image ? `<img src="${entry.image}" class="mt-3 rounded-lg max-h-48 object-cover" />` : ''}
+              </div>
+          `).join('');
+      }
+
+      function saveJournalEntry() {
+          const text = document.getElementById('journalEntry').value;
+          const imageInput = document.getElementById('journalImage');
+          
+          if(!text.trim() && (!imageInput.files || imageInput.files.length === 0)) {
+              alert('Please write something or add an image.');
+              return;
+          }
+          
+          const saveEntry = (imageBase64 = null) => {
+              const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+              entries.push({
+                  id: Date.now(),
+                  text: text,
+                  image: imageBase64,
+                  date: new Date().toISOString()
+              });
+              localStorage.setItem('journalEntries', JSON.stringify(entries));
+              
+              document.getElementById('journalEntry').value = '';
+              document.getElementById('journalImage').value = '';
+              loadJournalEntries();
+              alert('Journal entry saved successfully!');
+          };
+          
+          if(imageInput.files && imageInput.files[0]) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                  saveEntry(e.target.result);
+              };
+              reader.readAsDataURL(imageInput.files[0]);
+          } else {
+              saveEntry(null);
+          }
+      }
+
+      window.addEventListener('load', () => {
+          document.getElementById('journalDateDisplay').textContent = "Today's Date: " + new Date().toLocaleDateString();
+          loadJournalEntries();
+          loadDiscussions();
+          setTimeout(updateMoodChartLocal, 500);
+      });
+      
+      // Community Logic
+      function loadDiscussions() {
+          const defaultDiscs = [
+              { title: "Managing Exam Anxiety", content: "Looking for tips on how to handle stress during finals week...", author: "AS", color: "bg-primary", replies: 12, time: "3 hours ago" },
+              { title: "Mindfulness Techniques", content: "Sharing some meditation practices that have helped me stay grounded...", author: "RK", color: "bg-secondary", replies: 8, time: "1 day ago" }
+          ];
+          
+          let discs = JSON.parse(localStorage.getItem('communityDiscussions'));
+          if(!discs) {
+              discs = defaultDiscs;
+              localStorage.setItem('communityDiscussions', JSON.stringify(discs));
+          }
+          
+          const container = document.getElementById('discussionsList');
+          if(container) {
+              container.innerHTML = discs.map(d => `
+                  <div class="card-surface p-4">
+                    <div class="flex items-start space-x-3">
+                      <div class="w-10 h-10 ${d.color || 'bg-primary'} rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-medium">${d.author}</span>
+                      </div>
+                      <div class="flex-1">
+                        <h5 class="font-medium text-text-primary">${d.title}</h5>
+                        <p class="text-sm text-text-secondary mt-1">${d.content}</p>
+                        <div class="flex items-center space-x-4 mt-2 text-xs text-text-secondary">
+                          <span>${d.replies || 0} replies</span>
+                          <span>&bull;</span>
+                          <span>${d.time || 'Just now'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              `).join('');
+          }
+      }
+      
+      function postDiscussion() {
+          const title = document.getElementById('newDiscTitle').value;
+          const content = document.getElementById('newDiscContent').value;
+          
+          if(!title.trim() || !content.trim()) {
+              alert('Please enter a title and content.');
+              return;
+          }
+          
+          const discs = JSON.parse(localStorage.getItem('communityDiscussions') || '[]');
+          discs.unshift({
+              title: title,
+              content: content,
+              author: "ME",
+              color: "bg-accent",
+              replies: 0,
+              time: "Just now"
+          });
+          
+          localStorage.setItem('communityDiscussions', JSON.stringify(discs));
+          
+          document.getElementById('newDiscTitle').value = '';
+          document.getElementById('newDiscContent').value = '';
+          document.getElementById('newDiscussionForm').classList.add('hidden');
+          
+          loadDiscussions();
+          alert('Discussion posted!');
+      }
+
+      function joinSupportGroup(btn) {
+          if (btn.textContent === 'Join Group') {
+              btn.textContent = 'Joined';
+              btn.classList.remove('bg-secondary');
+              btn.classList.add('bg-green-500');
+          }
+      }
+
+      // Chart.js initialization
+      const ctx = document.getElementById("moodChart").getContext("2d");
+      const moodChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          datasets: [
+            {
+              label: "Mood Score",
+              data: [3.5, 4.2, 3.8, 4.5, 4.1, 4.8, 4.2],
+              borderColor: "#2563EB",
+              backgroundColor: "rgba(37, 99, 235, 0.1)",
+              borderWidth: 3,
+              fill: true,
+              tension: 0.4,
+              pointBackgroundColor: "#2563EB",
+              pointBorderColor: "#ffffff",
+              pointBorderWidth: 2,
+              pointRadius: 6,
+              pointHoverRadius: 8,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 5,
+              ticks: {
+                stepSize: 1,
+                callback: function (value) {
+                  const labels = ["ðŸ˜°", "ðŸ˜”", "ðŸ˜", "ðŸ™‚", "ðŸ˜Š"];
+                  return labels[value - 1] || "";
+                },
+              },
+              grid: {
+                color: "rgba(0, 0, 0, 0.05)",
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+            },
+          },
+          elements: {
+            point: {
+              hoverBackgroundColor: "#2563EB",
+            },
+          },
+        },
+      });
+
+      function changePeriod(period) {
+        // Update button states
+        document
+          .querySelectorAll('button[onclick^="changePeriod"]')
+          .forEach((btn) => {
+            btn.classList.remove("bg-primary", "text-white");
+            btn.classList.add("text-text-secondary", "hover:bg-gray-100");
+          });
+
+        event.target.classList.remove(
+          "text-text-secondary",
+          "hover:bg-gray-100"
+        );
+        event.target.classList.add("bg-primary", "text-white");
+
+        // Update chart data based on period
+        if (period === "week") {
+          moodChart.data.labels = [
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun",
+          ];
+          moodChart.data.datasets[0].data = [3.5, 4.2, 3.8, 4.5, 4.1, 4.8, 4.2];
+        } else {
+          moodChart.data.labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+          moodChart.data.datasets[0].data = [4.1, 3.9, 4.3, 4.2];
+        }
+
+        moodChart.update();
+      }
+
+      // Mental Health Quote Logic
+      const quotes = [
+        "You're doing better than you think, even if it doesn't feel like it.",
+        "You don't have to carry everything alone.",
+        "Small progress still counts — daily.",
+        "It's okay to not have everything figured out in your early 20s.",
+        "Changing direction is not failure — it's correction.",
+        "Clarity often comes after trying, not before.",
+        "Someone else's success doesn't reduce your chances.",
+        "Comparison steals focus more than it builds motivation.",
+        "Sabka timeline alag hota hai — yours is valid too.",
+        "Taking a break is not laziness — it's maintenance.",
+        "Thak jaana normal hai; stopping forever isn't required.",
+        "You don't need to study 24/7 to be serious about your goals.",
+        "Your marks are a result, not your identity.",
+        "Log kya kahenge will always exist — what you think about yourself matters more.",
+        "You are more than your rank, branch, or college name.",
+        "One exam cannot measure your intelligence — it only measures performance on a given day.",
+        "Padhai ka pressure real hai, but it doesn't define your future.",
+        "Consistency matters more than one perfect test."
+      ];
+
+      function showQuoteModal() {
+        const modal = document.getElementById('quoteModal');
+        const quoteElement = document.getElementById('dailyQuote');
+        
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        quoteElement.textContent = randomQuote;
+        
+        modal.classList.remove('hidden');
+        // Trigger reflow
+        void modal.offsetWidth;
+        modal.classList.remove('opacity-0');
+        modal.querySelector('div').classList.remove('scale-95');
+        modal.querySelector('div').classList.add('scale-100');
+      }
+
+      function closeQuoteModal() {
+        const modal = document.getElementById('quoteModal');
+        modal.classList.add('opacity-0');
+        modal.querySelector('div').classList.remove('scale-100');
+        modal.querySelector('div').classList.add('scale-95');
+        
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 500);
+      }
+
+      // Show quote on login (triggered by login page via sessionStorage)
+      window.addEventListener('load', () => {
+        const showFromLogin = sessionStorage.getItem('showWelcomeQuote');
+        if (showFromLogin === 'true') {
+          sessionStorage.removeItem('showWelcomeQuote');
+          setTimeout(showQuoteModal, 500);
+        }
+      });
+
+      // Initialize dark mode immediately
+      initializeDarkMode();
+    </script>
+
+    <!-- Mental Health Quote Modal -->
+    <div id="quoteModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-500">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-transform duration-500 shadow-2xl border border-primary/20">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-primary-50 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+            </svg>
+          </div>
+          <h3 class="text-xl md:text-2xl font-heading font-medium text-text-primary mb-6" id="dailyQuote"></h3>
+          <button onclick="closeQuoteModal()" class="w-full py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+            Let's Begin
+          </button>
+        </div>
+      </div>
+    </div>
+      
+    <!-- Dark Mode Script -->
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/language.js"></script>
+</body>
+</html>
