@@ -79,10 +79,12 @@ class DarkModeToggle {
     animateToggle() {
         const toggleButton = document.getElementById('darkModeToggle');
         if (toggleButton) {
-            toggleButton.style.transform = 'rotate(360deg)';
+            toggleButton.style.transform = 'scale(0.9)';
+            toggleButton.style.opacity = '0.5';
             setTimeout(() => {
-                toggleButton.style.transform = 'rotate(0deg)';
-            }, 300);
+                toggleButton.style.transform = 'scale(1)';
+                toggleButton.style.opacity = '1';
+            }, 150);
         }
     }
 }

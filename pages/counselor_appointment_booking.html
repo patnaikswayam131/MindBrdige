@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
     <style>
         /* Dark Mode CSS Variables */
         :root {
@@ -98,118 +100,105 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+<body class="min-h-screen bg-bg">
+    <!-- Navigation Header -->
+    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
-                    </div>
+                <a href="landing.html" class="flex-shrink-0 flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden" alt="MindBridge Logo">
+                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block" alt="MindBridge Logo">
                     <div>
-                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
-                        <p class="text-xs text-text-secondary">Mental Health Support</p>
+                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
                     </div>
-                </div>
+                </a>
 
                 <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="student_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">Dashboard</a>
-                    <a href="ai_mental_health_chatbot.html" class="text-text-secondary hover:text-primary transition-colors">AI Support</a>
-                    <a href="mental_health_assessments.html" class="text-text-secondary hover:text-primary transition-colors">Assessments</a>
-                    <a href="counselor_appointment_booking.html" class="text-primary font-medium">Book Appointment</a>
+                <nav class="hidden xl:flex items-center space-x-6">
+                    <a href="student_dashboard.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Dashboard</a>
+                    <a href="ai_mental_health_chatbot.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">AI Support</a>
+                    <a href="mental_health_assessments.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Check-in</a>
+                    <a href="counselor_appointment_booking.html" class="whitespace-nowrap text-brand font-medium border-b-2 border-brand pb-1 text-body-m">Counseling</a>
+                    
+                    <div class="h-4 w-px bg-border flex-shrink-0 hidden xl:block"></div>
+                    <div class="hidden xl:flex items-center space-x-2 text-sm flex-shrink-0 whitespace-nowrap">
+                        <div class="w-2 h-2 bg-error rounded-pill animate-pulse flex-shrink-0"></div>
+                        <span class="text-text-secondary">Kiran Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                    </div>
                 </nav>
 
-                <!-- Dark Mode Toggle & Emergency Contact -->
-                <div class="hidden lg:flex items-center space-x-4">
-                    <!-- Dark Mode Toggle -->
-                    <button
-                        id="darkModeToggle"
-                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                        title="Toggle Dark Mode"
-                    >
-                        <svg
-                            id="darkModeIcon"
-                            class="w-5 h-5 text-text-secondary"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                            />
+                <!-- Right Section -->
+                <div class="flex items-center space-x-4 flex-shrink-0">
+                    <button id="darkModeToggle" class="flex-shrink-0 p-2 rounded-lg hover:bg-surface-soft transition-colors text-text-secondary hover:text-text" title="Toggle Dark Mode">
+                        <svg id="darkModeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
                         </svg>
                     </button>
-                    
-                    <!-- Emergency Contact -->
-                    <div class="flex items-center space-x-2 text-sm">
-                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
-                        <span class="text-text-secondary">Crisis Helpline:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">
-                            1800-599-0019
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Mobile Controls -->
-                <div class="md:hidden flex items-center space-x-2">
-                    <!-- Mobile Dark Mode Toggle -->
-                    <button
-                        id="darkModeToggleMobile"
-                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                        title="Toggle Dark Mode"
-                        onclick="toggleDarkMode()"
-                    >
-                        <svg
-                            id="darkModeIconMobile"
-                            class="w-5 h-5 text-text-secondary"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                            />
-                        </svg>
-                    </button>
-                    
                     <!-- Mobile Menu Button -->
-                    <button class="p-2" onclick="toggleMobileMenu()">
-                        <svg class="w-6 h-6 text-text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
                     </button>
-                </div>
-            </div>
-
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="md:hidden hidden border-t border-border-light py-4">
-                <div class="space-y-3">
-                    <a href="student_dashboard.html" class="block text-text-secondary hover:text-primary transition-colors">Dashboard</a>
-                    <a href="ai_mental_health_chatbot.html" class="block text-text-secondary hover:text-primary transition-colors">AI Support</a>
-                    <a href="mental_health_assessments.html" class="block text-text-secondary hover:text-primary transition-colors">Assessments</a>
-                    <a href="counselor_appointment_booking.html" class="block text-primary font-medium">Book Appointment</a>
-                    <div class="pt-3 border-t border-border-light">
-                        <div class="flex items-center space-x-2 text-sm">
-                            <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
-                            <span class="text-text-secondary">Crisis:</span>
-                            <a href="tel:1800-599-0019" class="text-error font-medium">1800-599-0019</a>
+                    <!-- User Profile -->
+                    <div class="flex-shrink-0 flex items-center space-x-3 cursor-pointer hover:bg-surface-soft rounded-lg p-2 transition-colors">
+                        <div class="w-10 h-10 bg-brand-soft text-brand rounded-full flex items-center justify-center font-medium">
+                            AS
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-5">
+                <a href="student_dashboard.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Dashboard</a>
+                <a href="ai_mental_health_chatbot.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">AI Support</a>
+                <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Check-in</a>
+                <a href="counselor_appointment_booking.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Counseling</a>
+                
+                <div class="h-px w-full bg-border my-1"></div>
+                
+                <div class="flex items-center space-x-2 text-sm text-text-secondary">
+                    <span class="font-medium">Crisis Support:</span>
+                    <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                </div>
+            </div>
+        </div>
     </header>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            
+            if (btn && menu) {
+                // Toggle menu
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                });
+                
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) {
+                        menu.classList.add('hidden');
+                    }
+                });
+                
+                // Close on link click
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.add('hidden');
+                    });
+                });
+            }
+        });
+    </script>
 
     <!-- Main Content -->
     <main class="flex-1 py-8">
@@ -609,12 +598,12 @@
                             </svg>
                             Cancellation Policy
                         </h4>
-                        <div class="space-y-2 text-sm text-text-secondary">
-                            <p>â€¢ Cancel up to 24 hours in advance without penalty</p>
-                            <p>â€¢ Same-day cancellations may result in a missed appointment fee</p>
-                            <p>â€¢ Emergency situations are handled case-by-case</p>
-                            <p>â€¢ Reschedule easily through your dashboard</p>
-                        </div>
+                        <ul class="list-disc list-outside ml-4 space-y-2 text-sm text-text-secondary marker:text-accent">
+                            <li>Cancel up to 24 hours before your appointment with no fee.</li>
+                            <li>Same-day cancellations may incur a fee.</li>
+                            <li>Emergency situations are reviewed individually.</li>
+                            <li>Need to change your appointment? Reschedule from your dashboard.</li>
+                        </ul>
                     </div>
 
                     <!-- Emergency Support -->
@@ -648,11 +637,11 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-border-light py-6">
+    <footer class="bg-surface border-t border-border-light py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div class="text-sm text-text-secondary">
-                    Â© 2025 MindBridge. All Rights Reserved. | Confidential Mental Health Support
+                    &copy; 2025 MindBridge. All Rights Reserved. | Confidential Mental Health Support
                 </div>
                 <div class="flex items-center space-x-6 text-sm">
                     <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Privacy Policy</a>
@@ -865,5 +854,6 @@
     <!-- Dark Mode Script -->
     <script src="../js/dark-mode.js"></script>
 <script src="../js/language.js"></script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
 </body>
 </html>

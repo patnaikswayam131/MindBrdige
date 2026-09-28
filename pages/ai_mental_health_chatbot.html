@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
     <style>
         /* Dark Mode CSS Variables */
         :root {
@@ -132,83 +133,105 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+<body class="min-h-screen bg-bg">
+    <!-- Navigation Header -->
+    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
-                    </div>
+                <a href="landing.html" class="flex-shrink-0 flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden" alt="MindBridge Logo">
+                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block" alt="MindBridge Logo">
                     <div>
-                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
-                        <p class="text-xs text-text-secondary">AI Mental Health Support</p>
+                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
                     </div>
-                </div>
+                </a>
 
                 <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="student_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">Dashboard</a>
-                    <a href="mental_health_assessments.html" class="text-text-secondary hover:text-primary transition-colors">Assessments</a>
-                    <a href="counselor_appointment_booking.html" class="text-text-secondary hover:text-primary transition-colors">Book Counselor</a>
+                <nav class="hidden xl:flex items-center space-x-6">
+                    <a href="student_dashboard.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Dashboard</a>
+                    <a href="ai_mental_health_chatbot.html" class="whitespace-nowrap text-brand font-medium border-b-2 border-brand pb-1 text-body-m">AI Support</a>
+                    <a href="mental_health_assessments.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Check-in</a>
+                    <a href="counselor_appointment_booking.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Counseling</a>
+                    
+                    <div class="h-4 w-px bg-border flex-shrink-0 hidden xl:block"></div>
+                    <div class="hidden xl:flex items-center space-x-2 text-sm flex-shrink-0 whitespace-nowrap">
+                        <div class="w-2 h-2 bg-error rounded-pill animate-pulse flex-shrink-0"></div>
+                        <span class="text-text-secondary">Kiran Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                    </div>
                 </nav>
 
                 <!-- Right Section -->
-                <div class="flex items-center space-x-4">
-                    <!-- Language Selector -->
-                    <select id="languageSelector" class="text-sm border border-border-light rounded px-2 py-1 text-text-primary bg-white dark:bg-gray-800" onchange="translatePage(this.value)">
-                        <option value="en">English</option>
-                        <option value="hi">हिंदी (Hindi)</option>
-                        <option value="hinglish">Hinglish</option>
-                    </select>
-
-                    <!-- Dark Mode Toggle -->
-                    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
-                        <svg id="sunIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-                        </svg>
-                        <svg id="moonIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center space-x-4 flex-shrink-0">
+                    <button id="darkModeToggle" class="flex-shrink-0 p-2 rounded-lg hover:bg-surface-soft transition-colors text-text-secondary hover:text-text" title="Toggle Dark Mode">
+                        <svg id="darkModeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
                         </svg>
                     </button>
-                    
-                    <!-- Emergency Contact -->
-                    <div class="hidden md:flex items-center space-x-2 text-sm">
-                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
-                        <span class="text-text-secondary">Crisis:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">
-                            1800-599-0019
-                        </a>
-                    </div>
-                    <button class="md:hidden p-2 text-text-secondary hover:text-primary" onclick="toggleMobileMenu()">
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
                     </button>
+                    <!-- User Profile -->
+                    <div class="flex-shrink-0 flex items-center space-x-3 cursor-pointer hover:bg-surface-soft rounded-lg p-2 transition-colors">
+                        <div class="w-10 h-10 bg-brand-soft text-brand rounded-full flex items-center justify-center font-medium">
+                            AS
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-border-light">
-            <div class="px-4 py-3 space-y-3">
-                <a href="student_dashboard.html" class="block text-text-secondary hover:text-primary transition-colors">Dashboard</a>
-                <a href="mental_health_assessments.html" class="block text-text-secondary hover:text-primary transition-colors">Assessments</a>
-                <a href="counselor_appointment_booking.html" class="block text-text-secondary hover:text-primary transition-colors">Book Counselor</a>
-                <div class="pt-3 border-t border-border-light">
-                    <div class="flex items-center space-x-2 text-sm">
-                        <div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
-                        <span class="text-text-secondary">Crisis Helpline:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium">1800-599-0019</a>
-                    </div>
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-5">
+                <a href="student_dashboard.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Dashboard</a>
+                <a href="ai_mental_health_chatbot.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">AI Support</a>
+                <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Check-in</a>
+                <a href="counselor_appointment_booking.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Counseling</a>
+                
+                <div class="h-px w-full bg-border my-1"></div>
+                
+                <div class="flex items-center space-x-2 text-sm text-text-secondary">
+                    <span class="font-medium">Crisis Support:</span>
+                    <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            
+            if (btn && menu) {
+                // Toggle menu
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                });
+                
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) {
+                        menu.classList.add('hidden');
+                    }
+                });
+                
+                // Close on link click
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.add('hidden');
+                    });
+                });
+            }
+        });
+    </script>
 
     <!-- Main Chat Interface -->
     <main class="flex-1 flex h-screen" style="height: calc(100vh - 64px);">
@@ -220,16 +243,16 @@
                 <div class="px-4 lg:px-6 py-4 border-b border-border-light bg-gradient-to-r from-primary-50 to-secondary-50">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            <div class="w-12 h-12 bg-brand-soft rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="font-heading font-semibold text-text-primary">O.R.I.S</h2>
+                                <h2 class="font-heading font-semibold text-text-primary">MindBridge AI</h2>
                                 <div class="flex items-center space-x-2">
-                                    <div class="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
-                                    <span class="text-sm text-text-secondary">Online</span>
+                                    <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                                    <span class="text-sm text-text-secondary">Your first point of support</span>
                                 </div>
                             </div>
                         </div>
@@ -259,31 +282,34 @@
                 <div id="chatMessages" class="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4">
                     <!-- Welcome Message -->
                     <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        <div class="w-8 h-8 bg-brand-soft rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
                         </div>
                         <div class="flex-1">
-                            <div class="bg-gray-50 rounded-lg p-4 max-w-md">
-                                <p class="text-text-primary">Hello! I'm O.R.I.S. I'm here to provide support, coping strategies, and a safe space to talk. How are you feeling today?</p>
+                            <div class="bg-surface-soft border border-border rounded-lg p-4 max-w-md">
+                                <p class="text-text">Hi! How are you feeling today? You can talk to me about anything that's been on your mind — academics, stress, relationships, sleep, or just how your day is going.</p>
                             </div>
-                            <p class="text-xs text-text-secondary mt-1">Today, 04:17 PM</p>
+                            <p class="text-xs text-text-secondary mt-1">Just now</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Suggested Responses -->
-                <div id="suggestedResponses" class="px-4 lg:px-6 py-3 border-t border-border-light bg-gray-50">
+                <div id="suggestedResponses" class="px-4 lg:px-6 py-3 border-t border-border-light bg-surface-soft">
                     <div class="flex flex-wrap gap-2">
-                        <button onclick="sendSuggestedResponse('Let\'s try the grounding exercise')" class="px-3 py-2 bg-white border border-border rounded-full text-sm text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-colors">
-                            Let's try the grounding exercise
+                        <button onclick="sendSuggestedResponse('I\'m feeling stressed')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
+                            I'm feeling stressed
                         </button>
-                        <button onclick="sendSuggestedResponse('Tell me more about exam strategies')" class="px-3 py-2 bg-white border border-border rounded-full text-sm text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-colors">
-                            Tell me more about exam strategies
+                        <button onclick="sendSuggestedResponse('I need someone to talk to')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
+                            I need someone to talk to
                         </button>
-                        <button onclick="sendSuggestedResponse('I need breathing exercises')" class="px-3 py-2 bg-white border border-border rounded-full text-sm text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-colors">
-                            I need breathing exercises
+                        <button onclick="sendSuggestedResponse('I\'m having a difficult day')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
+                            I'm having a difficult day
+                        </button>
+                        <button onclick="sendSuggestedResponse('I\'m doing okay')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
+                            I'm doing okay
                         </button>
                     </div>
                 </div>
@@ -312,7 +338,7 @@
             </div>
 
             <!-- Side Panel -->
-            <div class="w-full lg:w-80 bg-gray-50 border-l border-border-light">
+            <div class="w-full lg:w-80 bg-surface border-l border-border">
                 <!-- Quick Actions -->
                 <div class="p-4 lg:p-6">
                     <h3 class="font-heading font-semibold text-text-primary mb-4">Quick Support</h3>
@@ -426,18 +452,10 @@
                     </div>
                 </div>
 
-                <!-- Privacy Notice -->
+                <!-- Disclaimer -->
                 <div class="p-4 lg:p-6 border-t border-border">
-                    <div class="bg-primary-50 rounded-lg p-3">
-                        <div class="flex items-start space-x-2">
-                            <svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                            </svg>
-                            <div>
-                                <p class="text-sm font-medium text-primary">Your Privacy is Protected</p>
-                                <p class="text-xs text-text-secondary mt-1">This conversation is confidential and encrypted. You can export or delete it anytime.</p>
-                            </div>
-                        </div>
+                    <div class="bg-surface-soft border border-border rounded-lg p-3">
+                        <p class="text-caption text-text-secondary">MindBridge AI provides general emotional support and mental-health information. It does not replace professional care or emergency services.</p>
                     </div>
                 </div>
             </div>
@@ -629,5 +647,6 @@
     <!-- Chat API and Integration -->
     <script src="../js/chat-integration.js"></script>
     <script src="../js/language.js"></script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
 </body>
 </html>
