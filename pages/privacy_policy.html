@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy - MindBridge</title>
+    <meta name="description" content="MindBridge Privacy Policy - Learn how we collect, use, and protect your personal information.">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .policy-content h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            line-height: 32px;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        .policy-content h3 {
+            font-family: var(--font-body);
+            font-size: 18px;
+            line-height: 28px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+        .policy-content h4 {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        .policy-content p {
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--color-text-secondary);
+            margin-bottom: 16px;
+        }
+        .policy-content ul {
+            list-style: disc;
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+        .policy-content li {
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+        .policy-content strong {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+        .policy-content a {
+            color: var(--color-brand);
+            text-decoration: underline;
+        }
+        .policy-content a:hover {
+            color: var(--color-brand-hover);
+        }
+        .policy-content .last-updated {
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--color-text-muted);
+            margin-bottom: 24px;
+        }
+        .policy-content .intro {
+            font-size: 18px;
+            line-height: 28px;
+            color: var(--color-text-secondary);
+            margin-bottom: 24px;
+        }
+        @media (max-width: 768px) {
+            .policy-content h2 {
+                font-size: 20px;
+                line-height: 28px;
+                margin-top: 24px;
+            }
+            .policy-content h3 {
+                font-size: 16px;
+                line-height: 24px;
+            }
+            .policy-content p, .policy-content li {
+                font-size: 15px;
+                line-height: 24px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-bg">
+    <!-- Navigation Header -->
+    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
+                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <div>
+                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
+                    </div>
+                </a>
+
+                <!-- Navigation -->
+                <nav class="hidden xl:flex items-center space-x-6">
+                    <a href="landing.html#features" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
+                    <a href="landing.html#how-it-works" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
+                    <a href="mental_health_assessments.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
+                    <a href="landing.html#about" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
+                    <a href="landing.html#contact" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
+                    
+                    <div class="h-4 w-px bg-border flex-shrink-0 hidden xl:block"></div>
+                    <div class="hidden xl:flex items-center space-x-2 text-sm flex-shrink-0 whitespace-nowrap">
+                        <div class="w-2 h-2 bg-error rounded-pill animate-pulse flex-shrink-0"></div>
+                        <span class="text-text-secondary">Kiran Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                    </div>
+                </nav>
+
+                <!-- Right Section -->
+                <div class="flex items-center space-x-4 flex-shrink-0">
+                    <!-- Theme Switch -->
+                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
+                        <input type="checkbox" id="darkModeCheckbox">
+                        <span class="slider">
+                            <span class="star star_1"></span>
+                            <span class="star star_2"></span>
+                            <span class="star star_3"></span>
+                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                            </svg>
+                        </span>
+                    </label>
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <a href="student_login.html" class="btn-secondary hidden sm:inline-flex whitespace-nowrap flex-shrink-0 min-w-fit">Sign In</a>
+                    <a href="student_login.html" class="btn-primary whitespace-nowrap flex-shrink-0 min-w-fit">Get Started</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-5">
+                <a href="landing.html#features" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
+                <a href="landing.html#how-it-works" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
+                <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
+                <a href="landing.html#about" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
+                <a href="landing.html#contact" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
+                
+                <div class="h-px w-full bg-border my-1"></div>
+                
+                <div class="flex flex-col space-y-5">
+                    <div class="flex items-center space-x-2 text-sm text-text-secondary">
+                        <span class="font-medium">Crisis Support:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                    </div>
+                    
+                    <div class="sm:hidden">
+                        <a href="student_login.html" class="btn-secondary w-full justify-center flex">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            
+            if (btn && menu) {
+                // Toggle menu
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                });
+                
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) {
+                        menu.classList.add('hidden');
+                    }
+                });
+                
+                // Close on link click
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.add('hidden');
+                    });
+                });
+            }
+        });
+    </script>
+
+    <!-- Policy Hero Section -->
+    <section class="py-16 lg:py-24 bg-bg border-b border-border">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+            <h1 class="text-display-m sm:text-display-l font-display text-text mb-6">Privacy Policy</h1>
+            <p class="last-updated">Last Updated: September 29, 2026</p>
+            <p class="intro">MindBridge ("MindBridge", "we", "us", or "our") respects your privacy. This Privacy Policy explains what information we collect, why we collect it, how we use and protect it, when information may be shared, and the choices available to you when using the MindBridge platform. Because MindBridge may process information relating to mental wellbeing, we aim to apply additional care to the collection and handling of such information.</p>
+        </div>
+    </section>
+
+    <!-- Policy Content -->
+    <section class="py-16 lg:py-20 bg-bg">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="policy-content fade-in space-y-8">
+                
+                <section>
+                    <h2>1. Information We Collect</h2>
+                    <p>Depending on the features you use, MindBridge may collect the following categories of information.</p>
+                    
+                    <h3>Account Information</h3>
+                    <p>This may include:</p>
+                    <ul>
+                        <li>Name or display name</li>
+                        <li>Email address</li>
+                        <li>Password or authentication information</li>
+                        <li>Age or date of birth where required</li>
+                        <li>Student status</li>
+                        <li>Institution or educational information where voluntarily provided</li>
+                    </ul>
+
+                    <h3>Wellbeing Information</h3>
+                    <p>If you choose to use relevant features, MindBridge may process information such as:</p>
+                    <ul>
+                        <li>Responses to wellbeing or mental-health questionnaires</li>
+                        <li>Wellbeing assessment results</li>
+                        <li>Mood or emotion information</li>
+                        <li>Journal or reflection entries</li>
+                        <li>Responses provided through self-help tools</li>
+                        <li>Information you voluntarily provide regarding your wellbeing</li>
+                    </ul>
+                    <p>You should only provide information that you are comfortable storing on the platform.</p>
+
+                    <h3>Peer-Support Information</h3>
+                    <p>If peer-support functionality is available, we may process:</p>
+                    <ul>
+                        <li>Posts</li>
+                        <li>Messages</li>
+                        <li>Comments</li>
+                        <li>Reports</li>
+                        <li>Moderation-related information</li>
+                    </ul>
+
+                    <h3>Technical Information</h3>
+                    <p>We may automatically collect limited technical information such as:</p>
+                    <ul>
+                        <li>IP address</li>
+                        <li>Device type</li>
+                        <li>Operating system</li>
+                        <li>Browser type</li>
+                        <li>Application version</li>
+                        <li>Log information</li>
+                        <li>Approximate usage information</li>
+                        <li>Security and diagnostic information</li>
+                    </ul>
+                    <p>The exact information collected will depend on the technical implementation of the platform.</p>
+
+                    <h3>Cookies and Similar Technologies</h3>
+                    <p>MindBridge may use cookies or similar technologies for purposes such as:</p>
+                    <ul>
+                        <li>Authentication</li>
+                        <li>Session management</li>
+                        <li>Security</li>
+                        <li>Remembering preferences</li>
+                        <li>Understanding platform usage</li>
+                        <li>Improving functionality</li>
+                    </ul>
+                    <p>Where required, we will provide appropriate choices or consent mechanisms.</p>
+                </section>
+
+                <section>
+                    <h2>2. How We Use Your Information</h2>
+                    <p>We may use information to:</p>
+                    <ul>
+                        <li>Create and manage your account</li>
+                        <li>Provide MindBridge features</li>
+                        <li>Provide wellbeing resources</li>
+                        <li>Generate assessment results requested by you</li>
+                        <li>Provide personalized platform experiences where enabled</li>
+                        <li>Facilitate peer-support functionality</li>
+                        <li>Maintain platform security</li>
+                        <li>Detect abuse, fraud, or security incidents</li>
+                        <li>Improve platform functionality</li>
+                        <li>Respond to support requests</li>
+                        <li>Conduct aggregated or de-identified analysis</li>
+                        <li>Comply with legal obligations</li>
+                        <li>Protect the rights, safety, and security of users and the platform</li>
+                    </ul>
+                    <p>We will seek to limit collection and processing to information reasonably necessary for the relevant purpose.</p>
+                </section>
+
+                <section>
+                    <h2>3. Mental-Health and Wellbeing Information</h2>
+                    <p>Some information submitted to MindBridge may reveal sensitive information about your mental wellbeing.</p>
+                    <p>We do not treat such information as ordinary marketing information.</p>
+                    <p>Unless otherwise stated in this Privacy Policy or required by law, MindBridge will not sell your personal information.</p>
+                    <p>We will not use your private journal entries or wellbeing responses for unrelated advertising purposes.</p>
+                    <p>Where analytics or research activities are conducted, we will use aggregated, anonymized, or de-identified information where reasonably appropriate.</p>
+                </section>
+
+                <section>
+                    <h2>4. AI and Automated Processing</h2>
+                    <p>MindBridge may use artificial intelligence or machine-learning systems to provide certain features.</p>
+                    <p>Depending on the feature, information submitted to the system may be processed to generate a response, recommendation, classification, summary, or other output.</p>
+                    <p>AI-generated outputs are not medical diagnoses.</p>
+                    <p>Where applicable, we will disclose when you are interacting with an AI-based feature.</p>
+                    <p>We will not represent an AI-generated assessment as a clinical diagnosis.</p>
+                    <p>If your information is processed by an external AI or technology provider, such processing will be subject to appropriate contractual and security safeguards and the applicable privacy requirements.</p>
+                </section>
+
+                <section>
+                    <h2>5. Sharing of Information</h2>
+                    <p>We may share personal information only where reasonably necessary for legitimate platform operations, with your consent where required, or where permitted or required by applicable law.</p>
+                    <p>Potential recipients may include:</p>
+                    <ul>
+                        <li>Cloud hosting providers</li>
+                        <li>Authentication providers</li>
+                        <li>Database or infrastructure providers</li>
+                        <li>Security providers</li>
+                        <li>Analytics providers</li>
+                        <li>Communication providers</li>
+                        <li>AI or machine-learning service providers</li>
+                        <li>Professional service providers working on behalf of MindBridge</li>
+                    </ul>
+                    <p>These providers should only receive information reasonably necessary to perform the services for which they are engaged.</p>
+                    <p>We may also disclose information:</p>
+                    <ul>
+                        <li>Where required by applicable law or a lawful governmental request</li>
+                        <li>To investigate security incidents or unlawful activity</li>
+                        <li>To protect the safety of users or others</li>
+                        <li>To protect the rights and property of MindBridge</li>
+                        <li>In connection with a merger, acquisition, restructuring, or transfer of the platform, subject to applicable law</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>6. We Do Not Sell Your Personal Information</h2>
+                    <p>MindBridge does not sell personal information to third parties for advertising or commercial data-broker purposes.</p>
+                    <p>We also do not use private mental-health information to build advertising profiles.</p>
+                </section>
+
+                <section>
+                    <h2>7. Institutional Access</h2>
+                    <p>If MindBridge is provided through a college, university, or other educational institution, the institution's access to user information will depend on the specific implementation and agreements governing the service.</p>
+                    <p>Unless clearly disclosed otherwise, individual wellbeing responses should not be assumed to be visible to the institution.</p>
+                    <p>Where institutional reporting is provided, we will aim to use aggregated or de-identified information wherever practical.</p>
+                    <p>The specific information available to an institution should be clearly disclosed to users before or when the relevant information is collected.</p>
+                </section>
+
+                <section>
+                    <h2>8. Data Retention</h2>
+                    <p>We retain personal information only for as long as reasonably necessary for the purposes described in this Privacy Policy, unless a longer retention period is required by law.</p>
+                    <p>Retention periods may vary depending on the type of information and the purpose for which it was collected.</p>
+                    <p>For example:</p>
+                    <ul>
+                        <li>Account information may be retained while your account remains active.</li>
+                        <li>User-generated content may be retained until you delete it or the applicable retention period expires.</li>
+                        <li>Security and technical logs may be retained for a limited period for security and operational purposes.</li>
+                        <li>Information that must be retained to comply with legal obligations may be retained for the legally required period.</li>
+                    </ul>
+                    <p>When information is no longer required, we will take reasonable steps to delete, anonymize, or otherwise dispose of it securely.</p>
+                </section>
+
+                <section>
+                    <h2>9. Data Security</h2>
+                    <p>We use reasonable technical and organizational measures designed to protect personal information against unauthorized access, alteration, disclosure, loss, or destruction.</p>
+                    <p>Depending on the system architecture, these measures may include:</p>
+                    <ul>
+                        <li>Encryption in transit</li>
+                        <li>Encryption at rest where appropriate</li>
+                        <li>Access controls</li>
+                        <li>Authentication mechanisms</li>
+                        <li>Secure password storage</li>
+                        <li>Logging and monitoring</li>
+                        <li>Regular security reviews</li>
+                        <li>Restricted access to sensitive information</li>
+                        <li>Backup and recovery procedures</li>
+                    </ul>
+                    <p>No internet-based system can be guaranteed to be completely secure.</p>
+                </section>
+
+                <section>
+                    <h2>10. Your Rights and Choices</h2>
+                    <p>Subject to applicable law, you may have rights relating to your personal information, including rights to:</p>
+                    <ul>
+                        <li>Request information about how your personal data is processed</li>
+                        <li>Request access to personal data</li>
+                        <li>Request correction of inaccurate information</li>
+                        <li>Request deletion or erasure where applicable</li>
+                        <li>Withdraw consent where processing is based on consent</li>
+                        <li>Raise a grievance regarding the processing of your personal data</li>
+                        <li>Exercise other rights available under applicable data-protection law</li>
+                    </ul>
+                    <p>Requests may be submitted to:</p>
+                    <p><strong>Privacy Contact:</strong> <a href="mailto:privacy@mindbridge.example">privacy@mindbridge.example</a></p>
+                    <p>We may need to verify your identity before fulfilling certain requests.</p>
+                    <p>The Digital Personal Data Protection Act provides rights and obligations concerning personal-data processing, including consent withdrawal and grievance-related mechanisms.</p>
+                </section>
+
+                <section>
+                    <h2>11. Children's Privacy</h2>
+                    <p>MindBridge is primarily designed for students aged 18 and above unless a specific version of the platform has been designed to legally support younger users.</p>
+                    <p>We do not knowingly permit children under 18 to use features that require personal-data processing without the legally required parental or guardian consent.</p>
+                    <p>Where services are made available to children, MindBridge will implement appropriate mechanisms required by applicable law, including requirements concerning verifiable parental or guardian consent.</p>
+                    <p>If you believe that a child has provided personal information to MindBridge without the required authorization, contact us at <a href="mailto:privacy@mindbridge.example">privacy@mindbridge.example</a>.</p>
+                </section>
+
+                <section>
+                    <h2>12. Crisis and Safety Information</h2>
+                    <p>MindBridge may process information submitted through wellbeing assessments or support features.</p>
+                    <p>However, submitting information to MindBridge does not guarantee that MindBridge will identify an emergency or contact emergency services.</p>
+                    <p>Unless explicitly stated for a particular feature, MindBridge does not continuously monitor user activity for crisis detection.</p>
+                    <p>Users experiencing an immediate mental-health emergency should contact appropriate emergency services or seek assistance from a qualified professional or trusted person.</p>
+                </section>
+
+                <section>
+                    <h2>13. Research and Analytics</h2>
+                    <p>Where MindBridge conducts research, analytics, or product-improvement activities, we will seek to minimize the use of directly identifiable personal information.</p>
+                    <p>Where practical, research and analytics will use aggregated, anonymized, or de-identified information.</p>
+                    <p>If a specific research activity requires identifiable information or additional consent, we will provide appropriate information and obtain consent where required.</p>
+                </section>
+
+                <section>
+                    <h2>14. International Data Transfers</h2>
+                    <p>Some service providers used by MindBridge may process information on servers located outside India.</p>
+                    <p>Where personal information is transferred or processed outside India, MindBridge will apply the safeguards and requirements required by applicable law.</p>
+                    <p>We will disclose material changes to our data-processing practices through updates to this Privacy Policy where required.</p>
+                </section>
+
+                <section>
+                    <h2>15. Third-Party Links and Services</h2>
+                    <p>MindBridge may link to external websites, helplines, healthcare providers, educational resources, or other services.</p>
+                    <p>Those services have their own privacy practices.</p>
+                    <p>MindBridge is not responsible for the privacy practices of third parties that it does not control.</p>
+                    <p>We recommend reviewing the privacy policy of any external service before submitting personal information.</p>
+                </section>
+
+                <section>
+                    <h2>16. Changes to This Privacy Policy</h2>
+                    <p>We may update this Privacy Policy periodically.</p>
+                    <p>If we make material changes, we will provide appropriate notice through the platform or another reasonable method.</p>
+                    <p>The "Last Updated" date at the beginning of this Privacy Policy indicates when it was most recently revised.</p>
+                </section>
+
+                <section>
+                    <h2>17. Contact Us</h2>
+                    <p>For privacy questions, data requests, or complaints, contact:</p>
+                    <p><strong>MindBridge Privacy Team</strong><br>
+                    Email: <a href="mailto:privacy@mindbridge.example">privacy@mindbridge.example</a><br>
+                    Website: <a href="http://www.example.com">www.example.com</a></p>
+                    <p><strong>Data Protection / Grievance Contact:</strong><br>
+                    [Name / Designation]<br>
+                    [Email Address]</p>
+                    <p class="last-updated"><strong>Effective Date:</strong> September 29, 2026</p>
+                </section>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-surface-soft py-16 border-t border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div class="md:col-span-1">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="../images/logo_light.png" class="h-8 dark:hidden opacity-80" alt="MindBridge Logo">
+                        <img src="../images/logo_dark.png" class="h-8 hidden dark:block opacity-80" alt="MindBridge Logo">
+                        <h2 class="text-h4 font-display text-text">MindBridge</h2>
+                    </div>
+                    <p class="text-body-s text-text-secondary mb-4">Mental Health Support for Students</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-label text-text font-medium mb-4">Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="landing.html#features" class="text-body-s text-text-secondary hover:text-brand transition-colors">Features</a></li>
+                        <li><a href="landing.html#how-it-works" class="text-body-s text-text-secondary hover:text-brand transition-colors">How It Works</a></li>
+                        <li><a href="landing.html#about" class="text-body-s text-text-secondary hover:text-brand transition-colors">About</a></li>
+                        <li><a href="landing.html#contact" class="text-body-s text-text-secondary hover:text-brand transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-label text-text font-medium mb-4">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="ai_mental_health_chatbot.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">AI Support</a></li>
+                        <li><a href="mental_health_assessments.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Resources</a></li>
+                        <li><span class="text-body-s text-error font-medium">Kiran Helpline: Call 1800-599-0019</span></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-label text-text font-medium mb-4">Legal</h3>
+                    <ul class="space-y-3">
+                        <li><a href="privacy_policy.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms_of_service.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-body-s text-text-secondary hover:text-brand transition-colors">AI Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between">
+                <p class="text-caption text-text-muted mb-4 md:mb-0">© 2024 MindBridge. MindBridge is not an emergency medical service.</p>
+                <div class="flex space-x-6 text-caption text-text-muted">
+                    <span>Privacy-focused</span>
+                    <span>•</span>
+                    <span>Secure communication</span>
+                    <span>•</span>
+                    <span>Confidential support</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

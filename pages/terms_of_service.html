@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Service - MindBridge</title>
+    <meta name="description" content="MindBridge Terms of Service - Terms and conditions for using the MindBridge platform.">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .policy-content h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            line-height: 32px;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        .policy-content h3 {
+            font-family: var(--font-body);
+            font-size: 18px;
+            line-height: 28px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+        .policy-content h4 {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        .policy-content p {
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--color-text-secondary);
+            margin-bottom: 16px;
+        }
+        .policy-content ul {
+            list-style: disc;
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+        .policy-content li {
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+        .policy-content strong {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+        .policy-content a {
+            color: var(--color-brand);
+            text-decoration: underline;
+        }
+        .policy-content a:hover {
+            color: var(--color-brand-hover);
+        }
+        .policy-content .last-updated {
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--color-text-muted);
+            margin-bottom: 24px;
+        }
+        .policy-content .intro {
+            font-size: 18px;
+            line-height: 28px;
+            color: var(--color-text-secondary);
+            margin-bottom: 24px;
+        }
+        @media (max-width: 768px) {
+            .policy-content h2 {
+                font-size: 20px;
+                line-height: 28px;
+                margin-top: 24px;
+            }
+            .policy-content h3 {
+                font-size: 16px;
+                line-height: 24px;
+            }
+            .policy-content p, .policy-content li {
+                font-size: 15px;
+                line-height: 24px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-bg">
+    <!-- Navigation Header -->
+    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
+                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <div>
+                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
+                    </div>
+                </a>
+
+                <!-- Navigation -->
+                <nav class="hidden xl:flex items-center space-x-6">
+                    <a href="landing.html#features" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
+                    <a href="landing.html#how-it-works" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
+                    <a href="mental_health_assessments.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
+                    <a href="landing.html#about" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
+                    <a href="landing.html#contact" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
+                    
+                    <div class="h-4 w-px bg-border flex-shrink-0 hidden xl:block"></div>
+                    <div class="hidden xl:flex items-center space-x-2 text-sm flex-shrink-0 whitespace-nowrap">
+                        <div class="w-2 h-2 bg-error rounded-pill animate-pulse flex-shrink-0"></div>
+                        <span class="text-text-secondary">Kiran Helpline:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                    </div>
+                </nav>
+
+                <!-- Right Section -->
+                <div class="flex items-center space-x-4 flex-shrink-0">
+                    <!-- Theme Switch -->
+                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
+                        <input type="checkbox" id="darkModeCheckbox">
+                        <span class="slider">
+                            <span class="star star_1"></span>
+                            <span class="star star_2"></span>
+                            <span class="star star_3"></span>
+                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                            </svg>
+                        </span>
+                    </label>
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <a href="student_login.html" class="btn-secondary hidden sm:inline-flex whitespace-nowrap flex-shrink-0 min-w-fit">Sign In</a>
+                    <a href="student_login.html" class="btn-primary whitespace-nowrap flex-shrink-0 min-w-fit">Get Started</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-5">
+                <a href="landing.html#features" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
+                <a href="landing.html#how-it-works" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
+                <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
+                <a href="landing.html#about" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
+                <a href="landing.html#contact" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
+                
+                <div class="h-px w-full bg-border my-1"></div>
+                
+                <div class="flex flex-col space-y-5">
+                    <div class="flex items-center space-x-2 text-sm text-text-secondary">
+                        <span class="font-medium">Crisis Support:</span>
+                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                    </div>
+                    
+                    <div class="sm:hidden">
+                        <a href="student_login.html" class="btn-secondary w-full justify-center flex">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            
+            if (btn && menu) {
+                // Toggle menu
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                });
+                
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) {
+                        menu.classList.add('hidden');
+                    }
+                });
+                
+                // Close on link click
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.add('hidden');
+                    });
+                });
+            }
+        });
+    </script>
+
+    <!-- Policy Hero Section -->
+    <section class="py-16 lg:py-24 bg-bg border-b border-border">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+            <h1 class="text-display-m sm:text-display-l font-display text-text mb-6">Terms of Service</h1>
+            <p class="last-updated">Last Updated: September 29, 2026</p>
+            <p class="intro">Welcome to MindBridge. MindBridge is a student-focused mental-health and wellbeing platform designed to provide educational resources, self-help tools, peer-support features, and access to mental-health resources. By accessing or using MindBridge, you agree to these Terms of Service ("Terms"). If you do not agree with these Terms, please do not use the platform.</p>
+        </div>
+    </section>
+
+    <!-- Policy Content -->
+    <section class="py-16 lg:py-20 bg-bg">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="policy-content fade-in space-y-8">
+                
+                <section>
+                    <h2>1. About MindBridge</h2>
+                    <p>MindBridge is intended to support student wellbeing and mental-health awareness.</p>
+                    <p>Depending on the features available, MindBridge may provide:</p>
+                    <ul>
+                        <li>Mental-health and wellbeing assessments</li>
+                        <li>Self-help and wellbeing resources</li>
+                        <li>Journaling or reflection tools</li>
+                        <li>Peer-support features</li>
+                        <li>Information about professional mental-health services</li>
+                        <li>Educational content</li>
+                        <li>Administrative or institutional wellbeing resources</li>
+                        <li>AI-assisted features</li>
+                    </ul>
+                    <p>MindBridge is not a replacement for a psychologist, psychiatrist, counsellor, physician, emergency service, or other qualified healthcare professional.</p>
+                </section>
+
+                <section>
+                    <h2>2. Not Medical Advice</h2>
+                    <p>The information and tools provided through MindBridge are intended for general educational and wellbeing purposes.</p>
+                    <p>Nothing on MindBridge should be interpreted as:</p>
+                    <ul>
+                        <li>A medical diagnosis</li>
+                        <li>A psychiatric diagnosis</li>
+                        <li>A clinical assessment</li>
+                        <li>A treatment recommendation</li>
+                        <li>A substitute for professional medical care</li>
+                        <li>A guarantee regarding your mental-health condition or future wellbeing</li>
+                    </ul>
+                    <p>Any assessment, questionnaire, score, recommendation, or AI-generated response provided through MindBridge should be treated as informational rather than a clinical diagnosis.</p>
+                    <p>If you are experiencing significant psychological distress or believe that you may be in immediate danger, seek help from a qualified professional or emergency service rather than relying solely on MindBridge.</p>
+                </section>
+
+                <section>
+                    <h2>3. Emergency and Crisis Situations</h2>
+                    <p>MindBridge is not an emergency-response service.</p>
+                    <p>If you are in immediate danger, believe you may harm yourself or someone else, or require urgent medical assistance, contact your local emergency service or go to the nearest emergency department.</p>
+                    <p>Where appropriate, users should also consider contacting a trusted person, qualified mental-health professional, counsellor, or crisis-support service.</p>
+                    <p>MindBridge does not guarantee that its platform, peer-support features, AI systems, notifications, or support resources will detect or respond to an emergency.</p>
+                </section>
+
+                <section>
+                    <h2>4. Eligibility</h2>
+                    <p>MindBridge is primarily intended for students.</p>
+                    <p>You must provide accurate information when creating an account or using features that require personal information.</p>
+                    <p>Unless MindBridge explicitly provides a legally compliant process for younger users, users under the age of 18 should not create an account or submit personal information to the platform.</p>
+                    <p>Where the platform permits users under 18, use of the relevant services will be subject to applicable requirements concerning parental or guardian consent and children's personal data.</p>
+                </section>
+
+                <section>
+                    <h2>5. Your Account</h2>
+                    <p>You are responsible for:</p>
+                    <ul>
+                        <li>Maintaining the confidentiality of your login credentials</li>
+                        <li>Providing accurate information</li>
+                        <li>Keeping your account secure</li>
+                        <li>Not sharing your account with another person</li>
+                        <li>Notifying MindBridge if you believe your account has been compromised</li>
+                    </ul>
+                    <p>You are responsible for activity conducted through your account, except where caused by circumstances outside your reasonable control.</p>
+                </section>
+
+                <section>
+                    <h2>6. Acceptable Use</h2>
+                    <p>You agree not to use MindBridge to:</p>
+                    <ul>
+                        <li>Harass, threaten, intimidate, or abuse another person</li>
+                        <li>Impersonate another person</li>
+                        <li>Publish deliberately harmful or malicious content</li>
+                        <li>Encourage self-harm, suicide, violence, or abuse</li>
+                        <li>Share another person's private or confidential information without permission</li>
+                        <li>Attempt to gain unauthorized access to accounts, systems, or data</li>
+                        <li>Introduce malware or other malicious software</li>
+                        <li>Circumvent security mechanisms</li>
+                        <li>Scrape, copy, or systematically collect platform data without authorization</li>
+                        <li>Use the platform for unlawful purposes</li>
+                        <li>Interfere with the operation or security of MindBridge</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>7. Peer Support</h2>
+                    <p>If MindBridge provides peer-support functionality, users should understand that peer supporters are not necessarily licensed mental-health professionals.</p>
+                    <p>Information received from another user should not be considered professional medical advice.</p>
+                    <p>Do not rely on peer support as the sole source of assistance during a mental-health crisis.</p>
+                    <p>Users should also avoid sharing highly sensitive personal information with other users unless they are comfortable doing so.</p>
+                    <p>MindBridge may moderate, remove, restrict, or report content that violates these Terms or creates a significant safety risk.</p>
+                </section>
+
+                <section>
+                    <h2>8. AI-Assisted Features</h2>
+                    <p>Certain MindBridge features may use artificial intelligence or machine-learning systems.</p>
+                    <p>AI-generated responses may be inaccurate, incomplete, inappropriate, outdated, or unsuitable for a particular individual.</p>
+                    <p>AI features should not be relied upon for diagnosis, emergency decisions, medication decisions, or other high-risk medical decisions.</p>
+                    <p>You should independently evaluate information generated by AI and consult a qualified healthcare professional where appropriate.</p>
+                    <p>MindBridge does not guarantee that an AI system will identify every mental-health crisis, symptom, risk factor, or emergency.</p>
+                </section>
+
+                <section>
+                    <h2>9. User-Generated Content</h2>
+                    <p>You may be able to submit content such as journal entries, feedback, posts, messages, assessments, or other information.</p>
+                    <p>You retain ownership of content that you own, subject to the rights necessary for MindBridge to operate the service.</p>
+                    <p>By submitting content, you grant MindBridge the limited rights necessary to store, process, display, transmit, and otherwise use that content to provide the features you requested and operate the platform.</p>
+                    <p>MindBridge will handle personal information in accordance with its Privacy Policy.</p>
+                </section>
+
+                <section>
+                    <h2>10. Platform Availability</h2>
+                    <p>We may modify, suspend, restrict, or discontinue any part of MindBridge at any time.</p>
+                    <p>We do not guarantee that:</p>
+                    <ul>
+                        <li>The platform will always be available</li>
+                        <li>The platform will operate without interruption</li>
+                        <li>Every feature will remain available</li>
+                        <li>Information will always be error-free</li>
+                        <li>AI-generated content will always be accurate</li>
+                        <li>External links or third-party services will remain available</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>11. Third-Party Services</h2>
+                    <p>MindBridge may contain links to or integrations with third-party services, including professional-care providers, crisis resources, authentication providers, analytics services, hosting providers, or other services.</p>
+                    <p>Third-party services may have their own terms and privacy policies.</p>
+                    <p>MindBridge is not responsible for the content, availability, security, or practices of third-party services that it does not control.</p>
+                </section>
+
+                <section>
+                    <h2>12. Intellectual Property</h2>
+                    <p>The MindBridge name, logo, software, interface, original content, graphics, designs, and other platform materials are owned by or licensed to MindBridge unless otherwise stated.</p>
+                    <p>You may use MindBridge for its intended personal or educational purposes.</p>
+                    <p>You may not reproduce, distribute, modify, sell, reverse engineer, or commercially exploit MindBridge or its protected materials without authorization, except where permitted by applicable law.</p>
+                </section>
+
+                <section>
+                    <h2>13. Account Suspension or Termination</h2>
+                    <p>MindBridge may suspend or terminate an account where reasonably necessary to:</p>
+                    <ul>
+                        <li>Protect users</li>
+                        <li>Prevent abuse</li>
+                        <li>Address security threats</li>
+                        <li>Investigate violations of these Terms</li>
+                        <li>Comply with applicable law</li>
+                        <li>Protect the integrity of the platform</li>
+                    </ul>
+                    <p>Where appropriate, users may discontinue their use of MindBridge at any time.</p>
+                </section>
+
+                <section>
+                    <h2>14. Disclaimer of Warranties</h2>
+                    <p>To the extent permitted by applicable law, MindBridge is provided on an "as is" and "as available" basis.</p>
+                    <p>MindBridge does not guarantee that the platform will identify, prevent, diagnose, or resolve a mental-health condition or crisis.</p>
+                    <p>Use of MindBridge does not create a doctor-patient, therapist-patient, or other healthcare-provider relationship unless explicitly stated in connection with a separately provided professional service.</p>
+                </section>
+
+                <section>
+                    <h2>15. Limitation of Liability</h2>
+                    <p>To the maximum extent permitted by applicable law, MindBridge and its operators, contributors, and service providers will not be responsible for indirect, incidental, consequential, special, or similar losses arising from use of the platform.</p>
+                    <p>Nothing in these Terms excludes or limits liability where such exclusion or limitation is prohibited by applicable law.</p>
+                </section>
+
+                <section>
+                    <h2>16. Changes to These Terms</h2>
+                    <p>We may update these Terms from time to time.</p>
+                    <p>When material changes are made, we will provide reasonable notice through the platform or other appropriate means.</p>
+                    <p>Your continued use of MindBridge after the updated Terms become effective constitutes acceptance of the revised Terms, to the extent permitted by applicable law.</p>
+                </section>
+
+                <section>
+                    <h2>17. Governing Law</h2>
+                    <p>These Terms shall be governed by the laws of India, subject to applicable law.</p>
+                    <p>Any disputes shall be subject to the jurisdiction of the courts located in [City, State], India, unless applicable law requires otherwise.</p>
+                </section>
+
+                <section>
+                    <h2>18. Contact</h2>
+                    <p>For questions regarding these Terms, contact:</p>
+                    <p><strong>MindBridge</strong><br>
+                    Email: <a href="mailto:support@mindbridge.example">support@mindbridge.example</a><br>
+                    Website: <a href="http://www.example.com">www.example.com</a></p>
+                    <p><strong>For privacy-related questions:</strong><br>
+                    <a href="mailto:privacy@mindbridge.example">privacy@mindbridge.example</a></p>
+                    <p class="last-updated"><strong>Effective Date:</strong> September 29, 2026</p>
+                </section>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-surface-soft py-16 border-t border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div class="md:col-span-1">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="../images/logo_light.png" class="h-8 dark:hidden opacity-80" alt="MindBridge Logo">
+                        <img src="../images/logo_dark.png" class="h-8 hidden dark:block opacity-80" alt="MindBridge Logo">
+                        <h2 class="text-h4 font-display text-text">MindBridge</h2>
+                    </div>
+                    <p class="text-body-s text-text-secondary mb-4">Mental Health Support for Students</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-label text-text font-medium mb-4">Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="landing.html#features" class="text-body-s text-text-secondary hover:text-brand transition-colors">Features</a></li>
+                        <li><a href="landing.html#how-it-works" class="text-body-s text-text-secondary hover:text-brand transition-colors">How It Works</a></li>
+                        <li><a href="landing.html#about" class="text-body-s text-text-secondary hover:text-brand transition-colors">About</a></li>
+                        <li><a href="landing.html#contact" class="text-body-s text-text-secondary hover:text-brand transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-label text-text font-medium mb-4">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="ai_mental_health_chatbot.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">AI Support</a></li>
+                        <li><a href="mental_health_assessments.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Resources</a></li>
+                        <li><span class="text-body-s text-error font-medium">Kiran Helpline: Call 1800-599-0019</span></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-label text-text font-medium mb-4">Legal</h3>
+                    <ul class="space-y-3">
+                        <li><a href="privacy_policy.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms_of_service.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-body-s text-text-secondary hover:text-brand transition-colors">AI Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between">
+                <p class="text-caption text-text-muted mb-4 md:mb-0">© 2024 MindBridge. MindBridge is not an emergency medical service.</p>
+                <div class="flex space-x-6 text-caption text-text-muted">
+                    <span>Privacy-focused</span>
+                    <span>•</span>
+                    <span>Secure communication</span>
+                    <span>•</span>
+                    <span>Confidential support</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
