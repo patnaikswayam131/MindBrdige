@@ -215,8 +215,14 @@ document.addEventListener('DOMContentLoaded', function() {
         typingDiv.id = 'typing-indicator';
         typingDiv.className = 'flex justify-start mb-4';
         typingDiv.innerHTML = `
-            <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-                <p class="text-sm">AI is typing...</p>
+            <div class="bg-surface-soft text-text-primary px-4 py-3 rounded-2xl flex items-center space-x-3 shadow-sm border border-border">
+                <div class="newtons-cradle" style="--uib-size: 28px; --uib-color: var(--color-brand, #6E5B8F);">
+                    <div class="newtons-cradle__dot"></div>
+                    <div class="newtons-cradle__dot"></div>
+                    <div class="newtons-cradle__dot"></div>
+                    <div class="newtons-cradle__dot"></div>
+                </div>
+                <p class="text-xs text-text-secondary font-medium">MindBridge AI is thinking...</p>
             </div>
         `;
         chatMessages.appendChild(typingDiv);

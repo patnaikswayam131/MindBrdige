@@ -101,29 +101,32 @@
 </head>
 <body class="min-h-screen" style="background: linear-gradient(to bottom right, var(--primary-50), var(--bg-primary), var(--secondary-50)); color: var(--text-primary);">
     <!-- Header -->
-    <header class="backdrop-blur-sm border-b border-border-light sticky top-0 z-50" style="background-color: var(--bg-surface);">
+    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-                    <img src="../images/logo_light.png" class="dark:hidden object-contain -my-1" style="height: 46px;" alt="MindBridge Logo">
-                    <img src="../images/logo_dark.png" class="h-10 hidden dark:block object-contain" alt="MindBridge Logo">
+                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
+                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
                     <div>
-                        <h1 class="text-[28px] font-display text-text-primary whitespace-nowrap leading-none mt-1">MindBridge</h1>
+                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
                     </div>
                 </a>
 
                 <!-- Right Section -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <!-- Dark Mode Toggle -->
-                    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
-                        <svg id="sunIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-                        </svg>
-                        <svg id="moonIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-                        </svg>
-                    </button>
+                    <!-- Theme Switch -->
+                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
+                        <input type="checkbox" id="darkModeCheckbox">
+                        <span class="slider">
+                            <span class="star star_1"></span>
+                            <span class="star star_2"></span>
+                            <span class="star star_3"></span>
+                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                            </svg>
+                        </span>
+                    </label>
                     
                     <!-- Emergency Contact -->
                     <div class="flex items-center space-x-2 text-sm">
@@ -389,10 +392,10 @@
                 <div class="text-sm text-text-secondary">
                     &copy; 2025 MindBridge. All Rights Reserved. | Confidential Mental Health Support
                 </div>
-                <div class="flex items-center space-x-6 text-sm">
-                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Privacy Policy</a>
-                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Terms of Service</a>
-                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">Support</a>
+<div class="flex items-center space-x-6 text-sm">
+                    <a href="privacy_policy.html" class="text-text-secondary hover:text-brand transition-colors">Privacy Policy</a>
+                    <a href="terms_of_service.html" class="text-text-secondary hover:text-brand transition-colors">Terms of Service</a>
+                    <a href="#" class="text-text-secondary hover:text-brand transition-colors">Support</a>
                 </div>
             </div>
         </div>
@@ -439,11 +442,13 @@
                 const button = event.target;
                 const originalText = button.innerHTML;
                 button.innerHTML = `
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Signing In...
+                    <div class="newtons-cradle newtons-cradle--sm inline-flex mr-3 align-middle" style="--uib-size: 20px; --uib-color: #ffffff;">
+                        <div class="newtons-cradle__dot"></div>
+                        <div class="newtons-cradle__dot"></div>
+                        <div class="newtons-cradle__dot"></div>
+                        <div class="newtons-cradle__dot"></div>
+                    </div>
+                    <span>Signing In...</span>
                 `;
                 button.disabled = true;
                 

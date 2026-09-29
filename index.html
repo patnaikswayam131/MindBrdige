@@ -51,25 +51,10 @@
             font-size: 1.1em;
         }
         
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #F3EEF6;
-            border-top: 4px solid #6E5B8F;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         .redirect-message {
             color: #8B8580;
             font-size: 0.9em;
-            margin-top: 15px;
+            margin-top: 20px;
         }
     </style>
 
@@ -79,7 +64,15 @@
         <img src="images/logo_light.png" alt="MindBridge Logo" class="logo-img">
         <div class="logo">MindBridge</div>
         <div class="subtitle">Mental Health Support Platform</div>
-        <div class="loading-spinner"></div>
+        
+        <!-- Newton's Cradle Loader -->
+        <div class="newtons-cradle" style="margin: 20px auto; --uib-color: #6E5B8F; --uib-size: 45px;">
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+        </div>
+        
         <div class="redirect-message">Redirecting to Landing Page...</div>
     </div>
 

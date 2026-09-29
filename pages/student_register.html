@@ -57,20 +57,32 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex flex-col">
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-sm border-b border-border-light sticky top-0 z-50">
+    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.location.href='index.html'">
-                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
-                    </div>
+                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
+                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
                     <div>
-                        <h1 class="text-xl font-heading font-semibold text-text-primary">MindBridge</h1>
-                        <p class="text-xs text-text-secondary">Mental Health Support</p>
+                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
                     </div>
+                </a>
+
+                <!-- Right Section -->
+                <div class="flex items-center space-x-4 flex-shrink-0">
+                    <!-- Theme Switch -->
+                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
+                        <input type="checkbox" id="darkModeCheckbox">
+                        <span class="slider">
+                            <span class="star star_1"></span>
+                            <span class="star star_2"></span>
+                            <span class="star star_3"></span>
+                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                            </svg>
+                        </span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -147,9 +159,13 @@
     <!-- Footer -->
     <footer class="bg-surface border-t border-border-light py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div class="text-sm text-text-secondary">
                     &copy; 2025 MindBridge. All Rights Reserved.
+                </div>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="privacy_policy.html" class="text-text-secondary hover:text-brand transition-colors">Privacy Policy</a>
+                    <a href="terms_of_service.html" class="text-text-secondary hover:text-brand transition-colors">Terms of Service</a>
                 </div>
             </div>
         </div>

@@ -27,12 +27,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Dashboard Logo -->
-                <a href="landing.html" class="dashboard-brand flex-shrink-0 flex items-center space-x-3.5 hover:opacity-80 active:scale-95 transition-all">
-                    <div class="relative w-8 h-8 flex items-center justify-center flex-shrink-0">
-                        <img src="../images/logo_light.png" class="absolute w-full h-full object-contain dark:hidden" alt="MindBridge Logo" style="transform: scale(1.15);">
-                        <img src="../images/logo_dark.png" class="absolute w-full h-full object-contain hidden dark:block" alt="MindBridge Logo">
+                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
+                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
+                    <div>
+                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
                     </div>
-                    <h1 class="text-h4 font-display text-text whitespace-nowrap mt-1">MindBridge</h1>
                 </a>
 
                 <!-- Navigation -->
@@ -52,11 +52,18 @@
 
                 <!-- Right Section -->
                 <div class="flex items-center space-x-4 flex-shrink-0">
-                    <button id="darkModeToggle" class="flex-shrink-0 p-2 rounded-lg hover:bg-surface-soft transition-colors text-text-secondary hover:text-text" title="Toggle Dark Mode">
-                        <svg id="darkModeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-                        </svg>
-                    </button>
+                    <!-- Theme Switch -->
+                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
+                        <input type="checkbox" id="darkModeCheckbox">
+                        <span class="slider">
+                            <span class="star star_1"></span>
+                            <span class="star star_2"></span>
+                            <span class="star star_3"></span>
+                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                            </svg>
+                        </span>
+                    </label>
                     <!-- Mobile Menu Button -->
                     <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
