@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resource Library - MindBridge</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+    <meta name="description" content="Explore evidence-based mental health resources, guided breathing, calming audio, and student wellness articles on MindBridge.">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/icons.js"></script>
+    <script src="../js/skeleton-loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-bg text-text selection:bg-brand selection:text-white min-h-screen flex flex-col">
+
+    <!-- Navigation Header -->
+    <header class="navbar bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="navbar__container">
+            <a href="landing.html" class="navbar__brand hover:opacity-80 transition-opacity">
+                <img src="../images/logo_light.png" id="logo-light" class="nav-logo dark:hidden" alt="MindBridge Logo">
+                <img src="../images/logo_dark.png" id="logo-dark" class="nav-logo hidden dark:block" alt="MindBridge Logo">
+                <span class="text-h4 font-display text-text whitespace-nowrap">MindBridge</span>
+            </a>
+
+            <nav class="navbar__main-nav hidden xl:flex">
+                <ul class="nav-list" id="main-nav-links">
+                    <!-- Populated dynamically by shared-layout.js -->
+                </ul>
+            </nav>
+
+            <div class="navbar__user-actions">
+                <div class="toggle-switch">
+                    <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                    <label class="switch-label" for="darkModeCheckbox" title="Toggle light and dark theme">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                
+                <div id="auth-actions" class="hidden items-center gap-4">
+                    <a href="student_login.html" class="btn-secondary nav-btn whitespace-nowrap">Sign In</a>
+                    <a href="student_login.html" class="btn-primary nav-btn whitespace-nowrap">Get Started</a>
+                </div>
+
+                <div id="user-profile-menu" class="relative hidden items-center ml-2">
+                    <button id="profile-btn" class="flex-shrink-0 flex items-center justify-center cursor-pointer hover:bg-surface-soft rounded-full p-1 transition-colors border-2 border-transparent hover:border-brand">
+                        <div id="profile-avatar" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-medium overflow-hidden text-lg">
+                            <span id="profile-initials">U</span>
+                        </div>
+                    </button>
+                    <div id="profile-dropdown" class="absolute right-0 top-14 w-64 bg-surface border border-border rounded-xl shadow-elevated hidden flex-col z-50 overflow-hidden">
+                        <!-- Populated by shared-layout.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-4" id="mobile-nav-links">
+                <!-- Injected by shared-layout.js -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 w-full mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] py-10 lg:py-14 space-y-12">
+        
+        <!-- Header Banner -->
+        <header class="space-y-4 max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 border border-brand/20 rounded-full text-caption text-brand font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Curated Self-Care & Clinical Guidance
+            </div>
+            <h1 class="text-display-m font-display text-text">Resource Library</h1>
+            <p class="text-body-l text-text-secondary leading-relaxed">
+                Explore evidence-based guides, guided grounding practices, calming ambient soundscapes, and personal recovery stories vetted for college students.
+            </p>
+        </header>
+
+        <!-- Interactive Calming Audio Player Module -->
+        <section class="bg-surface border border-border rounded-3xl p-6 sm:p-8 shadow-sm">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-border">
+                <div class="space-y-1">
+                    <span class="text-caption text-brand font-bold uppercase tracking-wider">MindBridge Audio Oasis</span>
+                    <h2 class="text-h3 font-display text-text">Calming Soundscapes & Breathwork Audio</h2>
+                    <p class="text-body-s text-text-secondary">Generate soothing natural frequencies to ease tension before studying or sleeping.</p>
+                </div>
+                <!-- Track Selector -->
+                <div class="flex flex-wrap gap-2">
+                    <button class="audio-track-btn px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface-soft hover:bg-brand hover:text-white transition-all active-track inline-flex items-center gap-2 cursor-pointer btn-tactile" data-track="rain">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>
+                        Gentle Rain
+                    </button>
+                    <button class="audio-track-btn px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface-soft hover:bg-brand hover:text-white transition-all inline-flex items-center gap-2 cursor-pointer btn-tactile" data-track="ocean">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+                        Deep Ocean Waves
+                    </button>
+                    <button class="audio-track-btn px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface-soft hover:bg-brand hover:text-white transition-all inline-flex items-center gap-2 cursor-pointer btn-tactile" data-track="forest">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m14 18 4-4H15l3-4h-2.5L18 6l-6 8h2.5l-3 4H14z"/><path d="m8 22 4-5H9.5l3-5H10l3-5-6 8h2.5l-3.5 5H8z"/></svg>
+                        Forest Solitude
+                    </button>
+                    <button class="audio-track-btn px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface-soft hover:bg-brand hover:text-white transition-all inline-flex items-center gap-2 cursor-pointer btn-tactile" data-track="binaural">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                        Theta Binaural 6Hz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Player Controls -->
+            <div class="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <button id="audioPlayBtn" class="w-12 h-12 rounded-full bg-brand text-white flex items-center justify-center shadow-card hover:bg-brand-hover transition-transform hover:scale-105 cursor-pointer btn-tactile" title="Play / Pause">
+                        <svg id="playIcon" class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="pauseIcon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <div>
+                        <div class="flex items-center gap-2.5">
+                            <p id="currentTrackTitle" class="text-body-m font-bold text-text">Gentle Rain & White Noise</p>
+                            <div id="audioVisualizer" class="hidden items-center gap-1 h-3.5">
+                                <span class="wave-bar"></span>
+                                <span class="wave-bar"></span>
+                                <span class="wave-bar"></span>
+                                <span class="wave-bar"></span>
+                                <span class="wave-bar"></span>
+                            </div>
+                        </div>
+                        <p class="text-caption text-text-secondary">Synthesized ambient calm for focus and anxiety relief</p>
+                    </div>
+                </div>
+
+                <!-- Volume and Timer -->
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                        <input type="range" id="audioVolume" min="0" max="1" step="0.05" value="0.7" class="w-24 accent-brand cursor-pointer" title="Adjust Volume" />
+                    </div>
+                    <span id="audioStatusBadge" class="px-3 py-1 bg-surface-soft text-text-secondary text-caption rounded-full font-medium">Ready</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Bar and Category Tabs -->
+        <section class="space-y-6">
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                <!-- Search Input -->
+                <div class="relative w-full md:max-w-md">
+                    <input type="text" id="resourceSearchInput" placeholder="Search breathing, sleep, anxiety, quotations..." class="w-full bg-surface border border-border rounded-2xl py-3.5 pl-12 pr-4 text-body-m text-text placeholder-text-secondary/60 focus:outline-none focus:border-brand transition-colors" />
+                    <svg class="w-5 h-5 text-text-secondary absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+
+                <!-- Bookmark Filter Toggle -->
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <button id="showSavedOnlyBtn" class="px-4 py-2.5 rounded-xl border border-border hover:border-brand/40 bg-surface text-body-s font-medium text-text transition-colors flex items-center gap-2 cursor-pointer btn-tactile">
+                        <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                        <span id="savedFilterLabel">Saved Resources</span>
+                        <span id="savedCountBadge" class="px-2 py-0.5 bg-brand/10 text-brand text-caption rounded-full font-bold">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 12 Category Filter Pills (Vector SVGs - Zero Emojis) -->
+            <div class="flex flex-wrap gap-2 pb-2" id="categoryFilterContainer">
+                <button class="cat-pill active-cat px-4 py-2 rounded-xl text-body-s font-medium border border-brand bg-brand text-white transition-colors cursor-pointer btn-tactile" data-cat="all">All Resources</button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="audio">
+                    <svg class="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                    Music & Audio
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="breathing">
+                    <svg class="w-4 h-4 text-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>
+                    Breathing & Somatics
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="meditation">
+                    <svg class="w-4 h-4 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-1.5 3-4 6-8 7 3.5 1.5 6 4.5 7 8 1-3.5 3.5-6.5 7-8-4-1-6.5-4-8-7z"/><path d="M12 18c-3-2-6-1-8 1 2 2 5 3 8 1 3 2 6 1 8-1-2-2-5-3-8-1z"/></svg>
+                    Meditation & Grounding
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="quotes">
+                    <svg class="w-4 h-4 text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+                    Inspirational Quotes
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="articles">
+                    <svg class="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    Psychoeducation
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="stress">
+                    <svg class="w-4 h-4 text-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    Stress & Anxiety
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="sleep">
+                    <svg class="w-4 h-4 text-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    Sleep Hygiene
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="academic">
+                    <svg class="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    Academic Pressure
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="social">
+                    <svg class="w-4 h-4 text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Social Connection
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="selfcare">
+                    <svg class="w-4 h-4 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 4 13c0-4 3.5-7 7.5-9 3.5 2 7.5 5 7.5 9a7 7 0 0 1-7 7Z"/><path d="M11 20v-9"/></svg>
+                    Self-Care
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="journeys">
+                    <svg class="w-4 h-4 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 20h10"/><path d="M10 20c0-5.5 2.5-9 2.5-9s2.5 3.5 2.5 9"/><path d="M12.5 11c-2-2.5-5-3.5-7.5-3 0 3 2.5 5.5 5 5.5"/><path d="M12.5 8c2-2.5 5-3.5 7.5-3 0 3-2.5 5.5-5 5.5"/></svg>
+                    Personal Journeys
+                </button>
+                <button class="cat-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors cursor-pointer btn-tactile inline-flex items-center gap-1.5" data-cat="clinical">
+                    <svg class="w-4 h-4 text-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 3v5a5.5 5.5 0 0 0 11 0V3"/><path d="M4.5 5h3"/><path d="M12.5 5h3"/><path d="M10 13.5v3.5a3 3 0 0 0 6 0V14"/><circle cx="18" cy="14" r="2"/></svg>
+                    Professional Support
+                </button>
+            </div>
+        </section>
+
+        <!-- Resources Grid -->
+        <section>
+            <div id="resourcesGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Dynamically populated by JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="noResultsState" class="hidden text-center py-16 bg-surface border border-border rounded-3xl p-8 max-w-md mx-auto">
+                <div class="w-16 h-16 rounded-full bg-surface-soft text-text-secondary flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-h4 font-display text-text mb-2">No Resources Found</h3>
+                <p class="text-body-s text-text-secondary mb-6">Try searching with broader terms or clear your active category filters.</p>
+                <button onclick="resetFilters()" class="btn-secondary text-body-s">Reset Filters</button>
+            </div>
+        </section>
+
+        <!-- Resource Detail Modal -->
+        <div id="resourceDetailModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+            <div class="bg-surface border border-border rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-10 shadow-2xl relative space-y-6">
+                <button onclick="closeResourceModal()" class="absolute right-6 top-6 p-2 rounded-full hover:bg-surface-soft text-text-secondary hover:text-text transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                <div class="space-y-2 pr-8">
+                    <span id="modalCategory" class="text-caption font-bold text-brand uppercase tracking-wider"></span>
+                    <h2 id="modalTitle" class="text-h3 font-display text-text"></h2>
+                    <p id="modalAuthor" class="text-caption text-text-secondary"></p>
+                </div>
+
+                <div class="h-px bg-border"></div>
+
+                <div id="modalBody" class="text-body-m text-text-secondary space-y-4 leading-relaxed"></div>
+
+                <div class="pt-4 flex flex-wrap gap-4 items-center justify-between border-t border-border">
+                    <button id="modalTTSBtn" class="btn-tts btn-secondary text-body-s flex items-center gap-2">
+                        <svg class="w-4 h-4 tts-icon text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                        <span class="tts-label">Read Aloud</span>
+                    </button>
+                    <button onclick="closeResourceModal()" class="btn-primary text-body-s">Close Guide</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Dependencies -->
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/shared-layout.js"></script>
+
+    <script>
+        // Resource Library Data (12 Comprehensive Categories)
+        const RESOURCES_DATA = [
+            {
+                id: 'res-1',
+                category: 'breathing',
+                categoryName: 'Breathing & Relaxation',
+                title: 'Box Breathing (4-4-4-4) for Acute Exam Anxiety',
+                summary: 'Navy SEAL-tested breath regulation protocol that halts sympathetic nervous system overload in under two minutes.',
+                readTime: '3 min practice',
+                author: 'Clinical MindBridge Protocol',
+                tags: ['anxiety', 'breathing', 'panic', 'exams'],
+                body: `<p>Box breathing is a powerful, time-tested technique to regain autonomic stability during acute panic, test anxiety, or tachycardia.</p>
+                       <h4 class="text-h4 font-bold text-text mt-4 mb-2">Step-by-Step Instructions:</h4>
+                       <ol class="list-decimal pl-5 space-y-2">
+                           <li><strong>Inhale:</strong> Breathe in slowly through your nose counting to 4. Feel your lower ribs expand.</li>
+                           <li><strong>Hold:</strong> Retain the air softly in your lungs for a count of 4. Do not clamp your throat.</li>
+                           <li><strong>Exhale:</strong> Smoothly release the breath through your mouth for a count of 4.</li>
+                           <li><strong>Hold Empty:</strong> Pause at the bottom of the breath for a count of 4 before your next cycle.</li>
+                       </ol>
+                       <p class="mt-4">Repeat this cycle 4 to 6 times. Your heart rate variability will stabilize, signaling to the amygdala that you are safe.</p>`
+            },
+            {
+                id: 'res-2',
+                category: 'sleep',
+                categoryName: 'Sleep Hygiene & Routine',
+                title: 'Resetting Circadian Rhythm After All-Nighters',
+                summary: 'Science-backed circadian recovery blueprint for students transitioning back to healthy sleep schedules.',
+                readTime: '5 min read',
+                author: 'Dr. Michael Chen, Sleep Medicine',
+                tags: ['sleep', 'insomnia', 'all-nighter', 'energy'],
+                body: `<p>Pulling an all-nighter shocks your suprachiasmatic nucleus. Here is how to restore your cognitive baseline without spiraling into insomnia.</p>
+                       <h4 class="text-h4 font-bold text-text mt-4 mb-2">The Recovery Protocol:</h4>
+                       <ul class="list-disc pl-5 space-y-2">
+                           <li><strong>Morning Light Exposure:</strong> Step outside within 30 minutes of waking for 10-15 minutes of direct sunlight. This sets your melatonin timer.</li>
+                           <li><strong>The Caffeine Curfew:</strong> Zero caffeine after 1:00 PM. Caffeine has a 5-7 hour quarter-life that prevents slow-wave restorative sleep.</li>
+                           <li><strong>Strategic 20-Min Nap:</strong> If feeling exhausted, take a nap capped strictly at 25 minutes before 2:00 PM. Avoid falling into deep REM during the day.</li>
+                           <li><strong>Hot Shower 90 Mins Before Bed:</strong> The rapid drop in core body temperature afterward signals natural drowsiness.</li>
+                       </ul>`
+            },
+            {
+                id: 'res-3',
+                category: 'academic',
+                categoryName: 'Academic Pressure',
+                title: 'Overcoming Imposter Syndrome in Competitive Majors',
+                summary: 'Practical cognitive reframing strategies when you feel like everyone else has it figured out except you.',
+                readTime: '6 min read',
+                author: 'Campus Counseling Consortium',
+                tags: ['academic', 'imposter syndrome', 'comparison', 'confidence'],
+                body: `<p>Imposter syndrome thrives in high-achieving environments where students silently compare their messy internal realities to their peers' polished public projections.</p>
+                       <p class="mt-2">Recognize that feelings of inadequacy are often a byproduct of being challenged, not evidence of incompetence.</p>
+                       <h4 class="text-h4 font-bold text-text mt-4 mb-2">Cognitive Reframes:</h4>
+                       <ul class="list-disc pl-5 space-y-2">
+                           <li><strong>"I got lucky" &rarr; "I prepared, applied, and earned this seat."</strong></li>
+                           <li><strong>"I don't know this yet" &rarr; "Confusion is the initial stage of neuroplastic learning."</strong></li>
+                           <li><strong>Separate feelings from facts:</strong> Feeling like an imposter does not mean you lack capability.</li>
+                       </ul>`
+            },
+            {
+                id: 'res-4',
+                category: 'meditation',
+                categoryName: 'Meditation & Grounding',
+                title: '5-4-3-2-1 Sensory Grounding for Dissociation & Stress',
+                summary: 'A fast sensory grounding exercise that anchors attention in the physical present when racing thoughts spiral.',
+                readTime: '4 min exercise',
+                author: 'MindBridge Wellness Team',
+                tags: ['grounding', 'dissociation', 'overwhelm', 'mindfulness'],
+                body: `<p>When anxious rumination takes over, your brain gets stuck in forward-projected fear. This sensory count anchors you back into physical safety.</p>
+                       <ul class="list-disc pl-5 space-y-2 mt-4">
+                           <li><strong>5 Things You Can See:</strong> Notice subtle colors, shadows, a desk grain, or dust dancing in the light.</li>
+                           <li><strong>4 Things You Can Physically Touch:</strong> Feel the weight of your feet in your shoes, the texture of your shirt, the cool table surface.</li>
+                           <li><strong>3 Things You Can Hear:</strong> A clock ticking, distant traffic, your own steady breathing.</li>
+                           <li><strong>2 Things You Can Smell:</strong> Fresh air, coffee, paper, or shampoo.</li>
+                           <li><strong>1 Thing You Can Taste:</strong> Mint, water, or the inside of your cheek.</li>
+                       </ul>`
+            },
+            {
+                id: 'res-5',
+                category: 'quotes',
+                categoryName: 'Inspirational Quotes',
+                title: 'Daily Reflections on Resilience & Self-Compassion',
+                summary: 'Curated, attributed quotes and reflections from authors, philosophers, and clinicians to center your day.',
+                readTime: '2 min reflection',
+                author: 'Curated Reflections',
+                tags: ['quotes', 'inspiration', 'calm', 'perspective'],
+                body: `<blockquote class="p-4 bg-brand/5 border-l-4 border-brand italic text-h4 font-display">
+                           "You don’t have to control your thoughts. You just have to stop letting them control you."<br>
+                           <span class="text-body-s font-sans not-italic text-text font-medium mt-2 block">— Dan Millman</span>
+                       </blockquote>
+                       <blockquote class="p-4 bg-brand/5 border-l-4 border-brand italic text-h4 font-display mt-4">
+                           "Almost everything will work again if you unplug it for a few minutes, including you."<br>
+                           <span class="text-body-s font-sans not-italic text-text font-medium mt-2 block">— Anne Lamott</span>
+                       </blockquote>
+                       <blockquote class="p-4 bg-brand/5 border-l-4 border-brand italic text-h4 font-display mt-4">
+                           "Do not let what you cannot do interfere with what you can do."<br>
+                           <span class="text-body-s font-sans not-italic text-text font-medium mt-2 block">— John Wooden</span>
+                       </blockquote>`
+            },
+            {
+                id: 'res-6',
+                category: 'audio',
+                categoryName: 'Music & Calming Audio',
+                title: 'Binaural Frequencies: The Science of Focus & Sleep',
+                summary: 'How frequency following response in auditory cortex induces alpha and theta brainwave states.',
+                readTime: '4 min guide',
+                author: 'Auditory Neuroscience Lab',
+                tags: ['audio', 'music', 'soundscape', 'brainwaves'],
+                body: `<p>Binaural beats occur when two slightly different frequencies are presented separately to each ear via headphones. Your brain perceives the mathematical difference as a rhythmic beat.</p>
+                       <p class="mt-2"><strong>Alpha Waves (8–13 Hz):</strong> Ideal for calm studying, reducing test jitter while maintaining sharp alertness.</p>
+                       <p class="mt-2"><strong>Theta Waves (4–7 Hz):</strong> Promotes deep relaxation, meditation, and prepares the brain for stage-1 sleep.</p>`
+            },
+            {
+                id: 'res-7',
+                category: 'stress',
+                categoryName: 'Stress & Anxiety',
+                title: 'The Physical Anatomy of Panic: Why Your Body Isn’t Broken',
+                summary: 'Understand why adrenaline rushes cause tingling, shortness of breath, and tunnel vision, and how to de-escalate safely.',
+                readTime: '5 min read',
+                author: 'Dr. Sarah Jenkins, Clinical Psychologist',
+                tags: ['panic', 'anxiety', 'adrenaline', 'physiology'],
+                body: `<p>During panic, your brain misinterprets psychological stress as an immediate physical predator. Adrenaline redistributes blood from your stomach and extremities to major running muscles.</p>
+                       <p class="mt-2">This is why your fingers tingle, your mouth dries, and your vision narrows. <strong>You are not having a heart attack or losing control; your body is simply trying to protect you.</strong></p>
+                       <p class="mt-2">Acknowledge the adrenaline wave: "This is uncomfortable, but it is not dangerous. It will naturally dissipate in 15 minutes."</p>`
+            },
+            {
+                id: 'res-8',
+                category: 'social',
+                categoryName: 'Relationships & Social Well-Being',
+                title: 'Navigating Loneliness & Finding Your Tribe in College',
+                summary: 'Actionable steps to build meaningful, low-pressure friendships beyond surface-level campus pleasantries.',
+                readTime: '6 min read',
+                author: 'Student Well-Being Advisory',
+                tags: ['loneliness', 'friendship', 'belonging', 'social'],
+                body: `<p>Over 64% of college students report feeling profound loneliness during their academic career. Real connection doesn't happen automatically in crowded lecture halls; it requires repeated, unstructured micro-interactions.</p>
+                       <h4 class="text-h4 font-bold text-text mt-4 mb-2">Three Micro-Habits:</h4>
+                       <ul class="list-disc pl-5 space-y-2">
+                           <li><strong>The Rule of Proximity:</strong> Pick one spot in your library or campus cafe at the same time twice a week. Familiar faces breed natural conversations.</li>
+                           <li><strong>Ask for Low-Stakes Advice:</strong> "Have you taken Professor Lee's course before?" Asking for small guidance creates an opening for connection.</li>
+                           <li><strong>Join Activity-First Groups:</strong> Hiking, board games, or campus volunteer projects remove the awkward pressure of forced networking.</li>
+                       </ul>`
+            },
+            {
+                id: 'res-9',
+                category: 'selfcare',
+                categoryName: 'Self-Care & Emotional Regulation',
+                title: 'Non-Negotiable Self-Care: Real Hygiene vs Commercial Trends',
+                summary: 'Real emotional regulation isn’t face masks and bath bombs; it’s boundary enforcement, nutrition, and saying no.',
+                readTime: '4 min read',
+                author: 'Campus Wellness Alliance',
+                tags: ['selfcare', 'boundaries', 'burnout', 'habits'],
+                body: `<p>Authentic self-care is often unglamorous. It is doing what your future self needs rather than what feels easiest right now.</p>
+                       <ul class="list-disc pl-5 space-y-2 mt-4">
+                           <li>Drinking a full glass of water before looking at morning notifications.</li>
+                           <li>Saying: "I care about this event, but I need an evening to rest tonight."</li>
+                           <li>Eating real protein during midterm weeks rather than surviving exclusively on energy drinks.</li>
+                           <li>Booking a therapy or counselor appointment before reaching a total emotional breaking point.</li>
+                       </ul>`
+            },
+            {
+                id: 'res-10',
+                category: 'journeys',
+                categoryName: 'Personal Journeys',
+                title: 'Maya’s Story: From Burnout to Balance in Junior Year',
+                summary: 'A student narrative on hitting the academic wall, taking medical leave, and building sustainable life habits.',
+                readTime: '7 min story',
+                author: 'MindBridge Peer Narrative (Shared with Permission)',
+                tags: ['stories', 'recovery', 'burnout', 'balance'],
+                body: `<p><em>"By sophomore spring, I was sleeping three hours a night and convinced that dropping my GPA below 3.9 would end my career. My body finally shut down during finals week."</em></p>
+                       <p class="mt-2">Maya candidly describes working with campus counselors, learning cognitive behavioral tools to decouple self-worth from academic metrics, and finding happiness in college.</p>
+                       <p class="mt-2 text-caption text-text-secondary">Note: Personal lived experience accounts are reviewed and shared with written consent to offer peer hope and solidarity.</p>`
+            },
+            {
+                id: 'res-11',
+                category: 'clinical',
+                categoryName: 'Professional Support',
+                title: 'What to Expect in Your Very First Counseling Session',
+                summary: 'Demystifying the counseling intake process so you can walk into your first appointment with confidence.',
+                readTime: '5 min guide',
+                author: 'MindBridge Counseling Staff',
+                tags: ['counseling', 'therapy', 'intake', 'support'],
+                body: `<p>It is completely normal to feel apprehensive before your first session. Your counselor does not expect you to deliver a neat, organized summary of your life.</p>
+                       <h4 class="text-h4 font-bold text-text mt-4 mb-2">What Actually Happens:</h4>
+                       <ul class="list-disc pl-5 space-y-2">
+                           <li><strong>Confidentiality Review:</strong> The counselor explains that everything you discuss is strictly private and never shared with professors, parents, or university records (except in rare situations of imminent physical harm).</li>
+                           <li><strong>Open-Ended Exploration:</strong> You will discuss what prompted you to book, what has been feeling tough, and what goals you have.</li>
+                           <li><strong>Pacing Control:</strong> You are in full control. If a topic feels too vulnerable to discuss right away, you can say: "I'd rather save that for later."</li>
+                       </ul>`
+            },
+            {
+                id: 'res-12',
+                category: 'articles',
+                categoryName: 'Articles & Mental Health',
+                title: 'The Neurobiology of Procrastination: Why Willpower Fails',
+                summary: 'How emotional avoidance, not laziness, drives procrastination, and how the 5-minute rule breaks the loop.',
+                readTime: '6 min read',
+                author: 'Behavioral Psychology Review',
+                tags: ['procrastination', 'habits', 'focus', 'psychology'],
+                body: `<p>Procrastination is an emotional regulation problem, not a time management flaw. When a project triggers feelings of incompetence or fear of failure, the limbic system seeks immediate relief by switching to easy distractions.</p>
+                       <h4 class="text-h4 font-bold text-text mt-4 mb-2">The 5-Minute Gateway Rule:</h4>
+                       <p>Tell yourself: "I only have to work on this thesis paper for five minutes. If I still hate it after five minutes, I have full permission to stop."</p>
+                       <p class="mt-2">Over 80% of the time, overcoming the activation energy threshold breaks the emotional avoidance loop and allows work to continue smoothly.</p>`
+            }
+        ];
+
+        // State Management
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let showOnlySaved = false;
+        let savedResources = JSON.parse(localStorage.getItem('mb_saved_resources') || '[]');
+
+        // Calming Audio Generator via Web Audio API (No broken external links!)
+        class AmbientAudioGenerator {
+            constructor() {
+                this.ctx = null;
+                this.isPlaying = false;
+                this.currentType = 'rain';
+                this.gainNode = null;
+                this.noiseNode = null;
+                this.filterNode = null;
+                this.osc1 = null;
+                this.osc2 = null;
+            }
+
+            initAudio() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                    this.gainNode = this.ctx.createGain();
+                    this.gainNode.gain.value = 0.5;
+                    this.gainNode.connect(this.ctx.destination);
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            play(type) {
+                this.initAudio();
+                this.stop();
+                this.currentType = type;
+                this.isPlaying = true;
+
+                if (type === 'rain' || type === 'ocean' || type === 'forest') {
+                    // Create pink noise buffer
+                    const bufferSize = this.ctx.sampleRate * 2;
+                    const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                    const output = noiseBuffer.getChannelData(0);
+                    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+                    for (let i = 0; i < bufferSize; i++) {
+                        const white = Math.random() * 2 - 1;
+                        b0 = 0.99886 * b0 + white * 0.0555179;
+                        b1 = 0.99332 * b1 + white * 0.0750759;
+                        b2 = 0.96900 * b2 + white * 0.1538520;
+                        b3 = 0.86650 * b3 + white * 0.3104856;
+                        b4 = 0.55000 * b4 + white * 0.5329522;
+                        b5 = -0.7616 * b5 - white * 0.0168980;
+                        output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                        output[i] *= 0.11;
+                        b6 = white * 0.115926;
+                    }
+
+                    this.noiseNode = this.ctx.createBufferSource();
+                    this.noiseNode.buffer = noiseBuffer;
+                    this.noiseNode.loop = true;
+
+                    this.filterNode = this.ctx.createBiquadFilter();
+                    if (type === 'rain') {
+                        this.filterNode.type = 'lowpass';
+                        this.filterNode.frequency.value = 800;
+                    } else if (type === 'ocean') {
+                        this.filterNode.type = 'bandpass';
+                        this.filterNode.frequency.value = 400;
+                    } else { // forest
+                        this.filterNode.type = 'highpass';
+                        this.filterNode.frequency.value = 1200;
+                    }
+
+                    this.noiseNode.connect(this.filterNode);
+                    this.filterNode.connect(this.gainNode);
+                    this.noiseNode.start();
+                } else if (type === 'binaural') {
+                    // Binaural beat: 200Hz left, 206Hz right (6Hz theta diff)
+                    const merger = this.ctx.createChannelMerger(2);
+                    this.osc1 = this.ctx.createOscillator();
+                    this.osc2 = this.ctx.createOscillator();
+                    this.osc1.frequency.value = 200;
+                    this.osc2.frequency.value = 206;
+
+                    this.osc1.connect(merger, 0, 0);
+                    this.osc2.connect(merger, 0, 1);
+                    merger.connect(this.gainNode);
+                    this.osc1.start();
+                    this.osc2.start();
+                }
+            }
+
+            stop() {
+                if (this.noiseNode) {
+                    try { this.noiseNode.stop(); } catch(e){}
+                    this.noiseNode.disconnect();
+                    this.noiseNode = null;
+                }
+                if (this.osc1) {
+                    try { this.osc1.stop(); this.osc2.stop(); } catch(e){}
+                    this.osc1.disconnect();
+                    this.osc2.disconnect();
+                    this.osc1 = null;
+                    this.osc2 = null;
+                }
+                this.isPlaying = false;
+            }
+
+            setVolume(val) {
+                if (this.gainNode) {
+                    this.gainNode.gain.setValueAtTime(val, this.ctx.currentTime);
+                }
+            }
+        }
+
+        const ambientAudio = new AmbientAudioGenerator();
+
+        // Render Resources
+        function renderResources() {
+            const grid = document.getElementById('resourcesGrid');
+            const noResults = document.getElementById('noResultsState');
+            if (!grid) return;
+
+            let filtered = RESOURCES_DATA.filter(res => {
+                const matchCat = (activeCategory === 'all' || res.category === activeCategory);
+                const q = searchQuery.toLowerCase().trim();
+                const matchSearch = !q || res.title.toLowerCase().includes(q) || res.summary.toLowerCase().includes(q) || res.tags.some(t => t.toLowerCase().includes(q));
+                const matchSaved = !showOnlySaved || savedResources.includes(res.id);
+                return matchCat && matchSearch && matchSaved;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const isSaved = savedResources.includes(item.id);
+                return `
+                    <article class="bg-surface border border-border hover:border-brand/40 rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-sm group">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="px-3 py-1 bg-surface-soft border border-border text-text-secondary text-caption rounded-full font-medium">${item.categoryName}</span>
+                                <button onclick="toggleBookmark('${item.id}', event)" class="p-2 rounded-xl text-text-secondary hover:text-brand hover:bg-surface-soft transition-colors" title="${isSaved ? 'Remove from saved' : 'Save resource'}">
+                                    <svg class="w-5 h-5 ${isSaved ? 'text-brand fill-brand' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                                </button>
+                            </div>
+                            <div>
+                                <h3 class="text-h4 font-display text-text group-hover:text-brand transition-colors mb-2">${item.title}</h3>
+                                <p class="text-body-s text-text-secondary line-clamp-3">${item.summary}</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 mt-6 border-t border-border flex items-center justify-between">
+                            <span class="text-caption text-text-muted">${item.readTime}</span>
+                            <button onclick="openResourceModal('${item.id}')" class="text-body-s font-medium text-brand hover:underline inline-flex items-center gap-1">
+                                Read Guide <svg class="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // Bookmark Toggle
+        window.toggleBookmark = function(id, e) {
+            e.stopPropagation();
+            if (savedResources.includes(id)) {
+                savedResources = savedResources.filter(x => x !== id);
+            } else {
+                savedResources.push(id);
+            }
+            localStorage.setItem('mb_saved_resources', JSON.stringify(savedResources));
+            updateBookmarkBadge();
+            renderResources();
+        };
+
+        function updateBookmarkBadge() {
+            const badge = document.getElementById('savedCountBadge');
+            if (badge) badge.textContent = savedResources.length;
+        }
+
+        // Modal Handlers
+        window.openResourceModal = function(id) {
+            const item = RESOURCES_DATA.find(x => x.id === id);
+            if (!item) return;
+
+            document.getElementById('modalCategory').textContent = item.categoryName;
+            document.getElementById('modalTitle').textContent = item.title;
+            document.getElementById('modalAuthor').textContent = `${item.author} • ${item.readTime}`;
+            document.getElementById('modalBody').innerHTML = item.body;
+            
+            const ttsBtn = document.getElementById('modalTTSBtn');
+            if (ttsBtn) {
+                ttsBtn.setAttribute('data-tts-target', 'modalBody');
+            }
+
+            const modal = document.getElementById('resourceDetailModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeResourceModal = function() {
+            const modal = document.getElementById('resourceDetailModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+            if (window.MindBridgeSpeechInstance) {
+                window.MindBridgeSpeechInstance.stop();
+            }
+        };
+
+        window.resetFilters = function() {
+            activeCategory = 'all';
+            searchQuery = '';
+            showOnlySaved = false;
+            document.getElementById('resourceSearchInput').value = '';
+            document.querySelectorAll('.cat-pill').forEach(p => {
+                if (p.getAttribute('data-cat') === 'all') {
+                    p.classList.add('border-brand', 'bg-brand', 'text-white');
+                    p.classList.remove('border-border', 'bg-surface', 'text-text');
+                } else {
+                    p.classList.remove('border-brand', 'bg-brand', 'text-white');
+                    p.classList.add('border-border', 'bg-surface', 'text-text');
+                }
+            });
+            renderResources();
+        };
+
+        // DOM Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBookmarkBadge();
+            renderResources();
+
+            // Search input listener
+            const searchInput = document.getElementById('resourceSearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value;
+                    renderResources();
+                });
+            }
+
+            // Category filter pills
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.cat-pill').forEach(b => {
+                        b.classList.remove('border-brand', 'bg-brand', 'text-white');
+                        b.classList.add('border-border', 'bg-surface', 'text-text');
+                    });
+                    btn.classList.add('border-brand', 'bg-brand', 'text-white');
+                    btn.classList.remove('border-border', 'bg-surface', 'text-text');
+                    activeCategory = btn.getAttribute('data-cat');
+                    renderResources();
+                });
+            });
+
+            // Saved filter toggle
+            const savedBtn = document.getElementById('showSavedOnlyBtn');
+            if (savedBtn) {
+                savedBtn.addEventListener('click', () => {
+                    showOnlySaved = !showOnlySaved;
+                    if (showOnlySaved) {
+                        savedBtn.classList.add('border-brand', 'bg-brand/10');
+                    } else {
+                        savedBtn.classList.remove('border-brand', 'bg-brand/10');
+                    }
+                    renderResources();
+                });
+            }
+
+            // Audio Player Controls
+            const playBtn = document.getElementById('audioPlayBtn');
+            const playIcon = document.getElementById('playIcon');
+            const pauseIcon = document.getElementById('pauseIcon');
+            const statusBadge = document.getElementById('audioStatusBadge');
+            const volSlider = document.getElementById('audioVolume');
+            const trackTitle = document.getElementById('currentTrackTitle');
+
+            const trackNames = {
+                rain: 'Gentle Rain & White Noise',
+                ocean: 'Deep Ocean Waves',
+                forest: 'Forest Solitude & Whispering Pines',
+                binaural: 'Theta Binaural 6Hz (Stereo Focused)'
+            };
+
+            let currentAudioTrack = 'rain';
+
+            document.querySelectorAll('.audio-track-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.audio-track-btn').forEach(b => {
+                        b.classList.remove('bg-brand', 'text-white');
+                        b.classList.add('bg-surface-soft');
+                    });
+                    btn.classList.add('bg-brand', 'text-white');
+                    btn.classList.remove('bg-surface-soft');
+
+                    currentAudioTrack = btn.getAttribute('data-track');
+                    trackTitle.textContent = trackNames[currentAudioTrack];
+                    if (ambientAudio.isPlaying) {
+                        ambientAudio.play(currentAudioTrack);
+                    }
+                });
+            });
+
+            const visualizer = document.getElementById('audioVisualizer');
+            if (playBtn) {
+                playBtn.addEventListener('click', () => {
+                    if (ambientAudio.isPlaying) {
+                        ambientAudio.stop();
+                        playIcon.classList.remove('hidden');
+                        pauseIcon.classList.add('hidden');
+                        statusBadge.textContent = 'Paused';
+                        statusBadge.classList.remove('bg-success/20', 'text-success');
+                        if (visualizer) {
+                            visualizer.classList.add('hidden');
+                            visualizer.classList.remove('flex');
+                        }
+                    } else {
+                        ambientAudio.play(currentAudioTrack);
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                        statusBadge.textContent = 'Playing';
+                        statusBadge.classList.add('bg-success/20', 'text-success');
+                        if (visualizer) {
+                            visualizer.classList.remove('hidden');
+                            visualizer.classList.add('flex');
+                        }
+                    }
+                });
+            }
+
+            if (volSlider) {
+                volSlider.addEventListener('input', (e) => {
+                    ambientAudio.setVolume(parseFloat(e.target.value));
+                });
+            }
+        });
+    </script>
+</body>
+</html>

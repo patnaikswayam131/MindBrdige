@@ -1,0 +1,56 @@
+{
+  "test@student.edu": {
+    "email": "test@student.edu",
+    "firstName": "Test",
+    "department": "CS",
+    "wellnessProfile": {
+      "focusAreas": [
+        "Stress Relief"
+      ]
+    },
+    "consent": {
+      "essential": true,
+      "personalization": true
+    },
+    "updatedAt": "2026-10-01T19:58:10.112Z"
+  },
+  "smoke_test@university.edu": {
+    "email": "smoke_test@university.edu",
+    "firstName": "Alex",
+    "wellnessProfile": {
+      "academicYear": "Senior / Final Year",
+      "focusAreas": [
+        "Stress Management",
+        "Sleep Hygiene"
+      ]
+    },
+    "consent": {
+      "essential": true,
+      "personalization": true,
+      "reminders": false,
+      "consentTimestamp": "2026-10-02T23:28:40.100Z"
+    },
+    "updatedAt": "2026-10-02T23:28:40.104Z"
+  },
+  "student@university.edu": {
+    "email": "student@university.edu",
+    "firstName": "Student",
+    "lastName": "",
+    "department": "",
+    "wellnessProfile": {
+      "academicYear": "",
+      "language": "English",
+      "focusAreas": [],
+      "cadence": "daily"
+    },
+    "consent": {
+      "essential": true,
+      "personalization": true,
+      "reminders": false,
+      "campusAnalytics": false,
+      "consentTimestamp": "2026-10-01T20:48:40.640Z",
+      "policyVersion": "2026.1-STUDENT-WELLNESS"
+    },
+    "updatedAt": "2026-10-01T20:48:40.647Z"
+  }
+}

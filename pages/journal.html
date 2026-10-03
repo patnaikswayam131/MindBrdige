@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Private Reflection Journal - MindBridge</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+    <meta name="description" content="A private, guided emotional reflection journal with guided prompts, mood linking, draft autosave, and confidential storage.">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/icons.js"></script>
+    <script src="../js/skeleton-loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        .zen-active header.navbar,
+        .zen-active #journalSidebar,
+        .zen-active footer {
+            display: none !important;
+        }
+        .zen-active main {
+            max-width: 860px !important;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body class="bg-bg text-text selection:bg-brand selection:text-white min-h-screen flex flex-col">
+
+    <!-- Navigation Header -->
+    <header class="navbar bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="navbar__container">
+            <a href="landing.html" class="navbar__brand hover:opacity-80 transition-opacity">
+                <img src="../images/logo_light.png" id="logo-light" class="nav-logo dark:hidden" alt="MindBridge Logo">
+                <img src="../images/logo_dark.png" id="logo-dark" class="nav-logo hidden dark:block" alt="MindBridge Logo">
+                <span class="text-h4 font-display text-text whitespace-nowrap">MindBridge</span>
+            </a>
+
+            <nav class="navbar__main-nav hidden xl:flex">
+                <ul class="nav-list" id="main-nav-links">
+                    <!-- Populated dynamically by shared-layout.js -->
+                </ul>
+            </nav>
+
+            <div class="navbar__user-actions">
+                <div class="toggle-switch">
+                    <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                    <label class="switch-label" for="darkModeCheckbox" title="Toggle light and dark theme">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                
+                <div id="auth-actions" class="hidden items-center gap-4">
+                    <a href="student_login.html" class="btn-secondary nav-btn whitespace-nowrap">Sign In</a>
+                    <a href="student_login.html" class="btn-primary nav-btn whitespace-nowrap">Get Started</a>
+                </div>
+
+                <div id="user-profile-menu" class="relative hidden items-center ml-2">
+                    <button id="profile-btn" class="flex-shrink-0 flex items-center justify-center cursor-pointer hover:bg-surface-soft rounded-full p-1 transition-colors border-2 border-transparent hover:border-brand">
+                        <div id="profile-avatar" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-medium overflow-hidden text-lg">
+                            <span id="profile-initials">U</span>
+                        </div>
+                    </button>
+                    <div id="profile-dropdown" class="absolute right-0 top-14 w-64 bg-surface border border-border rounded-xl shadow-elevated hidden flex-col z-50 overflow-hidden">
+                        <!-- Populated by shared-layout.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-4" id="mobile-nav-links">
+                <!-- Injected by shared-layout.js -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Journal Workspace -->
+    <main class="flex-1 w-full mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] py-8 lg:py-12">
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+            
+            <!-- Left Column: Past Reflections Timeline & Search (4 Cols) -->
+            <aside class="lg:col-span-4 bg-surface border border-border rounded-3xl p-6 space-y-6 shadow-sm" id="journalSidebar">
+                <div class="flex items-center justify-between pb-4 border-b border-border">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </span>
+                        <h2 class="text-h4 font-display text-text">Past Entries</h2>
+                    </div>
+                    <button onclick="createNewEntry()" class="p-2 rounded-xl bg-brand text-white hover:bg-brand-hover transition-colors shadow-sm" title="New Blank Reflection">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative">
+                    <input type="text" id="journalSearchInput" placeholder="Search entries, thoughts, tags..." class="w-full bg-surface-soft border border-border rounded-xl py-2.5 pl-9 pr-3 text-body-s text-text placeholder-text-secondary/60 focus:outline-none focus:border-brand" />
+                    <svg class="w-4 h-4 text-text-secondary absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+
+                <!-- Entries Timeline List -->
+                <div class="space-y-3 max-h-[600px] overflow-y-auto pr-1" id="entriesListContainer">
+                    <!-- Populated dynamically -->
+                </div>
+            </aside>
+
+            <!-- Right Column: Focused Guided Writing Canvas (8 Cols) -->
+            <section class="lg:col-span-8 bg-surface border border-border rounded-3xl p-6 sm:p-10 shadow-sm space-y-6" id="journalCanvas">
+                
+                <!-- Canvas Top Bar -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border">
+                    <!-- Mode Selector -->
+                    <div class="space-y-1">
+                        <label class="text-caption font-bold text-brand uppercase tracking-wider block">Guided Reflection Mode</label>
+                        <select id="reflectionModeSelect" onchange="handleModeChange()" class="bg-surface border border-border rounded-xl px-3.5 py-2 text-body-s text-text font-medium focus:outline-none focus:border-brand cursor-pointer">
+                            <option value="free">Free Writing (Unstructured)</option>
+                            <option value="daily" selected>Daily Check-in & Centering</option>
+                            <option value="gratitude">Gratitude & Small Wins</option>
+                            <option value="anxiety">Stress & Worry Brain Dump</option>
+                            <option value="academic">Academic Pressure Reflection</option>
+                            <option value="emotional">Emotional Processing</option>
+                            <option value="decompression">Tough Day Decompression</option>
+                            <option value="counseling">Preparing for Counseling Session</option>
+                        </select>
+                    </div>
+
+                    <!-- Autosave Status and Zen Toggle -->
+                    <div class="flex items-center gap-3">
+                        <span id="autosaveStatusBadge" class="text-caption text-text-secondary flex items-center gap-1.5 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-success"></span>
+                            <span>All changes saved</span>
+                        </span>
+                        <button onclick="toggleZenMode()" id="zenModeBtn" class="p-2 rounded-xl border border-border hover:border-brand/40 bg-surface-soft text-text-secondary hover:text-text transition-colors btn-tactile cursor-pointer" title="Toggle Distraction-Free Zen Mode">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Guided Prompt Card -->
+                <div id="guidedPromptCard" class="bg-brand/5 border border-brand/15 rounded-2xl p-5 relative space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-caption font-bold text-brand uppercase tracking-wider flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                            Prompt for You
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="cyclePrompt()" class="text-caption text-brand hover:underline font-medium cursor-pointer">Next Prompt</button>
+                            <span>•</span>
+                            <button onclick="togglePromptVisibility()" class="text-caption text-text-secondary hover:text-text font-medium cursor-pointer">Hide</button>
+                        </div>
+                    </div>
+                    <p id="promptText" class="text-body-m font-medium text-text italic leading-relaxed">
+                        "What is one thought or worry you have been holding onto today that you can gently leave on this page?"
+                    </p>
+                </div>
+
+                <!-- Associated Emotion / Mood Selector (Clean Vector SVG Badges - No Emojis) -->
+                <div class="space-y-2">
+                    <label class="text-caption font-bold text-text-secondary uppercase tracking-wider block">How are you feeling right now? (Optional)</label>
+                    <div class="flex flex-wrap gap-2" id="moodTagsContainer">
+                        <button type="button" class="mood-tag px-3 py-1.5 rounded-full border border-border bg-surface-soft text-caption font-medium hover:border-brand/40 transition-colors btn-tactile cursor-pointer inline-flex items-center gap-1.5" data-emotion="Calm">
+                            <svg class="w-3.5 h-3.5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-1.5 3-4 6-8 7 3.5 1.5 6 4.5 7 8 1-3.5 3.5-6.5 7-8-4-1-6.5-4-8-7z"/></svg>
+                            Calm
+                        </button>
+                        <button type="button" class="mood-tag px-3 py-1.5 rounded-full border border-border bg-surface-soft text-caption font-medium hover:border-brand/40 transition-colors btn-tactile cursor-pointer inline-flex items-center gap-1.5" data-emotion="Anxious">
+                            <svg class="w-3.5 h-3.5 text-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/></svg>
+                            Anxious
+                        </button>
+                        <button type="button" class="mood-tag px-3 py-1.5 rounded-full border border-border bg-surface-soft text-caption font-medium hover:border-brand/40 transition-colors btn-tactile cursor-pointer inline-flex items-center gap-1.5" data-emotion="Hopeful">
+                            <svg class="w-3.5 h-3.5 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 20h10"/><path d="M10 20c0-5.5 2.5-9 2.5-9s2.5 3.5 2.5 9"/></svg>
+                            Hopeful
+                        </button>
+                        <button type="button" class="mood-tag px-3 py-1.5 rounded-full border border-border bg-surface-soft text-caption font-medium hover:border-brand/40 transition-colors btn-tactile cursor-pointer inline-flex items-center gap-1.5" data-emotion="Exhausted">
+                            <svg class="w-3.5 h-3.5 text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                            Exhausted
+                        </button>
+                        <button type="button" class="mood-tag px-3 py-1.5 rounded-full border border-border bg-surface-soft text-caption font-medium hover:border-brand/40 transition-colors btn-tactile cursor-pointer inline-flex items-center gap-1.5" data-emotion="Down">
+                            <svg class="w-3.5 h-3.5 text-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/></svg>
+                            Down
+                        </button>
+                        <button type="button" class="mood-tag px-3 py-1.5 rounded-full border border-border bg-surface-soft text-caption font-medium hover:border-brand/40 transition-colors btn-tactile cursor-pointer inline-flex items-center gap-1.5" data-emotion="Grateful">
+                            <svg class="w-3.5 h-3.5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                            Grateful
+                        </button>
+                        <button type="button" class="mood-tag px-3 py-1.5 rounded-full border border-border bg-surface-soft text-caption font-medium hover:border-brand/40 transition-colors btn-tactile cursor-pointer inline-flex items-center gap-1.5" data-emotion="Proud">
+                            <svg class="w-3.5 h-3.5 text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+                            Proud
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Entry Title Input -->
+                <div>
+                    <input type="text" id="entryTitleInput" placeholder="Reflection Title (e.g. Evening clarity after study session)" class="w-full text-h3 font-display bg-transparent border-0 border-b border-border/80 focus:border-brand py-2 text-text placeholder-text-secondary/50 focus:outline-none transition-colors" />
+                </div>
+
+                <!-- Entry Textarea -->
+                <div>
+                    <textarea id="entryContentInput" rows="12" placeholder="Start typing freely... MindBridge autosaves your draft continuously." class="w-full bg-surface-soft/40 border border-border rounded-2xl p-5 sm:p-6 text-body-m text-text leading-relaxed placeholder-text-secondary/50 focus:outline-none focus:border-brand focus:bg-surface transition-all resize-none"></textarea>
+                </div>
+
+                <!-- Word Count and Privacy Confirmation -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-caption text-text-secondary pt-2">
+                    <div class="flex items-center gap-4">
+                        <span id="wordCountLabel">0 words</span>
+                        <span>•</span>
+                        <span id="readTimeLabel">0 min read</span>
+                        <span>•</span>
+                        <span class="inline-flex items-center gap-1 text-success font-medium">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            Encrypted Client Storage
+                        </span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-3">
+                        <button onclick="togglePinCurrentEntry()" id="pinEntryBtn" class="p-2.5 rounded-xl border border-border hover:border-brand/40 text-text-secondary hover:text-brand transition-colors" title="Pin / Star Entry">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                        </button>
+                        <button onclick="exportCurrentEntry()" class="p-2.5 rounded-xl border border-border hover:border-brand/40 text-text-secondary hover:text-brand transition-colors" title="Export as Markdown">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </button>
+                        <button onclick="deleteCurrentEntry()" class="p-2.5 rounded-xl border border-border hover:border-error/40 text-text-secondary hover:text-error transition-colors" title="Delete Entry">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                        <button onclick="saveCurrentEntry(true)" class="btn-primary text-body-s px-6">Save Entry</button>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Dependencies -->
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/shared-layout.js"></script>
+
+    <script>
+        // Guided Reflection Prompt Templates
+        const PROMPTS_DATABASE = {
+            free: [
+                "Write without stopping. There are no rules, grammar checks, or expectations here.",
+                "What is at the forefront of your attention right now?"
+            ],
+            daily: [
+                "What is one thought or worry you have been holding onto today that you can gently leave on this page?",
+                "What is one small thing that went well today, however modest?",
+                "How does your body feel as you sit down right now? Where are you holding tension?"
+            ],
+            gratitude: [
+                "Name three small sensations or moments that brought you ease or comfort today.",
+                "Who is someone whose presence made your day or semester even 1% easier?",
+                "What is something you appreciate about your own resilience this semester?"
+            ],
+            anxiety: [
+                "Dump everything that is causing mental noise right now onto this screen.",
+                "Which of the things worrying you are within your direct control right now?",
+                "If a dear friend came to you with this exact anxiety, what gentle advice would you give them?"
+            ],
+            academic: [
+                "What course or project feels most overwhelming right now, and what is the absolute smallest next step you can take?",
+                "Remember: Your grades reflect your performance on specific evaluations, not your human worth.",
+                "How can you redefine 'productive' today to include resting your brain?"
+            ],
+            emotional: [
+                "What emotion has been visiting you most frequently this week?",
+                "If your current feeling had a voice, what would it be trying to protect you from?",
+                "Allow yourself to feel whatever you feel without judging yourself for feeling it."
+            ],
+            decompression: [
+                "Today was hard. What drained your energy the most?",
+                "What do you need right now to feel safe, comforted, and restored?",
+                "Give yourself credit for simply showing up and making it through today."
+            ],
+            counseling: [
+                "What are the top two themes you want to explore in your next session?",
+                "What have you been hesitant to say out loud that you feel ready to voice?",
+                "What would progress or relief look like for you two weeks from now?"
+            ]
+        };
+
+        // State Management
+        let entries = JSON.parse(localStorage.getItem('mb_journal_entries') || '[]');
+        let currentEntryId = null;
+        let selectedEmotion = null;
+        let promptIndex = 0;
+        let autosaveTimer = null;
+
+        // Initialize Default Entry if empty
+        if (entries.length === 0) {
+            entries.push({
+                id: 'entry-seed',
+                title: 'Beginning my reflection practice',
+                mode: 'daily',
+                emotion: 'Calm',
+                content: 'Decided to start journaling on MindBridge today to clear my head between classes. It feels good to have a quiet place that is completely private.',
+                pinned: true,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+            localStorage.setItem('mb_journal_entries', JSON.stringify(entries));
+        }
+
+        // Render Sidebar Entries List
+        function renderSidebarEntries() {
+            const container = document.getElementById('entriesListContainer');
+            if (!container) return;
+
+            const search = (document.getElementById('journalSearchInput').value || '').toLowerCase().trim();
+            const filtered = entries.filter(e => {
+                return !search || (e.title && e.title.toLowerCase().includes(search)) || (e.content && e.content.toLowerCase().includes(search)) || (e.emotion && e.emotion.toLowerCase().includes(search));
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-caption text-text-secondary text-center py-6">No matching entries found.</p>`;
+                return;
+            }
+
+            // Sort: pinned first, then by date descending
+            filtered.sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
+            });
+
+            container.innerHTML = filtered.map(item => {
+                const isActive = item.id === currentEntryId;
+                const d = new Date(item.updatedAt || item.createdAt);
+                const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+                return `
+                    <div onclick="loadEntry('${item.id}')" class="p-3.5 rounded-2xl border ${isActive ? 'border-brand bg-brand/10' : 'border-border bg-surface hover:bg-surface-soft'} cursor-pointer transition-all space-y-1.5 group">
+                        <div class="flex items-center justify-between">
+                            <span class="text-caption text-text-secondary">${dateStr}</span>
+                            <div class="flex items-center gap-1.5">
+                                ${item.pinned ? '<svg class="w-3.5 h-3.5 text-amber-500 fill-amber-500" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' : ''}
+                                ${item.emotion ? `<span class="px-2 py-0.5 bg-surface-soft border border-border text-text-secondary text-[11px] rounded-full">${item.emotion}</span>` : ''}
+                            </div>
+                        </div>
+                        <h4 class="text-body-s font-medium text-text truncate group-hover:text-brand transition-colors">${item.title || 'Untitled Reflection'}</h4>
+                        <p class="text-caption text-text-secondary line-clamp-1">${item.content || 'Empty entry...'}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load an Entry into Canvas
+        window.loadEntry = function(id) {
+            const item = entries.find(x => x.id === id);
+            if (!item) return;
+
+            currentEntryId = item.id;
+            document.getElementById('entryTitleInput').value = item.title || '';
+            document.getElementById('entryContentInput').value = item.content || '';
+            document.getElementById('reflectionModeSelect').value = item.mode || 'free';
+            selectedEmotion = item.emotion || null;
+
+            // Update emotion pill active state
+            document.querySelectorAll('.mood-tag').forEach(tag => {
+                if (tag.getAttribute('data-emotion') === selectedEmotion) {
+                    tag.classList.add('border-brand', 'bg-brand/10', 'text-brand', 'font-bold');
+                    tag.classList.remove('bg-surface-soft');
+                } else {
+                    tag.classList.remove('border-brand', 'bg-brand/10', 'text-brand', 'font-bold');
+                    tag.classList.add('bg-surface-soft');
+                }
+            });
+
+            // Update pin button state
+            const pinBtn = document.getElementById('pinEntryBtn');
+            if (pinBtn) {
+                pinBtn.innerHTML = item.pinned
+                    ? '<svg class="w-4 h-4 text-amber-500 fill-amber-500" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>'
+                    : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>';
+            }
+
+            handleModeChange();
+            updateWordCount();
+            renderSidebarEntries();
+            setAutosaveStatus('Draft saved');
+        };
+
+        // Create New Blank Entry
+        window.createNewEntry = function() {
+            currentEntryId = 'entry-' + Date.now();
+            const newEntry = {
+                id: currentEntryId,
+                title: '',
+                mode: 'daily',
+                emotion: null,
+                content: '',
+                pinned: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            entries.unshift(newEntry);
+            localStorage.setItem('mb_journal_entries', JSON.stringify(entries));
+            loadEntry(currentEntryId);
+            document.getElementById('entryTitleInput').focus();
+        };
+
+        // Save Current Entry
+        window.saveCurrentEntry = function(showFeedback = false) {
+            if (!currentEntryId) return;
+
+            const item = entries.find(x => x.id === currentEntryId);
+            if (!item) return;
+
+            item.title = document.getElementById('entryTitleInput').value.trim();
+            item.content = document.getElementById('entryContentInput').value;
+            item.mode = document.getElementById('reflectionModeSelect').value;
+            item.emotion = selectedEmotion;
+            item.updatedAt = new Date().toISOString();
+
+            localStorage.setItem('mb_journal_entries', JSON.stringify(entries));
+            renderSidebarEntries();
+
+            if (showFeedback) {
+                setAutosaveStatus('Saved just now');
+                const badge = document.getElementById('autosaveStatusBadge');
+                gsap.from(badge, { scale: 1.1, duration: 0.2 });
+            }
+        };
+
+        // Autosave status badge updater
+        function setAutosaveStatus(text, saving = false) {
+            const badge = document.getElementById('autosaveStatusBadge');
+            if (!badge) return;
+            badge.innerHTML = saving
+                ? `<span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span><span>Saving...</span>`
+                : `<span class="w-2 h-2 rounded-full bg-success"></span><span>${text}</span>`;
+        }
+
+        // Mode and Prompt Changes
+        window.handleModeChange = function() {
+            const mode = document.getElementById('reflectionModeSelect').value;
+            const promptCard = document.getElementById('guidedPromptCard');
+            const promptTextEl = document.getElementById('promptText');
+
+            if (mode === 'free') {
+                promptCard.classList.add('hidden');
+            } else {
+                promptCard.classList.remove('hidden');
+                const list = PROMPTS_DATABASE[mode] || PROMPTS_DATABASE.daily;
+                promptIndex = 0;
+                promptTextEl.textContent = `"${list[promptIndex]}"`;
+            }
+        };
+
+        window.cyclePrompt = function() {
+            const mode = document.getElementById('reflectionModeSelect').value;
+            const list = PROMPTS_DATABASE[mode] || PROMPTS_DATABASE.daily;
+            promptIndex = (promptIndex + 1) % list.length;
+            document.getElementById('promptText').textContent = `"${list[promptIndex]}"`;
+        };
+
+        window.togglePromptVisibility = function() {
+            const card = document.getElementById('guidedPromptCard');
+            card.classList.toggle('hidden');
+        };
+
+        // Toggle Emotion Tag
+        document.querySelectorAll('.mood-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                const emotion = tag.getAttribute('data-emotion');
+                if (selectedEmotion === emotion) {
+                    selectedEmotion = null;
+                    tag.classList.remove('border-brand', 'bg-brand/10', 'text-brand', 'font-bold');
+                    tag.classList.add('bg-surface-soft');
+                } else {
+                    document.querySelectorAll('.mood-tag').forEach(t => {
+                        t.classList.remove('border-brand', 'bg-brand/10', 'text-brand', 'font-bold');
+                        t.classList.add('bg-surface-soft');
+                    });
+                    selectedEmotion = emotion;
+                    tag.classList.add('border-brand', 'bg-brand/10', 'text-brand', 'font-bold');
+                    tag.classList.remove('bg-surface-soft');
+                }
+                triggerAutosave();
+            });
+        });
+
+        // Pin Toggle
+        window.togglePinCurrentEntry = function() {
+            const item = entries.find(x => x.id === currentEntryId);
+            if (!item) return;
+            item.pinned = !item.pinned;
+            saveCurrentEntry(false);
+            loadEntry(item.id);
+        };
+
+        // Delete Entry
+        window.deleteCurrentEntry = function() {
+            if (!currentEntryId) return;
+            if (confirm('Are you sure you want to delete this reflection? This cannot be undone.')) {
+                entries = entries.filter(x => x.id !== currentEntryId);
+                localStorage.setItem('mb_journal_entries', JSON.stringify(entries));
+                if (entries.length > 0) {
+                    loadEntry(entries[0].id);
+                } else {
+                    createNewEntry();
+                }
+            }
+        };
+
+        // Export Markdown
+        window.exportCurrentEntry = function() {
+            const item = entries.find(x => x.id === currentEntryId);
+            if (!item) return;
+
+            let md = `# ${item.title || 'Untitled Reflection'}\n`;
+            md += `**Date:** ${new Date(item.updatedAt || item.createdAt).toLocaleString()}\n`;
+            if (item.emotion) md += `**Mood:** ${item.emotion}\n`;
+            md += `**Mode:** ${item.mode}\n\n---\n\n`;
+            md += item.content || '';
+
+            const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `journal_${item.title ? item.title.toLowerCase().replace(/[^a-z0-9]/g, '_') : 'entry'}.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        // Zen Mode Toggle
+        window.toggleZenMode = function() {
+            document.body.classList.toggle('zen-active');
+            const isZen = document.body.classList.contains('zen-active');
+            document.getElementById('zenModeBtn').classList.toggle('border-brand', isZen);
+            document.getElementById('zenModeBtn').classList.toggle('bg-brand/10', isZen);
+        };
+
+        // Word Count Calculator
+        function updateWordCount() {
+            const text = (document.getElementById('entryContentInput').value || '').trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            document.getElementById('wordCountLabel').textContent = `${words} word${words === 1 ? '' : 's'}`;
+            const mins = Math.ceil(words / 200);
+            document.getElementById('readTimeLabel').textContent = `${mins} min read`;
+        }
+
+        // Autosave Trigger on Keyup
+        function triggerAutosave() {
+            setAutosaveStatus('Saving...', true);
+            clearTimeout(autosaveTimer);
+            autosaveTimer = setTimeout(() => {
+                saveCurrentEntry(false);
+                setAutosaveStatus('Draft saved');
+            }, 800);
+        }
+
+        // Setup DOM Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const titleInput = document.getElementById('entryTitleInput');
+            const contentInput = document.getElementById('entryContentInput');
+            const searchInput = document.getElementById('journalSearchInput');
+
+            if (titleInput) titleInput.addEventListener('input', triggerAutosave);
+            if (contentInput) {
+                contentInput.addEventListener('input', () => {
+                    updateWordCount();
+                    triggerAutosave();
+                });
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', renderSidebarEntries);
+            }
+
+            // Load initial entry
+            if (entries.length > 0) {
+                loadEntry(entries[0].id);
+            } else {
+                createNewEntry();
+            }
+        });
+    </script>
+</body>
+</html>

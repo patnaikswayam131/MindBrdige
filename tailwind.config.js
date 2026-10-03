@@ -14,6 +14,36 @@ module.exports = {
           muted: "var(--color-text-muted)"
         },
         
+        primary: {
+          DEFAULT: "var(--color-primary)",
+          hover: "var(--color-primary-hover)",
+          light: "var(--color-primary-light)",
+          50: "var(--color-secondary)",
+          100: "var(--color-secondary)",
+          500: "var(--color-primary)",
+          600: "var(--color-primary-hover)"
+        },
+
+        secondary: {
+          DEFAULT: "var(--color-secondary)",
+          50: "var(--color-bg)",
+          100: "var(--color-secondary)",
+          500: "var(--color-secondary)",
+          600: "var(--color-secondary)"
+        },
+
+        accent: {
+          DEFAULT: "var(--color-accent)",
+          hover: "var(--color-accent-hover)",
+          50: "var(--color-bg)",
+          100: "var(--color-secondary)",
+          500: "var(--color-accent)",
+          600: "var(--color-accent)"
+        },
+
+        lavender: "var(--color-accent-purple)",
+        'accent-purple': "var(--color-accent-purple)",
+
         brand: {
           DEFAULT: "var(--color-brand)",
           hover: "var(--color-brand-hover)",
@@ -29,47 +59,25 @@ module.exports = {
         warning: "var(--color-warning)",
         error: "var(--color-error)",
         info: "var(--color-info)",
-        
-        // Fallbacks for existing pages
-        primary: {
-          DEFAULT: "var(--color-brand)",
-          50: "var(--color-brand-soft)",
-          100: "var(--color-brand-soft)",
-          500: "var(--color-brand)",
-          600: "var(--color-brand-hover)"
-        },
-        secondary: {
-          DEFAULT: "var(--color-success)",
-          50: "var(--color-bg)",
-          100: "var(--color-bg)",
-          500: "var(--color-success)",
-          600: "var(--color-success)"
-        },
-        accent: {
-          DEFAULT: "var(--color-warning)",
-          50: "var(--color-bg)",
-          100: "var(--color-bg)",
-          500: "var(--color-warning)",
-          600: "var(--color-warning)"
-        }
       },
       fontFamily: {
         sans: ['"DM Sans"', 'sans-serif'],
-        display: ['"DM Serif Display"', 'serif'],
+        serif: ['"Fraunces"', '"DM Serif Display"', 'serif'],
+        display: ['"Fraunces"', '"DM Serif Display"', 'serif'],
       },
       fontSize: {
-        'display-xl': ['64px', { lineHeight: '68px' }],
-        'display-l': ['52px', { lineHeight: '58px' }],
-        'display-m': ['44px', { lineHeight: '50px' }],
-        'h1': ['36px', { lineHeight: '44px' }],
-        'h2': ['30px', { lineHeight: '38px' }],
-        'h3': ['24px', { lineHeight: '32px' }],
-        'h4': ['20px', { lineHeight: '28px' }],
-        'body-l': ['18px', { lineHeight: '28px' }],
-        'body-m': ['16px', { lineHeight: '25px' }],
-        'body-s': ['14px', { lineHeight: '21px' }],
-        'label': ['13px', { lineHeight: '18px', letterSpacing: '0.08em' }],
-        'caption': ['12px', { lineHeight: '17px' }],
+        'display-xl': ['clamp(3rem, 2rem + 4vw, 4.5rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'display-l': ['clamp(2.5rem, 1.8rem + 3vw, 3.75rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'display-m': ['clamp(2rem, 1.5rem + 2vw, 2.75rem)', { lineHeight: '1.15', letterSpacing: '-0.01em' }],
+        'h1': ['clamp(1.75rem, 1.25rem + 1.5vw, 2.25rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        'h2': ['clamp(1.5rem, 1.1rem + 1vw, 1.875rem)', { lineHeight: '1.3' }],
+        'h3': ['clamp(1.25rem, 1rem + 0.5vw, 1.5rem)', { lineHeight: '1.4' }],
+        'h4': ['clamp(1.125rem, 0.9rem + 0.5vw, 1.25rem)', { lineHeight: '1.4' }],
+        'body-l': ['clamp(1.0625rem, 0.95rem + 0.25vw, 1.125rem)', { lineHeight: '1.6' }],
+        'body-m': ['1rem', { lineHeight: '1.6' }],
+        'body-s': ['0.875rem', { lineHeight: '1.5' }],
+        'label': ['0.75rem', { lineHeight: '1.4', letterSpacing: '0.05em', textTransform: 'uppercase' }],
+        'caption': ['0.75rem', { lineHeight: '1.4' }],
       },
       spacing: {
         '1': '4px',

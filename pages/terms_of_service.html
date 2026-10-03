@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Terms of Service - MindBridge</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+
     <meta name="description" content="MindBridge Terms of Service - Terms and conditions for using the MindBridge platform.">
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <script src="../js/dark-mode.js"></script>
+    <noscript><style>.fade-in { opacity: 1 !important; transform: none !important; }</style></noscript>
     <style>
         .fade-in {
             opacity: 0;
@@ -106,56 +110,72 @@
 </head>
 <body class="min-h-screen bg-bg">
     <!-- Navigation Header -->
-    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
-                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <div>
-                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
-                    </div>
-                </a>
+        <!-- Navigation Header -->
+        <!-- Navigation Header -->
+        <!-- Navigation Header -->
+        <!-- Navigation Header -->
+    <header class="navbar bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="navbar__container">
+            <!-- Zone 1: Brand -->
+            <a href="landing.html" class="navbar__brand hover:opacity-80 transition-opacity">
+                <img src="../images/logo_light.png" id="logo-light" class="nav-logo" alt="MindBridge Logo">
+                <span class="font-display text-text whitespace-nowrap" style="font-size: 2.1rem; font-weight: 500; letter-spacing: 0.5px; -webkit-font-smoothing: antialiased; margin-top: 4px;">MindBridge</span>
+            </a>
 
-                <!-- Navigation -->
-                <nav class="hidden xl:flex items-center space-x-6">
-                    <a href="landing.html#features" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
-                    <a href="landing.html#how-it-works" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
-                    <a href="mental_health_assessments.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
-                    <a href="landing.html#about" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
-                    <a href="landing.html#contact" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
-                    
-                    <div class="h-4 w-px bg-border flex-shrink-0 hidden xl:block"></div>
-                    <div class="hidden xl:flex items-center space-x-2 text-sm flex-shrink-0 whitespace-nowrap">
-                        <div class="w-2 h-2 bg-error rounded-pill animate-pulse flex-shrink-0"></div>
-                        <span class="text-text-secondary">Kiran Helpline:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
-                    </div>
-                </nav>
+            <!-- Zone 2: Main Navigation -->
+            <nav class="navbar__main-nav hidden xl:flex">
+                <ul class="nav-list" id="main-nav-links">
+                    <!-- Injected by JS -->
+                </ul>
+            </nav>
 
-                <!-- Right Section -->
-                <div class="flex items-center space-x-4 flex-shrink-0">
-                    <!-- Theme Switch -->
-                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
-                        <input type="checkbox" id="darkModeCheckbox">
-                        <span class="slider">
-                            <span class="star star_1"></span>
-                            <span class="star star_2"></span>
-                            <span class="star star_3"></span>
-                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
-                            </svg>
-                        </span>
+            <!-- Zone 3: User Actions -->
+            <div class="navbar__user-actions">
+                <div class="toggle-switch">
+                    <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                    <label class="switch-label" for="darkModeCheckbox" title="Toggle light and dark theme">
+                        <span class="slider"></span>
                     </label>
-                    <!-- Mobile Menu Button -->
-                    <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="mobile-menu-btn xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+                
+                <!-- Auth Actions (Logged out) -->
+                <div id="auth-actions" class="hidden sm:flex items-center gap-4">
+                    <a href="student_login.html" class="btn-secondary nav-btn hidden sm:inline-flex whitespace-nowrap min-w-[100px]">Sign In</a>
+                    <a href="student_login.html" class="btn-primary nav-btn whitespace-nowrap min-w-[136px]">Get Started</a>
+                </div>
+                
+                <!-- Profile Actions (Logged in) -->
+                <div id="user-profile-menu" class="relative hidden items-center ml-2">
+                    <button id="profile-btn" class="flex-shrink-0 flex items-center justify-center cursor-pointer hover:bg-surface-soft rounded-full p-1 transition-colors border-2 border-transparent hover:border-brand">
+                        <div id="profile-avatar" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-medium overflow-hidden text-lg">
+                            <span id="profile-initials">U</span>
+                        </div>
                     </button>
-                    <a href="student_login.html" class="btn-secondary hidden sm:inline-flex whitespace-nowrap flex-shrink-0 min-w-fit">Sign In</a>
-                    <a href="student_login.html" class="btn-primary whitespace-nowrap flex-shrink-0 min-w-fit">Get Started</a>
+                    <!-- Dropdown -->
+                    <div id="profile-dropdown" class="absolute right-0 top-14 w-60 bg-surface border border-border rounded-xl shadow-lg hidden flex-col z-50 overflow-hidden">
+                        <a href="#" class="px-5 py-3 hover:bg-surface-soft text-body-m text-text border-b border-border flex items-center gap-3">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            Add Profile Picture
+                        </a>
+                        <a href="#" class="px-5 py-3 hover:bg-surface-soft text-body-m text-text border-b border-border flex items-center gap-3">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            Change Password
+                        </a>
+                        <a href="#" class="px-5 py-3 hover:bg-surface-soft text-body-m text-text border-b border-border flex items-center gap-3">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                            Toggle Notifications
+                        </a>
+                        <a href="#" id="logout-btn" class="px-5 py-3 hover:bg-error/10 text-body-m text-error font-medium flex items-center gap-3 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -163,27 +183,147 @@
         <!-- Mobile Menu -->
         <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
             <div class="flex flex-col py-6 px-6 sm:px-8 space-y-5">
-                <a href="landing.html#features" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
-                <a href="landing.html#how-it-works" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
-                <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
-                <a href="landing.html#about" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
-                <a href="landing.html#contact" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
+                <div id="mobile-nav-links" class="flex flex-col space-y-5">
+                    <!-- Injected by JS -->
+                </div>
                 
                 <div class="h-px w-full bg-border my-1"></div>
                 
                 <div class="flex flex-col space-y-5">
-                    <div class="flex items-center space-x-2 text-sm text-text-secondary">
-                        <span class="font-medium">Crisis Support:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
-                    </div>
-                    
-                    <div class="sm:hidden">
+                    <div class="sm:hidden" id="mobile-auth-actions">
                         <a href="student_login.html" class="btn-secondary w-full justify-center flex">Sign In</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Build Navigation dynamically
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const mainNavLinks = document.getElementById('main-nav-links');
+        const mobileNavLinks = document.getElementById('mobile-nav-links');
+        
+        const loggedOutLinks = [
+            { href: 'landing.html#features', text: 'Features' },
+            { href: 'landing.html#how-it-works', text: 'How It Works' },
+            { href: 'mental_health_assessments.html', text: 'Resources' },
+            { href: 'landing.html#about', text: 'About' },
+            { href: 'landing.html#contact', text: 'Contact' }
+        ];
+        
+        const loggedInLinks = [
+            { href: 'student_dashboard.html', text: 'Dashboard' },
+            { href: 'ai_mental_health_chatbot.html', text: 'AI Chat' },
+            { href: 'counselor_appointment_booking.html', text: 'Counselor Booking' },
+            { href: 'mental_health_assessments.html', text: 'Assessments' }
+        ];
+        
+        const linksToUse = currentUser ? loggedInLinks : loggedOutLinks;
+        
+        if (mainNavLinks) {
+            mainNavLinks.innerHTML = linksToUse.map(link => `<li><a href="${link.href}" class="nav-link">${link.text}</a></li>`).join('');
+        }
+        if (mobileNavLinks) {
+            mobileNavLinks.innerHTML = linksToUse.map(link => `<a href="${link.href}" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m nav-link-mobile">${link.text}</a>`).join('');
+        }
+    
+        // Highlight Active Link
+        function updateActiveLink() {
+            const currentPath = window.location.pathname.split('/').pop() || 'landing.html';
+            const currentHash = window.location.hash;
+            
+            const allLinks = document.querySelectorAll('.nav-link, .nav-link-mobile');
+            allLinks.forEach(link => {
+                link.classList.remove('active');
+                if(link.classList.contains('nav-link-mobile')){
+                    link.classList.remove('text-brand', 'font-bold');
+                }
+                const href = link.getAttribute('href');
+                if (!href) return;
+                
+                const [linkPath, linkHash] = href.split('#');
+                const targetPath = linkPath || currentPath;
+                
+                if (targetPath === currentPath) {
+                    if (linkHash) {
+                        if (currentHash === '#' + linkHash) {
+                            link.classList.add('active');
+                            if(link.classList.contains('nav-link-mobile')){
+                                link.classList.add('text-brand', 'font-bold');
+                            }
+                        }
+                    } else if (!currentHash) {
+                        link.classList.add('active');
+                        if(link.classList.contains('nav-link-mobile')){
+                            link.classList.add('text-brand', 'font-bold');
+                        }
+                    }
+                }
+            });
+        }
+        
+        updateActiveLink();
+        window.addEventListener('hashchange', updateActiveLink);
+        
+        document.querySelectorAll('.nav-link, .nav-link-mobile').forEach(link => {
+            link.addEventListener('click', function() {
+                updateActiveLink(); // Let the hash change handle it naturally, or force update immediately
+                setTimeout(updateActiveLink, 50);
+            });
+        });
+
+        // Auth & Profile actions toggle
+        const authActions = document.getElementById('auth-actions');
+        const mobileAuthActions = document.getElementById('mobile-auth-actions');
+        const userProfileMenu = document.getElementById('user-profile-menu');
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const profileInitials = document.getElementById('profile-initials');
+        const profileAvatar = document.getElementById('profile-avatar');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        if (currentUser) {
+            if (authActions) authActions.style.display = 'none';
+            if (mobileAuthActions) mobileAuthActions.style.display = 'none';
+            if (userProfileMenu) {
+                userProfileMenu.classList.remove('hidden');
+                userProfileMenu.classList.add('flex');
+            }
+            
+            let initial = 'U';
+            if (currentUser.firstName) {
+                initial = currentUser.firstName.charAt(0).toUpperCase();
+            } else if (currentUser.email) {
+                initial = currentUser.email.charAt(0).toUpperCase();
+            }
+            
+            if (currentUser.profilePic) {
+                profileAvatar.innerHTML = `<img src="${currentUser.profilePic}" alt="Profile" class="w-full h-full object-cover">`;
+            } else {
+                if (profileInitials) profileInitials.textContent = initial;
+            }
+        } else {
+            if (authActions) authActions.style.display = 'flex';
+            if (mobileAuthActions) mobileAuthActions.style.display = 'block';
+            if (userProfileMenu) {
+                userProfileMenu.classList.remove('flex');
+                userProfileMenu.classList.add('hidden');
+            }
+        }
+
+        // Profile dropdown handled centrally by shared-layout.js
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('currentUser');
+                window.location.href = 'student_login.html';
+            });
+        }
+    });
+    </script>
 
     <!-- Mobile Menu Script -->
     <script>
@@ -420,12 +560,11 @@
 
     <!-- Footer -->
     <footer class="bg-surface-soft py-16 border-t border-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full mx-auto max-w-[var(--content-width)] px-[var(--content-padding)]">
             <div class="grid md:grid-cols-4 gap-8 mb-12">
                 <div class="md:col-span-1">
                     <div class="flex items-center space-x-3 mb-4">
-                        <img src="../images/logo_light.png" class="h-8 dark:hidden opacity-80" alt="MindBridge Logo">
-                        <img src="../images/logo_dark.png" class="h-8 hidden dark:block opacity-80" alt="MindBridge Logo">
+                        <img src="../images/logo_light.png" class="h-8 opacity-80" alt="MindBridge Logo">
                         <h2 class="text-h4 font-display text-text">MindBridge</h2>
                     </div>
                     <p class="text-body-s text-text-secondary mb-4">Mental Health Support for Students</p>
@@ -480,12 +619,13 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
 
         document.querySelectorAll('.fade-in').forEach(element => {
             observer.observe(element);
         });
     </script>
-<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/shared-layout.js"></script>
 </body>
 </html>

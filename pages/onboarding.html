@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to MindBridge - Personal Onboarding & Consent</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+    <meta name="description" content="Configure your MindBridge wellness preferences, learn about our privacy commitments, and establish transparent consent controls.">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/icons.js"></script>
+    <script src="../js/skeleton-loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-bg text-text selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
+
+    <!-- Top Minimal Navigation -->
+    <header class="w-full border-b border-border bg-surface/80 backdrop-blur-md sticky top-0 z-40 py-4 px-6 sm:px-12 flex items-center justify-between">
+        <a href="landing.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="../images/logo_light.png" id="logo-light" class="w-8 h-8 dark:hidden" alt="MindBridge Logo">
+            <img src="../images/logo_dark.png" id="logo-dark" class="w-8 h-8 hidden dark:block" alt="MindBridge Logo">
+            <span class="text-h4 font-display text-text">MindBridge</span>
+        </a>
+        <div class="flex items-center gap-4">
+            <button id="ttsOnboardingBtn" onclick="readCurrentStep()" class="btn-secondary text-caption flex items-center gap-1.5 py-1.5 px-3" title="Read this step aloud">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                <span>Read Step</span>
+            </button>
+            <div class="toggle-switch">
+                <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                <label class="switch-label" for="darkModeCheckbox" title="Toggle theme">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <a href="student_dashboard.html" class="text-caption text-text-secondary hover:text-text font-medium underline underline-offset-4">Skip Setup</a>
+        </div>
+    </header>
+
+    <!-- Main Multi-Step Onboarding Form Container -->
+    <main class="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-14">
+        
+        <!-- Progress Stepper Indicator -->
+        <div class="mb-10" aria-label="Onboarding Progress">
+            <div class="flex items-center justify-between text-caption font-bold uppercase tracking-wider text-text-secondary mb-3">
+                <span id="stepCounterLabel">Step 1 of 4</span>
+                <span id="stepTitleLabel" class="text-brand">Privacy & Transparency</span>
+            </div>
+            <div class="w-full bg-surface-soft h-2 rounded-full overflow-hidden border border-border">
+                <div id="progressBar" class="bg-brand h-full w-1/4 transition-all duration-500 ease-out"></div>
+            </div>
+        </div>
+
+        <form id="onboardingForm" onsubmit="event.preventDefault();" class="bg-surface border border-border rounded-3xl p-6 sm:p-10 shadow-elevated relative overflow-hidden">
+
+            <!-- STEP 1: TRANSPARENCY & DATA COMMITMENTS -->
+            <div id="step1" class="step-panel space-y-6">
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-caption font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        Privacy-First Mental Wellness
+                    </div>
+                    <h1 class="text-display-m font-display text-text">Welcome to MindBridge.</h1>
+                    <p class="text-body-m text-text-secondary leading-relaxed">
+                        MindBridge is built exclusively to support student mental health and emotional well-being. Before we begin, we want to be completely transparent about how your information is handled.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4 py-2">
+                    <div class="p-4 bg-surface-soft/60 rounded-2xl border border-border space-y-1.5">
+                        <div class="flex items-center gap-2 text-brand font-bold text-body-s">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            Private & Isolated
+                        </div>
+                        <p class="text-caption text-text-secondary leading-relaxed">
+                            Your private journal entries and mood check-ins are strictly isolated to your account. We never sell your personal data to advertisers.
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-surface-soft/60 rounded-2xl border border-border space-y-1.5">
+                        <div class="flex items-center gap-2 text-brand font-bold text-body-s">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Full Control in Settings
+                        </div>
+                        <p class="text-caption text-text-secondary leading-relaxed">
+                            You can review, modify, export (as JSON archive), or permanently wipe your local records at any time directly through Settings.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-brand/5 border border-brand/20 rounded-2xl text-body-s text-text-secondary leading-relaxed">
+                    <strong class="text-text font-medium">Important Clinical Notice:</strong> MindBridge provides peer support, guided reflections, and self-management resources. It is not an emergency psychiatric facility or a substitute for licensed medical care. If you are experiencing a life-threatening crisis, please dial <a href="tel:988" class="text-brand font-bold underline">988</a> or <a href="tel:18005990019" class="text-brand font-bold underline">1800-599-0019</a>.
+                </div>
+
+                <div class="pt-4 border-t border-border flex items-center justify-between">
+                    <a href="privacy_policy.html" target="_blank" class="text-caption text-brand hover:underline">Read Full Privacy Policy &rarr;</a>
+                    <button type="button" onclick="goToStep(2)" class="btn-primary flex items-center gap-2">
+                        <span>Get Started</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: MINIMAL STUDENT PROFILE -->
+            <div id="step2" class="step-panel space-y-6 hidden">
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-caption font-medium">
+                        Basic Profile (Optional)
+                    </div>
+                    <h2 class="text-display-m font-display text-text">How should we address you?</h2>
+                    <p class="text-body-m text-text-secondary leading-relaxed">
+                        Share what you feel comfortable with. You can use your first name or a preferred nickname.
+                    </p>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <label for="obDisplayName" class="block text-caption font-bold uppercase tracking-wider mb-2">Preferred Name / Nickname</label>
+                        <input type="text" id="obDisplayName" placeholder="e.g. Alex, Sam, Jordan" class="w-full bg-surface-soft border border-border rounded-xl p-3.5 text-body-m text-text focus:outline-none focus:border-brand transition-colors">
+                        <span class="text-caption text-text-secondary mt-1 block">Used for daily dashboard greetings and reflections.</span>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="obDepartment" class="block text-caption font-bold uppercase tracking-wider mb-2">Department / Major</label>
+                            <input type="text" id="obDepartment" placeholder="e.g. Humanities, Engineering, Life Sciences" class="w-full bg-surface-soft border border-border rounded-xl p-3.5 text-body-m text-text focus:outline-none focus:border-brand transition-colors">
+                        </div>
+                        <div>
+                            <label for="obAcademicYear" class="block text-caption font-bold uppercase tracking-wider mb-2">Academic Standing</label>
+                            <select id="obAcademicYear" class="w-full bg-surface-soft border border-border rounded-xl p-3.5 text-body-m text-text focus:outline-none focus:border-brand transition-colors">
+                                <option value="">Select standing (optional)</option>
+                                <option value="First Year / Freshman">First Year / Freshman</option>
+                                <option value="Second Year / Sophomore">Second Year / Sophomore</option>
+                                <option value="Third Year / Junior">Third Year / Junior</option>
+                                <option value="Senior / Final Year">Senior / Final Year</option>
+                                <option value="Graduate / Post-Graduate">Graduate / Post-Graduate</option>
+                                <option value="Doctoral / Researcher">Doctoral / Researcher</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="obLanguage" class="block text-caption font-bold uppercase tracking-wider mb-2">Preferred Language</label>
+                        <select id="obLanguage" class="w-full bg-surface-soft border border-border rounded-xl p-3.5 text-body-m text-text focus:outline-none focus:border-brand transition-colors">
+                            <option value="English" selected>English</option>
+                            <option value="Hindi">हिन्दी (Hindi)</option>
+                            <option value="Spanish">Español (Spanish)</option>
+                            <option value="French">Français (French)</option>
+                            <option value="Mandarin">中文 (Mandarin)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-border flex items-center justify-between">
+                    <button type="button" onclick="goToStep(1)" class="btn-secondary text-body-s">Back</button>
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goToStep(3)" class="text-caption text-text-secondary hover:text-text font-medium underline underline-offset-4">Skip step</button>
+                        <button type="button" onclick="saveStep2AndProceed()" class="btn-primary text-body-s">Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: WELLNESS PREFERENCES & FOCUS AREAS -->
+            <div id="step3" class="step-panel space-y-6 hidden">
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-caption font-medium">
+                        Personalization (Optional)
+                    </div>
+                    <h2 class="text-display-m font-display text-text">What matters most right now?</h2>
+                    <p class="text-body-m text-text-secondary leading-relaxed">
+                        Select any areas you would like MindBridge to prioritize for resources, soundscapes, and peer cohorts. You can skip any or all of these.
+                    </p>
+                </div>
+
+                <!-- Focus Areas -->
+                <div class="space-y-3">
+                    <label class="block text-caption font-bold uppercase tracking-wider text-text-secondary">Focus Areas (Select all that apply)</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="focusAreaGrid">
+                        <button type="button" onclick="toggleFocusArea(this, 'Stress Management')" class="focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex flex-col gap-1.5 btn-tactile">
+                            <div class="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                            </div>
+                            <span class="text-caption font-bold text-text">Stress Relief</span>
+                            <span class="text-[11px] text-text-secondary leading-tight">Decompression & calmness</span>
+                        </button>
+                        <button type="button" onclick="toggleFocusArea(this, 'Sleep Hygiene')" class="focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex flex-col gap-1.5 btn-tactile">
+                            <div class="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                            </div>
+                            <span class="text-caption font-bold text-text">Sleep & Rest</span>
+                            <span class="text-[11px] text-text-secondary leading-tight">Bedtime soundscapes</span>
+                        </button>
+                        <button type="button" onclick="toggleFocusArea(this, 'Academic Pressure')" class="focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex flex-col gap-1.5 btn-tactile">
+                            <div class="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            </div>
+                            <span class="text-caption font-bold text-text">Exam & Study</span>
+                            <span class="text-[11px] text-text-secondary leading-tight">Focus & deadline anxiety</span>
+                        </button>
+                        <button type="button" onclick="toggleFocusArea(this, 'Emotional Regulation')" class="focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex flex-col gap-1.5 btn-tactile">
+                            <div class="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3m-15 6c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3"/></svg>
+                            </div>
+                            <span class="text-caption font-bold text-text">Emotions</span>
+                            <span class="text-[11px] text-text-secondary leading-tight">Grounding & breathing</span>
+                        </button>
+                        <button type="button" onclick="toggleFocusArea(this, 'Social Well-being')" class="focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex flex-col gap-1.5 btn-tactile">
+                            <div class="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                            </div>
+                            <span class="text-caption font-bold text-text">Connection</span>
+                            <span class="text-[11px] text-text-secondary leading-tight">Community & belonging</span>
+                        </button>
+                        <button type="button" onclick="toggleFocusArea(this, 'Mindfulness & Audio')" class="focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex flex-col gap-1.5 btn-tactile">
+                            <div class="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 18v-6a9 9 0 0118 0v6M3 18a3 3 0 003 3h1a1 1 0 001-1v-4a1 1 0 00-1-1H4v3zm17 0a3 3 0 01-3 3h-1a1 1 0 01-1-1v-4a1 1 0 011-1h3v3z"/></svg>
+                            </div>
+                            <span class="text-caption font-bold text-text">Audio Calm</span>
+                            <span class="text-[11px] text-text-secondary leading-tight">Rain & ambient focus</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Check-in cadence -->
+                <div class="space-y-3 pt-2">
+                    <label class="block text-caption font-bold uppercase tracking-wider text-text-secondary">Preferred Check-in Cadence</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="cursor-pointer border border-border rounded-xl p-3 bg-surface-soft text-center hover:border-brand transition-all flex flex-col items-center">
+                            <input type="radio" name="checkinCadence" value="daily" checked class="text-brand mb-1">
+                            <span class="text-caption font-bold text-text">Daily</span>
+                            <span class="text-[11px] text-text-secondary">Gentle morning quote</span>
+                        </label>
+                        <label class="cursor-pointer border border-border rounded-xl p-3 bg-surface-soft text-center hover:border-brand transition-all flex flex-col items-center">
+                            <input type="radio" name="checkinCadence" value="weekly" class="text-brand mb-1">
+                            <span class="text-caption font-bold text-text">Weekly</span>
+                            <span class="text-[11px] text-text-secondary">Sunday summary</span>
+                        </label>
+                        <label class="cursor-pointer border border-border rounded-xl p-3 bg-surface-soft text-center hover:border-brand transition-all flex flex-col items-center">
+                            <input type="radio" name="checkinCadence" value="as_needed" class="text-brand mb-1">
+                            <span class="text-caption font-bold text-text">As Needed</span>
+                            <span class="text-[11px] text-text-secondary">Only when I open app</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-border flex items-center justify-between">
+                    <button type="button" onclick="goToStep(2)" class="btn-secondary text-body-s">Back</button>
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="goToStep(4)" class="text-caption text-text-secondary hover:text-text font-medium underline underline-offset-4">Skip step</button>
+                        <button type="button" onclick="saveStep3AndProceed()" class="btn-primary text-body-s">Continue to Consent</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: GRANULAR CONSENT & TRANSPARENCY -->
+            <div id="step4" class="step-panel space-y-6 hidden">
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-caption font-medium">
+                        Consent Management (WCAG & GDPR Aligned)
+                    </div>
+                    <h2 class="text-display-m font-display text-text">Your Explicit Consent Choices</h2>
+                    <p class="text-body-m text-text-secondary leading-relaxed">
+                        In compliance with transparent ethical standards, we never use blanket or pre-checked consent. Choose only the permissions you want to grant.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Essential (Required) -->
+                    <div class="p-4 bg-surface-soft/60 rounded-2xl border border-border flex items-start gap-3">
+                        <input type="checkbox" id="obConsentEssential" checked disabled class="w-5 h-5 rounded text-brand border-border mt-0.5 cursor-not-allowed">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <label for="obConsentEssential" class="text-body-s font-bold text-text">Essential Service Processing</label>
+                                <span class="text-[11px] bg-brand/10 text-brand px-2 py-0.5 rounded-full font-bold">REQUIRED</span>
+                            </div>
+                            <p class="text-caption text-text-secondary leading-relaxed">
+                                Necessary to authenticate your session, maintain secure account credentials, and display your saved dashboard. Cannot be disabled.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Personalization (Optional) -->
+                    <div class="p-4 bg-surface-soft/60 rounded-2xl border border-border flex items-start gap-3 hover:border-brand/40 transition-colors">
+                        <input type="checkbox" id="obConsentPersonalization" class="w-5 h-5 rounded text-brand focus:ring-brand border-border mt-0.5 cursor-pointer">
+                        <div class="space-y-1">
+                            <label for="obConsentPersonalization" class="text-body-s font-bold text-text cursor-pointer">Personalized Recommendations & Audio Library</label>
+                            <p class="text-caption text-text-secondary leading-relaxed">
+                                Allows MindBridge to recommend specific articles, ambient tracks, and breathing guides tailored to your self-reported mood tags and focus areas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Reminders (Optional) -->
+                    <div class="p-4 bg-surface-soft/60 rounded-2xl border border-border flex items-start gap-3 hover:border-brand/40 transition-colors">
+                        <input type="checkbox" id="obConsentReminders" class="w-5 h-5 rounded text-brand focus:ring-brand border-border mt-0.5 cursor-pointer">
+                        <div class="space-y-1">
+                            <label for="obConsentReminders" class="text-body-s font-bold text-text cursor-pointer">Gentle Wellness Reminders</label>
+                            <p class="text-caption text-text-secondary leading-relaxed">
+                                Enables subtle, non-intrusive reminders for daily mood check-ins or upcoming counselor appointments.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Campus Aggregate Analytics (Optional) -->
+                    <div class="p-4 bg-surface-soft/60 rounded-2xl border border-border flex items-start gap-3 hover:border-brand/40 transition-colors">
+                        <input type="checkbox" id="obConsentAnalytics" class="w-5 h-5 rounded text-brand focus:ring-brand border-border mt-0.5 cursor-pointer">
+                        <div class="space-y-1">
+                            <label for="obConsentAnalytics" class="text-body-s font-bold text-text cursor-pointer">Anonymous Campus Wellness Trend Analytics</label>
+                            <p class="text-caption text-text-secondary leading-relaxed">
+                                Contributes strictly anonymized, de-identified aggregate statistics (e.g. campus-wide stress levels during exam week) to help campus wellness centers schedule support services. No personal identifiers or journal entries are ever included.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-surface-soft/30 rounded-xl border border-border text-[11px] text-text-secondary space-y-1">
+                    <p><strong>Consent Version:</strong> 2026.1-STUDENT-WELLNESS</p>
+                    <p>You can withdraw or alter any of these consents at any time in <a href="settings.html" class="text-brand underline">Settings</a> without penalty.</p>
+                </div>
+
+                <div class="pt-6 border-t border-border flex items-center justify-between">
+                    <button type="button" onclick="goToStep(3)" class="btn-secondary text-body-s">Back</button>
+                    <button type="button" onclick="completeOnboarding()" class="btn-primary text-body-s px-6 flex items-center gap-2">
+                        <span>Save Preferences & Enter MindBridge</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 5: SUCCESS / CONFIRMATION MODAL -->
+            <div id="stepSuccess" class="step-panel space-y-6 hidden text-center py-6">
+                <div class="w-16 h-16 rounded-full bg-success/10 text-success mx-auto flex items-center justify-center">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div class="space-y-2">
+                    <h2 class="text-display-m font-display text-text">You're All Set!</h2>
+                    <p class="text-body-m text-text-secondary max-w-md mx-auto leading-relaxed">
+                        Your wellness profile and consent preferences are secured. MindBridge is ready to accompany your journey.
+                    </p>
+                </div>
+                <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="student_dashboard.html" class="btn-primary py-3 px-8 text-body-s">Go to Dashboard</a>
+                    <a href="resources.html" class="btn-secondary py-3 px-8 text-body-s">Explore Resources</a>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- Bottom Simple Footer -->
+    <footer class="w-full border-t border-border py-6 px-6 sm:px-12 text-center text-caption text-text-secondary flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span>&copy; 2026 MindBridge Mental Wellness Initiative. All rights reserved.</span>
+        <div class="flex gap-4">
+            <a href="privacy_policy.html" class="hover:text-text transition-colors">Privacy Policy</a>
+            <a href="terms_of_service.html" class="hover:text-text transition-colors">Terms of Service</a>
+            <a href="settings.html" class="hover:text-text transition-colors">Settings</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/accessibility.js"></script>
+
+    <script>
+        let selectedFocusAreas = [];
+        let currentStep = 1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            
+            // Prefill if existing
+            if (currentUser.firstName) {
+                document.getElementById('obDisplayName').value = currentUser.firstName;
+            }
+            if (currentUser.department) {
+                document.getElementById('obDepartment').value = currentUser.department;
+            }
+            if (currentUser.wellnessProfile) {
+                if (currentUser.wellnessProfile.academicYear) {
+                    document.getElementById('obAcademicYear').value = currentUser.wellnessProfile.academicYear;
+                }
+                if (currentUser.wellnessProfile.language) {
+                    document.getElementById('obLanguage').value = currentUser.wellnessProfile.language;
+                }
+                if (currentUser.wellnessProfile.focusAreas && Array.isArray(currentUser.wellnessProfile.focusAreas)) {
+                    selectedFocusAreas = currentUser.wellnessProfile.focusAreas;
+                    document.querySelectorAll('.focus-pill').forEach(btn => {
+                        const areaText = btn.querySelector('.font-bold').innerText;
+                        if (selectedFocusAreas.some(fa => fa.toLowerCase().includes(areaText.toLowerCase().slice(0, 5)))) {
+                            btn.classList.add('border-brand', 'bg-brand/10');
+                        }
+                    });
+                }
+            }
+        });
+
+        function toggleFocusArea(btn, area) {
+            const index = selectedFocusAreas.indexOf(area);
+            if (index > -1) {
+                selectedFocusAreas.splice(index, 1);
+                btn.classList.remove('border-brand', 'bg-brand/10');
+            } else {
+                selectedFocusAreas.push(area);
+                btn.classList.add('border-brand', 'bg-brand/10');
+            }
+        }
+
+        window.goToStep = function(step) {
+            document.querySelectorAll('.step-panel').forEach(panel => panel.classList.add('hidden'));
+            
+            const target = document.getElementById(`step${step}`);
+            if (target) {
+                target.classList.remove('hidden');
+                currentStep = step;
+                
+                const titles = {
+                    1: 'Privacy & Transparency',
+                    2: 'Student Profile',
+                    3: 'Wellness Preferences',
+                    4: 'Consent Management',
+                    5: 'Complete'
+                };
+                
+                document.getElementById('stepCounterLabel').innerText = `Step ${step} of 4`;
+                document.getElementById('stepTitleLabel').innerText = titles[step] || '';
+                document.getElementById('progressBar').style.width = `${(step / 4) * 100}%`;
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+
+        window.saveStep2AndProceed = function() {
+            const displayName = document.getElementById('obDisplayName').value.trim();
+            const department = document.getElementById('obDepartment').value.trim();
+            const academicYear = document.getElementById('obAcademicYear').value;
+            const language = document.getElementById('obLanguage').value;
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (displayName) currentUser.firstName = displayName;
+            if (department) currentUser.department = department;
+
+            currentUser.wellnessProfile = currentUser.wellnessProfile || {};
+            currentUser.wellnessProfile.academicYear = academicYear;
+            currentUser.wellnessProfile.language = language;
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            goToStep(3);
+        };
+
+        window.saveStep3AndProceed = function() {
+            const cadenceEl = document.querySelector('input[name="checkinCadence"]:checked');
+            const cadence = cadenceEl ? cadenceEl.value : 'daily';
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            currentUser.wellnessProfile = currentUser.wellnessProfile || {};
+            currentUser.wellnessProfile.focusAreas = selectedFocusAreas;
+            currentUser.wellnessProfile.cadence = cadence;
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            goToStep(4);
+        };
+
+        window.completeOnboarding = function() {
+            const consentEssential = document.getElementById('obConsentEssential').checked;
+            const consentPersonalization = document.getElementById('obConsentPersonalization').checked;
+            const consentReminders = document.getElementById('obConsentReminders').checked;
+            const consentAnalytics = document.getElementById('obConsentAnalytics').checked;
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            currentUser.consent = {
+                essential: consentEssential,
+                personalization: consentPersonalization,
+                reminders: consentReminders,
+                campusAnalytics: consentAnalytics,
+                consentTimestamp: new Date().toISOString(),
+                policyVersion: '2026.1-STUDENT-WELLNESS'
+            };
+
+            currentUser.onboardingCompleted = true;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Also post to server API if available for dual-persistence
+            fetch('/api/user/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: currentUser.email || 'guest@campus.edu',
+                    wellnessProfile: currentUser.wellnessProfile,
+                    consent: currentUser.consent
+                })
+            }).catch(() => {/* offline tolerant */});
+
+            document.querySelectorAll('.step-panel').forEach(panel => panel.classList.add('hidden'));
+            document.getElementById('stepSuccess').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('stepCounterLabel').innerText = 'Complete';
+            document.getElementById('stepTitleLabel').innerText = 'Preferences Saved';
+        };
+
+        window.readCurrentStep = function() {
+            if (!window.MindBridgeSpeechInstance) return;
+            let textToRead = "";
+            if (currentStep === 1) {
+                textToRead = "Welcome to MindBridge. Step 1: Privacy and transparency. MindBridge is built exclusively to support student mental health. Your private journal entries and mood check-ins are strictly isolated. We never sell your personal data. You have full control in settings. Important notice: MindBridge is not an emergency psychiatric facility. If you are experiencing a crisis, please call 988.";
+            } else if (currentStep === 2) {
+                textToRead = "Step 2: Basic Student Profile. How should we address you? Share what you feel comfortable with, such as your preferred name, department or major, and preferred language.";
+            } else if (currentStep === 3) {
+                textToRead = "Step 3: Personalization. What matters most right now? Select areas like Stress Relief, Sleep, Exam and Study pressure, Emotional Regulation, Connection, or Audio Calm. Select your preferred check-in cadence.";
+            } else if (currentStep === 4) {
+                textToRead = "Step 4: Explicit Consent Choices. We never use pre-checked consent. Choose whether you wish to allow personalized recommendations, gentle reminders, and anonymous campus wellness trends. You can withdraw consent at any time in Settings.";
+            }
+            window.MindBridgeSpeechInstance.speak(textToRead);
+        };
+    </script>
+</body>
+</html>

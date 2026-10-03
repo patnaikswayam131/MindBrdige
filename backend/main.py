@@ -60,7 +60,7 @@ def get_messages(thread_id):
     return [{"role": r[0], "content": r[1], "timestamp": r[2]} for r in rows]
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={GEMINI_API_KEY}"
+GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={GEMINI_API_KEY}"
 
 # Load some dataset context for training/better risk identification
 dataset_context = ""

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peer Communities & Wellness Groups - MindBridge</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+    <meta name="description" content="Connect with fellow students in confidential, moderated peer support communities and guided weekly campus wellness groups on MindBridge.">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/icons.js"></script>
+    <script src="../js/skeleton-loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-bg text-text selection:bg-brand selection:text-white min-h-screen flex flex-col">
+
+    <!-- Navigation Header -->
+    <header class="navbar bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="navbar__container">
+            <a href="landing.html" class="navbar__brand hover:opacity-80 transition-opacity">
+                <img src="../images/logo_light.png" id="logo-light" class="nav-logo dark:hidden" alt="MindBridge Logo">
+                <img src="../images/logo_dark.png" id="logo-dark" class="nav-logo hidden dark:block" alt="MindBridge Logo">
+                <span class="text-h4 font-display text-text whitespace-nowrap">MindBridge</span>
+            </a>
+
+            <nav class="navbar__main-nav hidden xl:flex">
+                <ul class="nav-list" id="main-nav-links">
+                    <!-- Populated dynamically by shared-layout.js -->
+                </ul>
+            </nav>
+
+            <div class="navbar__user-actions">
+                <div class="toggle-switch">
+                    <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                    <label class="switch-label" for="darkModeCheckbox" title="Toggle light and dark theme">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                
+                <div id="auth-actions" class="hidden items-center gap-4">
+                    <a href="student_login.html" class="btn-secondary nav-btn whitespace-nowrap">Sign In</a>
+                    <a href="student_login.html" class="btn-primary nav-btn whitespace-nowrap">Get Started</a>
+                </div>
+
+                <div id="user-profile-menu" class="relative hidden items-center ml-2">
+                    <button id="profile-btn" class="flex-shrink-0 flex items-center justify-center cursor-pointer hover:bg-surface-soft rounded-full p-1 transition-colors border-2 border-transparent hover:border-brand">
+                        <div id="profile-avatar" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-medium overflow-hidden text-lg">
+                            <span id="profile-initials">U</span>
+                        </div>
+                    </button>
+                    <div id="profile-dropdown" class="absolute right-0 top-14 w-64 bg-surface border border-border rounded-xl shadow-elevated hidden flex-col z-50 overflow-hidden">
+                        <!-- Populated by shared-layout.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-4" id="mobile-nav-links">
+                <!-- Injected by shared-layout.js -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 w-full mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] py-10 lg:py-14 space-y-10">
+        
+        <!-- Header Banner with Community Guidelines link -->
+        <header class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-border">
+            <div class="space-y-3 max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 border border-brand/20 rounded-full text-caption text-brand font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    Safe & Moderated Campus Spaces
+                </div>
+                <h1 class="text-display-m font-display text-text">Peer Communities & Wellness Groups</h1>
+                <p class="text-body-l text-text-secondary leading-relaxed">
+                    You don’t have to carry college stress alone. Share experiences with fellow students in respectful discussion spaces or join structured weekly groups.
+                </p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="openGuidelinesModal()" class="btn-secondary text-body-s flex items-center gap-2">
+                    <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Safety Guidelines
+                </button>
+                <button onclick="openNewPostModal()" class="btn-primary text-body-s flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Create Discussion Post
+                </button>
+            </div>
+        </header>
+
+        <!-- Primary View Switcher: Peer Discussions vs Wellness Groups -->
+        <div class="flex border-b border-border gap-8">
+            <button id="tabBtnDiscussions" onclick="switchTab('discussions')" class="pb-4 text-h4 font-display text-brand border-b-2 border-brand transition-colors flex items-center gap-2">
+                <span>Peer Discussion Spaces</span>
+                <span class="px-2 py-0.5 bg-brand/10 text-brand text-caption rounded-full font-bold" id="discussionsCountBadge">5</span>
+            </button>
+            <button id="tabBtnGroups" onclick="switchTab('groups')" class="pb-4 text-h4 font-display text-text-secondary hover:text-text border-b-2 border-transparent transition-colors flex items-center gap-2">
+                <span>Guided Wellness Groups</span>
+                <span class="px-2 py-0.5 bg-surface-soft text-text-secondary text-caption rounded-full font-bold">4 Active</span>
+            </button>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- TAB 1: PEER DISCUSSION SPACES                            -->
+        <!-- ======================================================== -->
+        <section id="discussionsView" class="space-y-8">
+            <!-- Filter Pills by Community Topic -->
+            <div class="flex flex-wrap gap-2.5" id="communityFilterContainer">
+                <button class="comm-pill active-comm px-4 py-2 rounded-xl text-body-s font-medium border border-brand bg-brand text-white transition-colors flex items-center gap-2" data-topic="all">All Discussions</button>
+                <button class="comm-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors flex items-center gap-2" data-topic="academic"><svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg> Academic Stress & Exams</button>
+                <button class="comm-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors flex items-center gap-2" data-topic="sleep"><svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg> Sleep & Daily Routine</button>
+                <button class="comm-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors flex items-center gap-2" data-topic="venting"><svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg> Open & Safe Venting</button>
+                <button class="comm-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors flex items-center gap-2" data-topic="mindfulness"><svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg> Mindfulness & Balance</button>
+                <button class="comm-pill px-4 py-2 rounded-xl text-body-s font-medium border border-border bg-surface hover:border-brand/40 text-text transition-colors flex items-center gap-2" data-topic="transition"><svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> First-Year & Transfer Transition</button>
+            </div>
+
+            <!-- Posts List -->
+            <div id="postsContainer" class="space-y-6">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- TAB 2: GUIDED WELLNESS GROUPS                           -->
+        <!-- ======================================================== -->
+        <section id="groupsView" class="hidden space-y-8">
+            <div class="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-2">
+                <h2 class="text-h3 font-display text-text">Campus Certified Wellness Cohorts</h2>
+                <p class="text-body-m text-text-secondary leading-relaxed max-w-3xl">
+                    Facilitated by university counselors and peer wellness advocates. Small cohorts of 8-12 students meet weekly for supportive discussion, coping exercises, and accountability.
+                </p>
+            </div>
+
+            <div id="groupsGrid" class="grid md:grid-cols-2 gap-6 sm:gap-8">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Modal 1: Create Discussion Post -->
+        <div id="newPostModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+            <div class="bg-surface border border-border rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative space-y-6">
+                <button onclick="closeNewPostModal()" class="absolute right-6 top-6 p-2 rounded-full hover:bg-surface-soft text-text-secondary hover:text-text transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                <div>
+                    <h3 class="text-h3 font-display text-text mb-1">New Discussion Post</h3>
+                    <p class="text-body-s text-text-secondary">Remember to be kind, respectful, and supportive.</p>
+                </div>
+
+                <form id="newPostForm" onsubmit="handleCreatePost(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Select Community</label>
+                        <select id="postCommunitySelect" required class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand">
+                            <option value="academic">Academic Stress & Exams</option>
+                            <option value="sleep">Sleep & Daily Routine</option>
+                            <option value="venting">Open & Safe Venting</option>
+                            <option value="mindfulness">Mindfulness & Balance</option>
+                            <option value="transition">First-Year & Transfer Transition</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Title</label>
+                        <input type="text" id="postTitleInput" required placeholder="What's on your mind?" class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand" />
+                    </div>
+
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Reflection / Message</label>
+                        <textarea id="postContentInput" required rows="4" placeholder="Share your experience or question..." class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand resize-none"></textarea>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-2">
+                        <input type="checkbox" id="postAnonymousCheck" class="rounded text-brand focus:ring-brand border-border" checked />
+                        <label for="postAnonymousCheck" class="text-body-s text-text-secondary cursor-pointer">Post anonymously (protects your real name)</label>
+                    </div>
+
+                    <div class="pt-4 flex justify-end gap-3 border-t border-border">
+                        <button type="button" onclick="closeNewPostModal()" class="btn-secondary text-body-s">Cancel</button>
+                        <button type="submit" class="btn-primary text-body-s">Publish Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal 2: Report Content -->
+        <div id="reportModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+            <div class="bg-surface border border-border rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative space-y-6">
+                <div>
+                    <h3 class="text-h3 font-display text-text mb-1">Report Post to Moderators</h3>
+                    <p class="text-body-s text-text-secondary">Help us keep MindBridge safe and respectful for all students.</p>
+                </div>
+
+                <form onsubmit="handleSendReport(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Reason for Report</label>
+                        <select id="reportReasonSelect" class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand">
+                            <option value="crisis">Signs of severe self-harm / immediate crisis</option>
+                            <option value="harassment">Harassment or disrespectful behavior</option>
+                            <option value="spam">Spam or commercial advertising</option>
+                            <option value="medical">Misleading medical or prescription advice</option>
+                            <option value="other">Other policy violation</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Optional Notes</label>
+                        <textarea id="reportNotes" rows="3" placeholder="Additional context for campus moderators..." class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand resize-none"></textarea>
+                    </div>
+
+                    <div class="pt-4 flex justify-end gap-3 border-t border-border">
+                        <button type="button" onclick="closeReportModal()" class="btn-secondary text-body-s">Cancel</button>
+                        <button type="submit" class="btn-primary text-body-s bg-error text-white hover:bg-error/90">Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal 3: Community Guidelines -->
+        <div id="guidelinesModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+            <div class="bg-surface border border-border rounded-3xl max-w-xl w-full p-6 sm:p-10 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
+                <button onclick="closeGuidelinesModal()" class="absolute right-6 top-6 p-2 rounded-full hover:bg-surface-soft text-text-secondary hover:text-text transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                <div>
+                    <h3 class="text-h3 font-display text-text mb-2">MindBridge Community Guidelines</h3>
+                    <p class="text-body-s text-text-secondary">Our shared agreement for maintaining an empathetic space.</p>
+                </div>
+
+                <div class="space-y-4 text-body-s text-text-secondary leading-relaxed border-t border-b border-border py-4">
+                    <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center flex-shrink-0 text-caption">1</span>
+                        <p><strong class="text-text">Respect & Emotional Safety:</strong> We do not tolerate invalidation, harassment, bullying, discrimination, or aggressive debate.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center flex-shrink-0 text-caption">2</span>
+                        <p><strong class="text-text">Confidentiality:</strong> What is shared in discussions stays here. Never screenshot, repost, or disclose another student's vulnerable disclosures.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center flex-shrink-0 text-caption">3</span>
+                        <p><strong class="text-text">No Clinical Diagnosis:</strong> Offer support, validation, and peer perspective—not unsolicited psychiatric diagnoses or prescription advice.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center flex-shrink-0 text-caption">4</span>
+                        <p><strong class="text-text">Crisis Protocol:</strong> If a post suggests immediate physical danger or suicidal intent, report it immediately so campus crisis liaisons can safely intervene.</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="closeGuidelinesModal()" class="btn-primary text-body-s">I Agree & Understand</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Dependencies -->
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/shared-layout.js"></script>
+
+    <script>
+        // Seed Discussion Posts
+        const DEFAULT_POSTS = [
+            {
+                id: 'post-1',
+                topic: 'academic',
+                topicName: 'Academic Stress & Exams',
+                title: 'Midterms approaching and feeling like I have retained nothing from lectures',
+                author: 'Anonymous Junior',
+                timestamp: '2 hours ago',
+                content: 'I have two exams this Thursday and every time I open my notes my chest gets tight. Trying not to freeze up. Anyone else feeling this right now?',
+                reactions: { support: 14, heart: 8, listen: 5 },
+                userReaction: null,
+                replies: [
+                    { author: 'Peer Mentor Kai', text: 'You are definitely not alone. When you freeze up, pick just ONE 20-minute timer for a single subtopic. Don\'t look at the entire syllabus.', time: '1 hour ago' },
+                    { author: 'Anonymous Student', text: 'Literally in the library doing the same thing. Taking a walk helped lower my heart rate a bit.', time: '45 mins ago' }
+                ]
+            },
+            {
+                id: 'post-2',
+                topic: 'sleep',
+                topicName: 'Sleep & Daily Routine',
+                title: 'Anyone fixed their 4 AM sleep cycle without feeling like a zombie?',
+                author: 'Engineering Sophomore',
+                timestamp: '5 hours ago',
+                content: 'Over the break my sleep schedule drifted completely. Now my 9 AM lab feels impossible. What actually worked for you guys?',
+                reactions: { support: 9, heart: 4, listen: 7 },
+                userReaction: null,
+                replies: [
+                    { author: 'Senior Bio major', text: 'Check out the Circadian Reset guide in the Resources tab! Morning sunlight on your eyes before checking your phone was a game changer for me.', time: '3 hours ago' }
+                ]
+            },
+            {
+                id: 'post-3',
+                topic: 'mindfulness',
+                topicName: 'Mindfulness & Balance',
+                title: 'Small win: took a full 15-minute break without guilt today',
+                author: 'Anonymous Student',
+                timestamp: 'Yesterday',
+                content: 'Usually when I take a break I feel massive guilt for not studying. Today I sat outside, had tea, and just watched the campus trees. It felt really peaceful.',
+                reactions: { support: 28, heart: 32, listen: 12 },
+                userReaction: 'heart',
+                replies: [
+                    { author: 'Arjun', text: 'Proud of you! Learning that rest is productive is the hardest lesson in college.', time: 'Yesterday' }
+                ]
+            }
+        ];
+
+        // Seed Wellness Groups
+        const WELLNESS_GROUPS_DATA = [
+            {
+                id: 'group-1',
+                title: 'Mindful Midterm Survival Cohort',
+                facilitator: 'Dr. Priya Sharma & Peer Advocate Liam',
+                schedule: 'Every Tuesday • 5:30 PM - 6:45 PM',
+                location: 'Wellness Center Room 204 & Virtual Zoom',
+                capacity: '10 / 12 enrolled',
+                description: 'A focused 6-week cohort practicing cognitive grounding, time boundaries, and collective stress debriefing.',
+                goals: ['Lower academic panic', 'Develop realistic study rhythms', 'Peer solidarity']
+            },
+            {
+                id: 'group-2',
+                title: 'Navigating First-Year Academic & Social Jitters',
+                facilitator: 'Counselor Marcus Vance, LCSW',
+                schedule: 'Every Thursday • 4:00 PM - 5:00 PM',
+                location: 'Student Union Room 310',
+                capacity: '8 / 12 enrolled',
+                description: 'Open to freshmen and transfer students processing imposter syndrome, homesickness, and navigating college autonomy.',
+                goals: ['Find your campus community', 'Normalize early struggles', 'Build resilience']
+            },
+            {
+                id: 'group-3',
+                title: 'Restorative Sleep & Nervous System Reset',
+                facilitator: 'Sarah Jenkins, Sleep Health Specialist',
+                schedule: 'Every Wednesday • 7:00 PM - 8:00 PM',
+                location: 'Virtual Evening Zoom',
+                capacity: '11 / 15 enrolled',
+                description: 'Gentle evening somatic relaxation, progressive muscle release, and science-based sleep hygiene accountability.',
+                goals: ['Resolve insomnia cycles', 'Evening wind-down routine', 'Lower cortisol']
+            },
+            {
+                id: 'group-4',
+                title: 'Creative Art & Journaling for Emotional Regulation',
+                facilitator: 'Ananya Roy, Expressive Arts Facilitator',
+                schedule: 'Every Friday • 3:30 PM - 5:00 PM',
+                location: 'Campus Studio 12',
+                capacity: '6 / 10 enrolled',
+                description: 'Non-judgmental expressive journaling, clay, and watercolor grounding for students feeling overwhelmed by analytical coursework.',
+                goals: ['Emotional decompression', 'Creative expression', 'Unplugging from screens']
+            }
+        ];
+
+        // Local Storage State
+        let posts = JSON.parse(localStorage.getItem('mb_community_posts') || JSON.stringify(DEFAULT_POSTS));
+        let userGroups = JSON.parse(localStorage.getItem('mb_user_groups') || '[]');
+        let activeTopic = 'all';
+
+        // Tab Switching
+        window.switchTab = function(tab) {
+            const btnD = document.getElementById('tabBtnDiscussions');
+            const btnG = document.getElementById('tabBtnGroups');
+            const viewD = document.getElementById('discussionsView');
+            const viewG = document.getElementById('groupsView');
+
+            if (tab === 'discussions') {
+                btnD.classList.add('text-brand', 'border-brand');
+                btnD.classList.remove('text-text-secondary', 'border-transparent');
+                btnG.classList.remove('text-brand', 'border-brand');
+                btnG.classList.add('text-text-secondary', 'border-transparent');
+                viewD.classList.remove('hidden');
+                viewG.classList.add('hidden');
+            } else {
+                btnG.classList.add('text-brand', 'border-brand');
+                btnG.classList.remove('text-text-secondary', 'border-transparent');
+                btnD.classList.remove('text-brand', 'border-brand');
+                btnD.classList.add('text-text-secondary', 'border-transparent');
+                viewG.classList.remove('hidden');
+                viewD.classList.add('hidden');
+            }
+        };
+
+        // Render Posts
+        function renderPosts() {
+            const container = document.getElementById('postsContainer');
+            if (!container) return;
+
+            let filtered = posts.filter(p => activeTopic === 'all' || p.topic === activeTopic);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 bg-surface border border-border rounded-3xl p-6">
+                        <p class="text-body-m text-text-secondary">No discussions in this space yet. Be the first to start a conversation!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(post => {
+                const repliesHTML = (post.replies || []).map(r => `
+                    <div class="p-4 bg-surface-soft/60 rounded-2xl border border-border/60 text-body-s space-y-1">
+                        <div class="flex items-center justify-between text-caption text-text-secondary">
+                            <span class="font-medium text-text">${r.author}</span>
+                            <span>${r.time}</span>
+                        </div>
+                        <p class="text-text-secondary">${r.text}</p>
+                    </div>
+                `).join('');
+
+                return `
+                    <article class="bg-surface card-elevated rounded-3xl p-6 sm:p-8 space-y-6">
+                        <!-- Post Header -->
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="space-y-1">
+                                <span class="px-3 py-1 bg-surface-soft border border-border text-brand text-caption rounded-full font-bold">${post.topicName}</span>
+                                <h3 class="text-h4 font-display text-text mt-2">${post.title}</h3>
+                                <p class="text-caption text-text-secondary">${post.author} • ${post.timestamp}</p>
+                            </div>
+                            <button onclick="openReportModal('${post.id}')" class="p-2 text-text-secondary hover:text-error hover:bg-error/10 rounded-xl transition-colors" title="Report Post">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Post Body -->
+                        <p class="text-body-m text-text-secondary leading-relaxed">${post.content}</p>
+
+                        <!-- Reactions & Reply Buttons -->
+                        <div class="pt-4 border-t border-border flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex items-center gap-2">
+                                <button onclick="reactPost('${post.id}', 'support')" class="reaction-btn btn-tactile px-3.5 py-1.5 rounded-xl border ${post.userReaction === 'support' ? 'border-brand bg-brand/10 text-brand' : 'border-border bg-surface-soft text-text'} text-caption font-medium hover:border-brand/40 transition-colors flex items-center gap-2">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+                                    <span>Support (${post.reactions.support || 0})</span>
+                                </button>
+                                <button onclick="reactPost('${post.id}', 'heart')" class="reaction-btn btn-tactile px-3.5 py-1.5 rounded-xl border ${post.userReaction === 'heart' ? 'border-brand bg-brand/10 text-brand' : 'border-border bg-surface-soft text-text'} text-caption font-medium hover:border-brand/40 transition-colors flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-error flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                    <span>Heart (${post.reactions.heart || 0})</span>
+                                </button>
+                                <button onclick="reactPost('${post.id}', 'listen')" class="reaction-btn btn-tactile px-3.5 py-1.5 rounded-xl border ${post.userReaction === 'listen' ? 'border-brand bg-brand/10 text-brand' : 'border-border bg-surface-soft text-text'} text-caption font-medium hover:border-brand/40 transition-colors flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                                    <span>Listening (${post.reactions.listen || 0})</span>
+                                </button>
+                            </div>
+                            <span class="text-caption text-text-secondary font-medium">${(post.replies || []).length} Responses</span>
+                        </div>
+
+                        <!-- Replies Section -->
+                        ${repliesHTML ? `<div class="space-y-3 pt-2">${repliesHTML}</div>` : ''}
+
+                        <!-- Reply Input Box -->
+                        <div class="flex gap-3 pt-2">
+                            <input type="text" id="replyInput-${post.id}" placeholder="Write a supportive reply..." class="flex-1 bg-surface border border-border rounded-xl px-4 py-2.5 text-body-s text-text focus:outline-none focus:border-brand" onkeypress="if(event.key==='Enter') submitReply('${post.id}')" />
+                            <button onclick="submitReply('${post.id}')" class="btn-primary text-body-s px-4 py-2.5">Reply</button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // Render Wellness Groups
+        function renderGroups() {
+            const grid = document.getElementById('groupsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = WELLNESS_GROUPS_DATA.map(group => {
+                const isJoined = userGroups.includes(group.id);
+                return `
+                    <article class="bg-surface card-elevated card-interactive rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="px-3 py-1 bg-brand/10 text-brand text-caption rounded-full font-bold">Weekly Cohort</span>
+                                <span class="text-caption text-text-secondary">${group.capacity}</span>
+                            </div>
+                            <div>
+                                <h3 class="text-h4 font-display text-text mb-1">${group.title}</h3>
+                                <p class="text-caption text-brand font-medium">${group.facilitator}</p>
+                            </div>
+                            <div class="space-y-1.5 text-body-s text-text-secondary bg-surface-soft/60 p-4 rounded-2xl border border-border/50">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span>${group.schedule}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    <span>${group.location}</span>
+                                </div>
+                            </div>
+                            <p class="text-body-s text-text-secondary">${group.description}</p>
+                            <div>
+                                <span class="text-caption text-text font-bold block mb-1">Key Focus Areas:</span>
+                                <ul class="list-disc pl-5 text-caption text-text-secondary space-y-0.5">
+                                    ${group.goals.map(g => `<li>${g}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-border flex items-center justify-between">
+                            <span class="text-caption ${isJoined ? 'text-success font-bold' : 'text-text-secondary'}">
+                                ${isJoined ? '✓ You are a member' : 'Free & Confidential'}
+                            </span>
+                            <button onclick="toggleGroupMembership('${group.id}')" class="${isJoined ? 'btn-secondary text-error hover:bg-error/10 border-error/40' : 'btn-primary'} text-body-s">
+                                ${isJoined ? 'Leave Group' : 'Join Weekly Group'}
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // Reactions
+        window.reactPost = function(postId, type) {
+            const p = posts.find(x => x.id === postId);
+            if (!p) return;
+
+            if (p.userReaction === type) {
+                p.reactions[type] = Math.max(0, (p.reactions[type] || 1) - 1);
+                p.userReaction = null;
+            } else {
+                if (p.userReaction) {
+                    p.reactions[p.userReaction] = Math.max(0, (p.reactions[p.userReaction] || 1) - 1);
+                }
+                p.reactions[type] = (p.reactions[type] || 0) + 1;
+                p.userReaction = type;
+            }
+            savePosts();
+            renderPosts();
+        };
+
+        // Submit Reply
+        window.submitReply = function(postId) {
+            const input = document.getElementById(`replyInput-${postId}`);
+            if (!input || !input.value.trim()) return;
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const author = currentUser.firstName ? currentUser.firstName : 'Student Peer';
+
+            const p = posts.find(x => x.id === postId);
+            if (p) {
+                if (!p.replies) p.replies = [];
+                p.replies.push({
+                    author: author,
+                    text: input.value.trim(),
+                    time: 'Just now'
+                });
+                savePosts();
+                renderPosts();
+            }
+        };
+
+        // Group Membership Toggle
+        window.toggleGroupMembership = function(groupId) {
+            if (userGroups.includes(groupId)) {
+                userGroups = userGroups.filter(x => x !== groupId);
+            } else {
+                userGroups.push(groupId);
+            }
+            localStorage.setItem('mb_user_groups', JSON.stringify(userGroups));
+            renderGroups();
+        };
+
+        function savePosts() {
+            localStorage.setItem('mb_community_posts', JSON.stringify(posts));
+        }
+
+        // New Post Modal
+        window.openNewPostModal = function() {
+            document.getElementById('newPostModal').classList.remove('hidden');
+            document.getElementById('newPostModal').classList.add('flex');
+        };
+        window.closeNewPostModal = function() {
+            document.getElementById('newPostModal').classList.add('hidden');
+            document.getElementById('newPostModal').classList.remove('flex');
+        };
+        window.handleCreatePost = function(e) {
+            e.preventDefault();
+            const communitySelect = document.getElementById('postCommunitySelect');
+            const title = document.getElementById('postTitleInput').value.trim();
+            const content = document.getElementById('postContentInput').value.trim();
+            const isAnon = document.getElementById('postAnonymousCheck').checked;
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const author = isAnon ? 'Anonymous Student' : (currentUser.firstName ? `${currentUser.firstName} (${currentUser.role || 'Student'})` : 'Student Peer');
+
+            const topicNames = {
+                academic: 'Academic Stress & Exams',
+                sleep: 'Sleep & Daily Routine',
+                venting: 'Open & Safe Venting',
+                mindfulness: 'Mindfulness & Balance',
+                transition: 'First-Year & Transfer Transition'
+            };
+
+            const newPost = {
+                id: 'post-' + Date.now(),
+                topic: communitySelect.value,
+                topicName: topicNames[communitySelect.value] || 'General Community',
+                title: title,
+                author: author,
+                timestamp: 'Just now',
+                content: content,
+                reactions: { support: 1, heart: 0, listen: 0 },
+                userReaction: 'support',
+                replies: []
+            };
+
+            posts.unshift(newPost);
+            savePosts();
+            renderPosts();
+            closeNewPostModal();
+            document.getElementById('newPostForm').reset();
+        };
+
+        // Report Modal
+        let activeReportPostId = null;
+        window.openReportModal = function(postId) {
+            activeReportPostId = postId;
+            document.getElementById('reportModal').classList.remove('hidden');
+            document.getElementById('reportModal').classList.add('flex');
+        };
+        window.closeReportModal = function() {
+            document.getElementById('reportModal').classList.add('hidden');
+            document.getElementById('reportModal').classList.remove('flex');
+        };
+        window.handleSendReport = function(e) {
+            e.preventDefault();
+            alert('Thank you. Your report has been submitted to campus moderators for review.');
+            closeReportModal();
+        };
+
+        // Guidelines Modal
+        window.openGuidelinesModal = function() {
+            document.getElementById('guidelinesModal').classList.remove('hidden');
+            document.getElementById('guidelinesModal').classList.add('flex');
+        };
+        window.closeGuidelinesModal = function() {
+            document.getElementById('guidelinesModal').classList.add('hidden');
+            document.getElementById('guidelinesModal').classList.remove('flex');
+        };
+
+        // Setup filter listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPosts();
+            renderGroups();
+
+            document.querySelectorAll('.comm-pill').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.comm-pill').forEach(b => {
+                        b.classList.remove('border-brand', 'bg-brand', 'text-white');
+                        b.classList.add('border-border', 'bg-surface', 'text-text');
+                    });
+                    btn.classList.add('border-brand', 'bg-brand', 'text-white');
+                    btn.classList.remove('border-border', 'bg-surface', 'text-text');
+                    activeTopic = btn.getAttribute('data-topic');
+                    renderPosts();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

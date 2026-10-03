@@ -3,498 +3,303 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Mental Health Chatbot - MindBridge</title>
+    <title>MIRA - Empathetic AI Companion - MindBridge</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <script src="../js/dark-mode.js"></script>
+    <script src="../js/icons.js"></script>
+    <script src="../js/skeleton-loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
-        /* Dark Mode CSS Variables */
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-surface: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-light: #e2e8f0;
-            --primary-50: #eff6ff;
-            --primary-500: #3b82f6;
-            --secondary-50: #f8fafc;
-            --secondary-500: #6366f1;
-            --secondary-600: #4f46e5;
-            --accent: #10b981;
-            --error: #ef4444;
+        /* Modern Scrollbar for chat area */
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background-color: var(--color-border);
+            border-radius: 10px;
         }
         
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-surface: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border-light: #475569;
-            --primary-50: #1e293b;
-            --primary-500: #60a5fa;
-            --secondary-50: #1e293b;
-            --secondary-500: #818cf8;
-            --secondary-600: #6366f1;
-            --accent: #34d399;
-            --error: #f87171;
+        /* Message bubble animations */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
+        .msg-enter {
+            animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        
-        .card-surface {
-            background-color: var(--bg-surface);
-            border-color: var(--border-light);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+
+        .chat-bubble-ai {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-bottom-left-radius: 4px;
         }
-        
-        .bg-white\/50 {
-            background-color: var(--bg-secondary) !important;
+        .chat-bubble-user {
+            background-color: var(--color-brand);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
         }
-        
-        .text-text-primary {
-            color: var(--text-primary) !important;
+
+        /* Guarantee global footer is never displayed in interactive chat */
+        #globalFooter {
+            display: none !important;
         }
-        
-        .text-text-secondary {
-            color: var(--text-secondary) !important;
-        }
-        
-        .border-border-light {
-            border-color: var(--border-light) !important;
-        }
-        
-        .dark-mode-toggle {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-light);
-            color: var(--text-primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .dark-mode-toggle:hover {
-            background: var(--primary-50);
-            border-color: var(--primary-500);
-            transform: scale(1.05);
-        }
-        
-        .dark-mode-toggle svg {
-            width: 20px;
-            height: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        /* Chat-specific dark mode fixes */
-        [data-theme="dark"] .bg-white {
-            background-color: var(--bg-surface) !important;
-        }
-        
-        [data-theme="dark"] .bg-gray-50 {
-            background-color: var(--bg-secondary) !important;
-        }
-        
-        [data-theme="dark"] .bg-primary-50 {
-            background-color: var(--primary-50) !important;
-        }
-        
-        /* Chat message bubbles */
-        [data-theme="dark"] .chat-message-ai {
-            background-color: var(--bg-secondary) !important;
-        }
-        
-        [data-theme="dark"] .chat-message-user {
-            background-color: var(--primary-500) !important;
-        }
-        
-        /* Input fields */
-        [data-theme="dark"] .input-field {
-            background-color: var(--bg-surface) !important;
-            border-color: var(--border-light) !important;
-            color: var(--text-primary) !important;
-        }
-        
-        [data-theme="dark"] .input-field::placeholder {
-            color: var(--text-secondary) !important;
+        html, body {
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow: hidden !important;
         }
     </style>
 </head>
-<body class="min-h-screen bg-bg">
+<body class="bg-bg text-text selection:bg-brand selection:text-white h-screen flex flex-col overflow-hidden">
     <!-- Navigation Header -->
-    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="landing.html" class="flex-shrink-0 flex items-center space-x-3 hover:opacity-80 transition-opacity">
-                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <div>
-                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
-                    </div>
-                </a>
+    <header class="navbar bg-surface/80 backdrop-blur-md flex-shrink-0 z-50">
+        <div class="navbar__container">
+            <a href="landing.html" class="navbar__brand hover:opacity-80 transition-opacity">
+                <img src="../images/logo_light.png" id="logo-light" class="nav-logo dark:hidden" alt="MindBridge Logo">
+                <img src="../images/logo_dark.png" id="logo-dark" class="nav-logo hidden dark:block" alt="MindBridge Logo">
+                <span class="text-h4 font-display text-text whitespace-nowrap">MindBridge</span>
+            </a>
 
-                <!-- Navigation -->
-                <nav class="hidden xl:flex items-center space-x-6">
-                    <a href="student_dashboard.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Dashboard</a>
-                    <a href="ai_mental_health_chatbot.html" class="whitespace-nowrap text-brand font-medium border-b-2 border-brand pb-1 text-body-m">AI Support</a>
-                    <a href="mental_health_assessments.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Check-in</a>
-                    <a href="counselor_appointment_booking.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Counseling</a>
-                    
-                    <div class="h-4 w-px bg-border flex-shrink-0 hidden xl:block"></div>
-                    <div class="hidden xl:flex items-center space-x-2 text-sm flex-shrink-0 whitespace-nowrap">
-                        <div class="w-2 h-2 bg-error rounded-pill animate-pulse flex-shrink-0"></div>
-                        <span class="text-text-secondary">Kiran Helpline:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
-                    </div>
-                </nav>
+            <nav class="navbar__main-nav hidden xl:flex">
+                <ul class="nav-list" id="main-nav-links">
+                    <li><a href="student_dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="ai_mental_health_chatbot.html" class="nav-link active">MIRA Chat</a></li>
+                    <li><a href="mental_health_assessments.html" class="nav-link">Assessments</a></li>
+                    <li><a href="counselor_appointment_booking.html" class="nav-link">Appointments</a></li>
+                </ul>
+            </nav>
 
-                <!-- Right Section -->
-                    <!-- Theme Switch -->
-                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
-                        <input type="checkbox" id="darkModeCheckbox">
-                        <span class="slider">
-                            <span class="star star_1"></span>
-                            <span class="star star_2"></span>
-                            <span class="star star_3"></span>
-                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
-                            </svg>
-                        </span>
+            <div class="navbar__user-actions">
+                <div class="toggle-switch">
+                    <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                    <label class="switch-label" for="darkModeCheckbox" title="Toggle light and dark theme">
+                        <span class="slider"></span>
                     </label>
-                    <!-- Mobile Menu Button -->
-                    <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    </button>
-                    <!-- User Profile -->
-                    <div class="flex-shrink-0 flex items-center space-x-3 cursor-pointer hover:bg-surface-soft rounded-lg p-2 transition-colors">
-                        <div class="w-10 h-10 bg-brand-soft text-brand rounded-full flex items-center justify-center font-medium">
-                            AS
+                </div>
+                
+                <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                
+                <div id="user-profile-menu" class="relative flex items-center ml-2">
+                    <button id="profile-btn" class="flex-shrink-0 flex items-center justify-center cursor-pointer hover:bg-surface-soft rounded-full p-1 transition-colors border-2 border-transparent hover:border-brand">
+                        <div id="profile-avatar" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-medium overflow-hidden text-lg">
+                            <span id="profile-initials">U</span>
                         </div>
+                    </button>
+                    <div id="profile-dropdown" class="absolute right-0 top-14 w-60 bg-surface border border-border rounded-xl shadow-elevated hidden flex-col z-50 overflow-hidden">
+                        <a href="student_dashboard.html" class="px-5 py-3 hover:bg-surface-soft text-body-m text-text border-b border-border flex items-center gap-3">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/></svg>
+                            Dashboard
+                        </a>
+                        <a href="#" id="logout-btn" class="px-5 py-3 hover:bg-error/10 text-body-m text-error font-medium flex items-center gap-3 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                            Logout
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
         <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
             <div class="flex flex-col py-6 px-6 sm:px-8 space-y-5">
-                <a href="student_dashboard.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Dashboard</a>
-                <a href="ai_mental_health_chatbot.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">AI Support</a>
-                <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Check-in</a>
-                <a href="counselor_appointment_booking.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Counseling</a>
-                
-                <div class="h-px w-full bg-border my-1"></div>
-                
-                <div class="flex items-center space-x-2 text-sm text-text-secondary">
-                    <span class="font-medium">Crisis Support:</span>
-                    <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
+                <div class="flex flex-col space-y-5">
+                    <a href="student_dashboard.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Dashboard</a>
+                    <a href="ai_mental_health_chatbot.html" class="text-brand font-bold text-body-m">MIRA Chat</a>
+                    <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Assessments</a>
+                    <a href="counselor_appointment_booking.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Appointments</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Menu Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.getElementById('mobileMenuBtn');
-            const menu = document.getElementById('mobileMenu');
-            
-            if (btn && menu) {
-                // Toggle menu
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    menu.classList.toggle('hidden');
-                });
-                
-                // Close on outside click
-                document.addEventListener('click', (e) => {
-                    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) {
-                        menu.classList.add('hidden');
-                    }
-                });
-                
-                // Close on link click
-                menu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        menu.classList.add('hidden');
-                    });
-                });
-            }
-        });
-    </script>
-
     <!-- Main Chat Interface -->
-    <main class="flex-1 flex h-screen" style="height: calc(100vh - 64px);">
-        <div class="flex-1 flex flex-col lg:flex-row max-w-7xl mx-auto">
+    <main class="flex-1 flex overflow-hidden w-full relative">
+        <!-- Sidebar (Hidden on mobile by default) -->
+        <aside class="hidden lg:flex w-80 bg-surface border-r border-border flex-col overflow-y-auto">
             
-            <!-- Chat Area -->
-            <div class="flex-1 flex flex-col bg-white">
-                <!-- Chat Header -->
-                <div class="px-4 lg:px-6 py-4 border-b border-border-light bg-gradient-to-r from-primary-50 to-secondary-50">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-brand-soft rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h2 class="font-heading font-semibold text-text-primary">MindBridge AI</h2>
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
-                                    <span class="text-sm text-text-secondary">Your first point of support</span>
-                                </div>
-                            </div>
+            <div class="p-6 border-b border-border flex items-center gap-4">
+                <img src="../images/mira_avatar.png" alt="MIRA Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-brand/40 shadow-sm flex-shrink-0" />
+                <div>
+                    <h2 class="text-h3 font-display mb-0.5">MIRA</h2>
+                    <p class="text-caption text-text-secondary">Mindful Reflection Assistant</p>
+                    <p class="text-caption text-text-secondary flex items-center mt-1">
+                        <span class="w-2 h-2 rounded-full bg-success mr-2 animate-pulse"></span>
+                        Online & Ready
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <h3 class="text-label text-text-secondary tracking-widest uppercase mb-4">Quick Support</h3>
+                <div class="space-y-2">
+                    <button onclick="quickAction('anxiety')" class="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-brand/40 hover:bg-surface-soft transition-all btn-tactile flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-brand/10 text-brand flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 8h5.5a2.5 2.5 0 100-5 2.5 2.5 0 00-2.5 2.5V8m-9 4h12.5a2.5 2.5 0 100-5 2.5 2.5 0 00-2.5 2.5V12m-6 4h8.5a2.5 2.5 0 100-5 2.5 2.5 0 00-2.5 2.5V16"/></svg>
                         </div>
-                        
-                        <div class="flex items-center space-x-2">
-                            <select id="chatPersonality" class="text-sm bg-white border border-border-light rounded px-2 py-1 text-text-primary mr-2" style="background-color: var(--bg-surface);">
-                                <option value="supportive">Supportive</option>
-                                <option value="charming">Charming</option>
-                                <option value="cheering">Cheering</option>
-                                <option value="helpful">Helpful</option>
-                            </select>
-                            <button onclick="exportConversation()" class="p-2 text-text-secondary hover:text-primary transition-colors" title="Export Conversation">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                            </button>
-                            <button id="clearChat" class="p-2 text-text-secondary hover:text-error transition-colors" title="Clear Chat">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
+                        <span class="text-body-s font-medium text-text">Anxiety Support</span>
+                    </button>
+                    <button onclick="quickAction('breathing')" class="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-brand/40 hover:bg-surface-soft transition-all btn-tactile flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-brand/10 text-brand flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         </div>
+                        <span class="text-body-s font-medium text-text">Breathing Exercises</span>
+                    </button>
+                    <button onclick="quickAction('mood')" class="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-brand/40 hover:bg-surface-soft transition-all btn-tactile flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-brand/10 text-brand flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        </div>
+                        <span class="text-body-s font-medium text-text">Mood Check-in</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-auto p-6 border-t border-border bg-error/5">
+                <div class="flex items-start gap-3 text-error">
+                    <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                    <div>
+                        <h4 class="text-body-m font-bold mb-1">Crisis Support</h4>
+                        <p class="text-caption mb-3 opacity-90">If you're in immediate danger, please reach out.</p>
+                        <a href="tel:1800-599-0019" class="text-caption font-bold underline">Call 1800-599-0019</a>
                     </div>
                 </div>
+            </div>
+        </aside>
 
-                <!-- Chat Messages -->
-                <div id="chatMessages" class="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4">
-                    <!-- Welcome Message -->
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 bg-brand-soft rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <div class="bg-surface-soft border border-border rounded-lg p-4 max-w-md">
-                                <p class="text-text">Hi! How are you feeling today? You can talk to me about anything that's been on your mind — academics, stress, relationships, sleep, or just how your day is going.</p>
-                            </div>
-                            <p class="text-xs text-text-secondary mt-1">Just now</p>
-                        </div>
-                    </div>
+        <!-- Chat Area -->
+        <div class="flex-1 flex flex-col bg-bg relative">
+            
+            <!-- Chat Action Bar -->
+            <div class="h-14 border-b border-border bg-surface/50 backdrop-blur-sm flex items-center justify-between px-4 sm:px-6 z-10">
+                <select id="chatPersonality" class="bg-surface border border-border rounded-lg px-3 py-1.5 text-body-s text-text focus:outline-none focus:border-brand">
+                    <option value="supportive">Supportive</option>
+                    <option value="direct">Direct & Solution-Focused</option>
+                    <option value="listening">Just Listening</option>
+                </select>
+                
+                <div class="flex items-center gap-2">
+                    <button onclick="exportConversation()" class="p-2 text-text-secondary hover:text-brand transition-colors rounded-lg hover:bg-surface-soft" title="Export Conversation">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    </button>
+                    <button id="clearChat" class="p-2 text-text-secondary hover:text-error transition-colors rounded-lg hover:bg-error/10" title="Clear Chat">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
                 </div>
+            </div>
 
-                <!-- Suggested Responses -->
-                <div id="suggestedResponses" class="px-4 lg:px-6 py-3 border-t border-border-light bg-surface-soft">
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="sendSuggestedResponse('I\'m feeling stressed')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
-                            I'm feeling stressed
-                        </button>
-                        <button onclick="sendSuggestedResponse('I need someone to talk to')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
-                            I need someone to talk to
-                        </button>
-                        <button onclick="sendSuggestedResponse('I\'m having a difficult day')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
-                            I'm having a difficult day
-                        </button>
-                        <button onclick="sendSuggestedResponse('I\'m doing okay')" class="px-3 py-2 bg-surface border border-border rounded-full text-sm text-text-secondary hover:bg-brand hover:text-white hover:border-brand transition-colors">
-                            I'm doing okay
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Message Input -->
-                <div class="px-4 lg:px-6 py-4 border-t border-border-light bg-white">
-                    <div class="flex items-end space-x-3">
-                        <div class="flex-1">
-                            <div class="relative">
-                                <textarea id="messageInput" placeholder="Type your message here... I'm here to listen and help." class="input-field w-full resize-none pr-12" rows="1" onkeypress="handleKeyPress(event)" oninput="adjustTextareaHeight(this)"></textarea>
-                                <button id="voiceButton" onclick="toggleVoiceInput()" class="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 text-text-secondary hover:text-primary transition-colors" title="Voice Input">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
-                                    </svg>
-                                </button>
+            <!-- Messages Stream -->
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 sm:p-6 chat-scroll">
+                <div id="messagesList" class="max-w-3xl mx-auto w-full flex flex-col space-y-6">
+                    <!-- Initial Welcome -->
+                    <div id="initialWelcome" class="flex items-start gap-3.5 msg-enter w-full justify-start">
+                        <img src="../images/mira_avatar.png" alt="MIRA" class="w-9 h-9 rounded-full object-cover border border-brand/30 flex-shrink-0 shadow-sm" />
+                        <div class="flex flex-col gap-1 max-w-[85%] sm:max-w-[80%]">
+                            <span class="text-caption text-text-secondary ml-1 font-medium">MIRA • Just now</span>
+                            <div class="chat-bubble-ai p-4 rounded-2xl shadow-sm text-body-m text-text leading-relaxed">
+                                Hi! I'm MIRA. I'm here to listen and help you navigate whatever is on your mind. We can talk about academics, stress, relationships, or anything else.<br><br>How are you feeling today?
                             </div>
                         </div>
-                        <button id="sendMessage" class="btn-primary px-6 py-3 flex items-center space-x-2">
-                            <span>Send</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                            </svg>
-                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Side Panel -->
-            <div class="w-full lg:w-80 bg-surface border-l border-border">
-                <!-- Quick Actions -->
-                <div class="p-4 lg:p-6">
-                    <h3 class="font-heading font-semibold text-text-primary mb-4">Quick Support</h3>
-                    <div class="space-y-3">
-                        <button onclick="quickAction('anxiety')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                                    <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-text-primary">Anxiety Support</p>
-                                    <p class="text-sm text-text-secondary">Calming techniques & coping strategies</p>
-                                </div>
-                            </div>
+            <!-- Input Area (Shadcn/UI Inspired, Ergonomic Bottom Bar, No Clunky Nested Boxes) -->
+            <div class="p-3 sm:p-4 bg-surface/90 dark:bg-[#1E1D19]/90 backdrop-blur-md border-t border-border/80 flex-shrink-0 z-20">
+                <div class="max-w-3xl mx-auto flex flex-col gap-2.5">
+                    <!-- Suggestions Badges -->
+                    <div id="suggestedResponses" class="flex flex-wrap items-center gap-2 px-1">
+                        <button type="button" onclick="sendSuggestedResponse('I\'m feeling overwhelmed')" class="px-3.5 py-1 text-caption text-text-secondary hover:text-brand bg-bg dark:bg-[#252420] hover:bg-surface-soft border border-border/80 hover:border-brand/40 rounded-full transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5 active:scale-95">
+                            <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+                            <span>I'm feeling overwhelmed</span>
                         </button>
-
-                        <button onclick="quickAction('breathing')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                                    <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-text-primary">Breathing Exercises</p>
-                                    <p class="text-sm text-text-secondary">Guided breathing for relaxation</p>
-                                </div>
-                            </div>
+                        <button type="button" onclick="sendSuggestedResponse('I can\'t sleep well')" class="px-3.5 py-1 text-caption text-text-secondary hover:text-brand bg-bg dark:bg-[#252420] hover:bg-surface-soft border border-border/80 hover:border-brand/40 rounded-full transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5 active:scale-95">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                            <span>I can't sleep well</span>
                         </button>
-
-                        <button onclick="quickAction('mood')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-text-primary">Mood Check-in</p>
-                                    <p class="text-sm text-text-secondary">Track and understand your feelings</p>
-                                </div>
-                            </div>
-                        </button>
-
-                        <button onclick="quickAction('stress')" class="w-full card-surface p-4 text-left hover:shadow-elevated transition-all group">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-error/10 rounded-lg flex items-center justify-center group-hover:bg-error/20 transition-colors">
-                                    <svg class="w-5 h-5 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-text-primary">Stress Relief</p>
-                                    <p class="text-sm text-text-secondary">Techniques to manage stress</p>
-                                </div>
-                            </div>
+                        <button type="button" onclick="sendSuggestedResponse('I just need to vent')" class="px-3.5 py-1 text-caption text-text-secondary hover:text-brand bg-bg dark:bg-[#252420] hover:bg-surface-soft border border-border/80 hover:border-brand/40 rounded-full transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5 active:scale-95">
+                            <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                            <span>I just need to vent</span>
                         </button>
                     </div>
-                </div>
 
-                <!-- Crisis Support -->
-                <div class="p-4 lg:p-6 border-t border-border">
-                    <div class="card-surface p-4 border-l-4 border-error">
-                        <h4 class="font-heading font-semibold text-text-primary mb-3 flex items-center">
-                            <svg class="w-5 h-5 text-error mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                            </svg>
-                            Crisis Support
-                        </h4>
-                        <p class="text-sm text-text-secondary mb-3">If you're in immediate danger or having thoughts of self-harm, please reach out for help immediately.</p>
-                        <div class="space-y-2">
-                            <a href="tel:1800-599-0019" class="btn-primary bg-error hover:bg-red-600 w-full text-center block">
-                                Call Crisis Helpline
-                            </a>
-                            <a href="counselor_appointment_booking.html" class="btn-secondary w-full text-center block">
-                                Book Emergency Session
-                            </a>
+                    <!-- Text Box (Sleek shadcn-style input pill with subtle border and focus ring) -->
+                    <div class="relative bg-surface dark:bg-[#252420] border border-border rounded-2xl shadow-xs focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20 transition-all flex items-center p-1.5 pl-4">
+                        <textarea id="messageInput" placeholder="Message MIRA... (Press Enter to send)" class="flex-1 bg-transparent border-none outline-none py-2 pr-2 text-body-m text-text placeholder:text-text-muted resize-none max-h-32 leading-relaxed" style="border: none !important; outline: none !important; box-shadow: none !important; background: transparent !important;" rows="1" oninput="adjustTextareaHeight(this)" aria-label="Type a message to MIRA"></textarea>
+                        
+                        <div class="flex items-center gap-1 flex-shrink-0 mr-1">
+                            <button id="voiceButton" type="button" onclick="toggleVoiceInput()" class="p-2 text-text-secondary hover:text-brand hover:bg-surface-soft dark:hover:bg-[#2C2A24] transition-colors rounded-xl cursor-pointer" title="Voice Input" aria-label="Toggle voice input">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                            </button>
+                            <button id="sendMessage" type="button" class="w-9 h-9 bg-brand text-white hover:bg-brand-hover active:scale-95 transition-all rounded-xl shadow-xs flex items-center justify-center flex-shrink-0 cursor-pointer disabled:opacity-40" title="Send message" aria-label="Send message">
+                                <svg class="w-4 h-4 translate-x-0.5 fill-none stroke-currentColor stroke-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
                         </div>
                     </div>
-                </div>
 
-                <!-- Professional Support -->
-                <div class="p-4 lg:p-6 border-t border-border">
-                    <h4 class="font-heading font-semibold text-text-primary mb-3">Professional Support</h4>
-                    <div class="space-y-3">
-                        <a href="counselor_appointment_booking.html" class="w-full card-surface p-3 text-left hover:shadow-elevated transition-all flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-1 12a2 2 0 002 2h6a2 2 0 002-2L15 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-medium text-text-primary text-sm">Book Counselor</p>
-                                <p class="text-xs text-text-secondary">Professional guidance</p>
-                            </div>
-                        </a>
-
-                        <a href="mental_health_assessments.html" class="w-full card-surface p-3 text-left hover:shadow-elevated transition-all flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-medium text-text-primary text-sm">Take Assessment</p>
-                                <p class="text-xs text-text-secondary">Understand your mental health</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Disclaimer -->
-                <div class="p-4 lg:p-6 border-t border-border">
-                    <div class="bg-surface-soft border border-border rounded-lg p-3">
-                        <p class="text-caption text-text-secondary">MindBridge AI provides general emotional support and mental-health information. It does not replace professional care or emergency services.</p>
-                    </div>
+                    <!-- Safety line (Clear, quiet, accessible) -->
+                    <p class="text-[12px] text-text-muted text-center leading-tight">
+                        MIRA is an empathetic AI peer companion, not a licensed clinician. In crisis? Call <a href="tel:988" class="text-error font-medium underline hover:opacity-80">988</a> or <a href="tel:1800-599-0019" class="text-error font-medium underline hover:opacity-80">1800-599-0019</a>.
+                    </p>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Mobile Emergency Bar -->
-    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-error text-white p-3 z-50" id="mobileEmergencyBar">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                <span class="text-sm font-medium">Crisis Support Available</span>
-            </div>
-            <div class="flex space-x-2">
-                <a href="tel:1800-599-0019" class="bg-white text-error px-3 py-1 rounded-full text-sm font-medium">
-                    Call
-                </a>
-                <button onclick="hideMobileEmergencyBar()" class="text-white/80 hover:text-white">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-error text-white p-3 z-50 flex items-center justify-between" id="mobileEmergencyBar">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+            <span class="text-caption font-bold">Crisis Support</span>
+        </div>
+        <div class="flex gap-3 items-center">
+            <a href="tel:1800-599-0019" class="bg-white text-error px-3 py-1 rounded-full text-caption font-bold">Call</a>
+            <button onclick="hideMobileEmergencyBar()" class="text-white/80 hover:text-white">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
     </div>
 
-    <!-- Include the chat integration script -->
+    <!-- Script dependencies -->
     <script src="../js/chat-integration.js"></script>
     <script>
+        // Adjust navbar/profile functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const profileInitials = document.getElementById('profile-initials');
+            const profileBtn = document.getElementById('profile-btn');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (currentUser) {
+                let initial = currentUser.firstName ? currentUser.firstName.charAt(0).toUpperCase() : 'U';
+                if (profileInitials) profileInitials.textContent = initial;
+            }
+            // Profile dropdown and logout handled centrally by shared-layout.js
+
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if(mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+
+        // Chat specific scripts
         let isVoiceRecording = false;
         let recognition = null;
 
-        // Initialize speech recognition if available
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
@@ -508,21 +313,10 @@
                 adjustTextareaHeight(document.getElementById('messageInput'));
             };
 
-            recognition.onerror = function(event) {
-                console.error('Speech recognition error:', event.error);
-                isVoiceRecording = false;
-                updateVoiceButton();
-            };
-
             recognition.onend = function() {
                 isVoiceRecording = false;
                 updateVoiceButton();
             };
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
         }
 
         function adjustTextareaHeight(textarea) {
@@ -533,7 +327,6 @@
         function handleKeyPress(event) {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
-                // The sendMessage function is now handled by chat-integration.js
                 const sendEvent = new Event('click');
                 document.getElementById('sendMessage').dispatchEvent(sendEvent);
             }
@@ -549,13 +342,13 @@
             const actions = {
                 anxiety: "I'd like help with managing my anxiety",
                 breathing: "Can you guide me through some breathing exercises?",
-                mood: "I'd like to do a mood check-in",
-                stress: "I need help with stress management"
+                mood: "I'd like to do a mood check-in"
             };
-
-            document.getElementById('messageInput').value = actions[type];
-            const sendEvent = new Event('click');
-            document.getElementById('sendMessage').dispatchEvent(sendEvent);
+            if(actions[type]) {
+                document.getElementById('messageInput').value = actions[type];
+                const sendEvent = new Event('click');
+                document.getElementById('sendMessage').dispatchEvent(sendEvent);
+            }
         }
 
         function toggleVoiceInput() {
@@ -563,7 +356,6 @@
                 alert('Voice input is not supported in your browser');
                 return;
             }
-
             if (isVoiceRecording) {
                 recognition.stop();
             } else {
@@ -576,52 +368,44 @@
         function updateVoiceButton() {
             const button = document.getElementById('voiceButton');
             if (isVoiceRecording) {
-                button.innerHTML = `
-                    <svg class="w-5 h-5 text-error animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
-                    </svg>
-                `;
-                button.title = 'Stop Recording';
+                button.innerHTML = '<svg class="w-5 h-5 text-error animate-pulse" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>';
             } else {
-                button.innerHTML = `
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
-                    </svg>
-                `;
-                button.title = 'Voice Input';
+                button.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>';
             }
         }
 
         function exportConversation() {
-            const messages = document.querySelectorAll('#chatMessages > div');
-            let conversation = 'MindBridge AI Conversation Export\n';
-            conversation += '=====================================\n\n';
+            const list = document.getElementById('messagesList') || document.getElementById('chatMessages');
+            if (!list) return;
 
-            messages.forEach(message => {
-                const isUser = message.querySelector('.bg-blue-500') || message.querySelector('.bg-primary');
-                const textElement = message.querySelector('p');
-                if (!textElement) return;
-                
-                const text = textElement.textContent;
-                const timestamp = message.querySelector('.text-xs');
-                
-                if (isUser) {
-                    conversation += `You: ${text}\n`;
-                } else {
-                    conversation += `AI Assistant: ${text}\n`;
+            const bubbles = Array.from(list.children).filter(el => el.id !== 'typing-indicator');
+            if (bubbles.length === 0) {
+                alert('No messages to export.');
+                return;
+            }
+
+            let transcript = `# MindBridge MIRA Chat Conversation Transcript\n`;
+            transcript += `**Export Date:** ${new Date().toLocaleString()}\n`;
+            transcript += `**Confidentiality Notice:** This transcript is exported locally from your browser session.\n\n---\n\n`;
+
+            bubbles.forEach(b => {
+                const isUser = b.querySelector('.chat-bubble-user');
+                const isAI = b.querySelector('.chat-bubble-ai');
+                const bubbleEl = isUser || isAI;
+                if (!bubbleEl) return;
+                const speaker = isUser ? 'Student' : 'MIRA (AI Companion)';
+                const text = bubbleEl.innerText.trim();
+                if (text) {
+                    transcript += `### ${speaker}\n${text}\n\n`;
                 }
-                
-                if (timestamp) {
-                    conversation += `Time: ${timestamp.textContent}\n`;
-                }
-                conversation += '\n';
             });
 
-            const blob = new Blob([conversation], { type: 'text/plain' });
+            const blob = new Blob([transcript], { type: 'text/markdown;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
+            const dateStr = new Date().toISOString().split('T')[0];
             a.href = url;
-            a.download = `mindbridge-conversation-${new Date().toISOString().split('T')[0]}.txt`;
+            a.download = `mira_chat_transcript_${dateStr}.md`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -635,24 +419,13 @@
                 bar.style.transition = 'transform 300ms ease-out';
             }
         }
-
-        // Auto-hide mobile emergency bar after 15 seconds
-        setTimeout(() => {
-            hideMobileEmergencyBar();
-        }, 15000);
-
-        // Focus on input when page loads
+        setTimeout(hideMobileEmergencyBar, 15000);
+        
         window.addEventListener('load', () => {
             document.getElementById('messageInput').focus();
         });
     </script>
-    
-    <!-- Dark Mode Script -->
-    <script src="../js/dark-mode.js"></script>
-    
-    <!-- Chat API and Integration -->
-    <script src="../js/chat-integration.js"></script>
-    <script src="../js/language.js"></script>
-<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/shared-layout.js"></script>
 </body>
 </html>

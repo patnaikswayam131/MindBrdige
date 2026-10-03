@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,30 +8,32 @@
     <link rel="stylesheet" href="css/main.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap"
+        rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: 'DM Sans', sans-serif;
-            background-color: #FAF8F5; /* calm background */
+            background-color: #F7F2E9;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        
+
         .redirect-container {
             text-align: center;
-            background: #FFFFFF;
+            background: #FFFDF8;
             padding: 40px;
-            border-radius: 18px;
-            border: 1px solid #E6DFE8;
-            box-shadow: 0 16px 48px rgba(51, 43, 69, 0.12);
+            border-radius: 20px;
+            border: 1px solid #E4DCD0;
+            box-shadow: 0 10px 30px rgba(41, 43, 38, 0.06);
             max-width: 400px;
             width: 90%;
         }
-        
+
         .logo-img {
             height: 60px;
             margin: 0 auto 10px auto;
@@ -41,57 +44,59 @@
             font-family: 'DM Serif Display', serif;
             font-size: 2.5em;
             font-weight: normal;
-            color: #6E5B8F;
+            color: #292B26;
             margin-bottom: 20px;
         }
-        
+
         .subtitle {
-            color: #5E5955;
+            color: #6A685F;
             margin-bottom: 30px;
             font-size: 1.1em;
         }
-        
+
         .redirect-message {
-            color: #8B8580;
+            color: #6A685F;
             font-size: 0.9em;
             margin-top: 20px;
         }
     </style>
 
 </head>
+
 <body>
     <div class="redirect-container">
         <img src="images/logo_light.png" alt="MindBridge Logo" class="logo-img">
         <div class="logo">MindBridge</div>
         <div class="subtitle">Mental Health Support Platform</div>
-        
+
         <!-- Newton's Cradle Loader -->
-        <div class="newtons-cradle" style="margin: 20px auto; --uib-color: #6E5B8F; --uib-size: 45px;">
+        <div class="newtons-cradle" style="margin: 20px auto; --uib-color: #526B57; --uib-size: 45px;">
             <div class="newtons-cradle__dot"></div>
             <div class="newtons-cradle__dot"></div>
             <div class="newtons-cradle__dot"></div>
             <div class="newtons-cradle__dot"></div>
         </div>
-        
+
         <div class="redirect-message">Redirecting to Landing Page...</div>
     </div>
 
     <script>
         // Redirect to landing page after 2 seconds
-        setTimeout(function() {
+        setTimeout(function () {
             window.location.href = 'pages/landing.html';
         }, 2000);
-        
+
         // Fallback redirect in case of any issues
-        window.addEventListener('load', function() {
-            setTimeout(function() {
+        window.addEventListener('load', function () {
+            setTimeout(function () {
                 if (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/')) {
                     window.location.href = 'pages/landing.html';
                 }
             }, 3000);
         });
     </script>
-<script src="js/language.js"></script>
-<script id="dhws-dataInjector" src="/public/dhws-data-injector.js"></script>
+    <script src="js/language.js"></script>
+    <script id="dhws-dataInjector" src="/public/dhws-data-injector.js"></script>
 </body>
+
 </html>

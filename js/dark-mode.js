@@ -1,4 +1,8 @@
 // Dark Mode Toggle Functionality
+
+// Every light/dark checkbox on the site. `checked` always means LIGHT theme.
+const THEME_CHECKBOX_SELECTOR = '#darkModeCheckbox, .theme-toggle .checkbox, .switch input[type="checkbox"]';
+
 class DarkModeToggle {
     constructor() {
         this.init();
@@ -42,7 +46,7 @@ class DarkModeToggle {
 
     setupToggleButton() {
         // 1. Setup Custom Day/Night Switch Checkboxes
-        const checkboxes = document.querySelectorAll('#darkModeCheckbox, .switch input[type="checkbox"]');
+        const checkboxes = document.querySelectorAll(THEME_CHECKBOX_SELECTOR);
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', (e) => {
                 // Checked = Day/Light mode, Unchecked = Night/Dark mode
@@ -62,9 +66,25 @@ class DarkModeToggle {
         const currentTheme = theme || localStorage.getItem('theme') || 'light';
         
         // Synchronize all custom switch checkboxes
-        const checkboxes = document.querySelectorAll('#darkModeCheckbox, .switch input[type="checkbox"]');
+        const checkboxes = document.querySelectorAll(THEME_CHECKBOX_SELECTOR);
         checkboxes.forEach(checkbox => {
             checkbox.checked = (currentTheme === 'light');
+        });
+
+        // Keep the accessible name of the navbar toggle in sync with the
+        // current theme so screen readers announce the right action.
+        // The checkbox is a SIBLING of the label, not a descendant, so
+        // it has to be resolved from the .theme-toggle container.
+        document.querySelectorAll('.theme-toggle').forEach((toggle) => {
+            const input = toggle.querySelector('.checkbox');
+            const label = toggle.querySelector('.switch-label');
+            if (!input || !label) return;
+            const action = currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+            label.setAttribute('title', action);
+            label.setAttribute('aria-label', action);
+            input.setAttribute('aria-label', action);
+            const sr = label.querySelector('.sr-only');
+            if (sr) sr.textContent = action;
         });
 
         // Synchronize legacy button icons if present
@@ -101,7 +121,7 @@ class DarkModeToggle {
     }
 }
 
-// Immediate execution to prevent flash of wrong theme
+// Immediate execution to prevent flash of wrong theme and contrast
 (function() {
     try {
         const savedTheme = localStorage.getItem('theme');
@@ -116,10 +136,26 @@ class DarkModeToggle {
             document.documentElement.setAttribute('data-theme', 'dark');
             document.documentElement.classList.add('dark');
         }
+
+        const savedContrast = localStorage.getItem('contrast');
+        if (savedContrast === 'high') {
+            document.documentElement.setAttribute('data-contrast', 'high');
+        }
     } catch (e) {
-        console.error('Error applying theme early:', e);
+        console.error('Error applying theme/contrast early:', e);
     }
 })();
+
+function applyContrast(contrast) {
+    if (contrast === 'high') {
+        document.documentElement.setAttribute('data-contrast', 'high');
+        localStorage.setItem('contrast', 'high');
+    } else {
+        document.documentElement.removeAttribute('data-contrast');
+        localStorage.setItem('contrast', 'normal');
+    }
+}
+window.applyContrast = applyContrast;
 
 // Initialize dark mode when DOM is loaded
 if (document.readyState === 'loading') {
@@ -141,7 +177,7 @@ if (window.matchMedia) {
             } else {
                 document.documentElement.classList.remove('dark');
             }
-            const checkboxes = document.querySelectorAll('#darkModeCheckbox, .switch input[type="checkbox"]');
+            const checkboxes = document.querySelectorAll(THEME_CHECKBOX_SELECTOR);
             checkboxes.forEach(cb => {
                 cb.checked = (newTheme === 'light');
             });

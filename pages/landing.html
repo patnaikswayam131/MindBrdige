@@ -3,77 +3,144 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MindBridge - Mental Health Support Platform</title>
+    <title>MindBridge - Mental Health Support for Students</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+
     <meta name="description" content="MindBridge helps college students access confidential mental-health support, screening, AI-guided assistance, and professional counseling in one place.">
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="../js/dark-mode.js"></script>
+    <script src="../js/icons.js"></script>
+    <script src="../js/skeleton-loader.js"></script>
     <style>
-        .fade-in {
+        /* Restrained Editorial Hero Entrance Animations */
+        @keyframes editorialFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes editorialImageScale {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .editorial-fade-1, .editorial-fade-2, .editorial-fade-3, .editorial-fade-4, .editorial-fade-image {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-on-scroll {
             opacity: 0;
             transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .fade-in.visible {
+        .reveal-on-scroll.is-revealed {
             opacity: 1;
             transform: translateY(0);
         }
+
+        .hover-lift-subtle {
+            transition: transform 0.2s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+        .hover-lift-subtle:hover {
+            transform: translateY(-2px);
+        }
+
+        .artwork-subtle-hover {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .artwork-subtle-hover:hover {
+            transform: scale(1.01);
+        }
+
+        /* Explicit theme switching */
+        html.dark .landing-artwork-light,
+        html[data-theme="dark"] .landing-artwork-light {
+            display: none !important;
+        }
+        html.dark .landing-artwork-dark,
+        html[data-theme="dark"] .landing-artwork-dark {
+            display: block !important;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .editorial-fade-1, .editorial-fade-2, .editorial-fade-3, .editorial-fade-4, .editorial-fade-image, .reveal-on-scroll, .hover-lift-subtle, .artwork-subtle-hover, .hero-parallax-target {
+                animation: none !important;
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Navigation Header -->
-    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
-                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <div>
-                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
-                    </div>
-                </a>
+<body class="bg-bg text-text selection:bg-brand selection:text-white overflow-x-hidden">
+    <!-- Navigation Header (Standardized Persistent Navbar) -->
+    <header class="navbar bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="navbar__container">
+            <!-- Zone 1: Brand -->
+            <a href="landing.html" class="navbar__brand hover:opacity-80 transition-opacity">
+                <img src="../images/logo_light.png" id="logo-light" class="nav-logo dark:hidden" alt="MindBridge Logo">
+                <img src="../images/logo_dark.png" id="logo-dark" class="nav-logo hidden dark:block" alt="MindBridge Logo">
+                <span class="text-h4 font-display text-text whitespace-nowrap">MindBridge</span>
+            </a>
 
-                <!-- Navigation -->
-                <nav class="hidden xl:flex items-center space-x-6">
-                    <a href="#features" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
-                    <a href="#how-it-works" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
-                    <a href="mental_health_assessments.html" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
-                    <a href="#about" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
-                    <a href="#contact" class="whitespace-nowrap text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
-                    
-                    <div class="h-4 w-px bg-border flex-shrink-0 hidden xl:block"></div>
-                    <div class="hidden xl:flex items-center space-x-2 text-sm flex-shrink-0 whitespace-nowrap">
-                        <div class="w-2 h-2 bg-error rounded-pill animate-pulse flex-shrink-0"></div>
-                        <span class="text-text-secondary">Kiran Helpline:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
-                    </div>
-                </nav>
+            <!-- Zone 2: Main Navigation -->
+            <nav class="navbar__main-nav hidden xl:flex">
+                <ul class="nav-list" id="main-nav-links">
+                    <!-- Populated dynamically by shared-layout.js -->
+                </ul>
+            </nav>
 
-                <!-- Right Section -->
-                <div class="flex items-center space-x-4 flex-shrink-0">
-                    <!-- Theme Switch -->
-                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
-                        <input type="checkbox" id="darkModeCheckbox">
-                        <span class="slider">
-                            <span class="star star_1"></span>
-                            <span class="star star_2"></span>
-                            <span class="star star_3"></span>
-                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
-                            </svg>
-                        </span>
+            <!-- Zone 3: User Actions -->
+            <div class="navbar__user-actions">
+                <div class="toggle-switch">
+                    <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                    <label class="switch-label" for="darkModeCheckbox" title="Toggle light and dark theme">
+                        <span class="slider"></span>
                     </label>
-                    <!-- Mobile Menu Button -->
-                    <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
+                </div>
+                
+                <!-- Mobile Navigation Toggle -->
+                <button id="mobileMenuBtn" class="xl:hidden p-2 text-text-secondary hover:text-brand hover:bg-surface-soft rounded-lg transition-colors cursor-pointer" aria-label="Toggle navigation menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                <!-- Auth Actions (Logged out) -->
+                <div id="auth-actions" class="hidden sm:flex items-center gap-3">
+                    <a href="student_login.html?role=admin" class="text-caption font-bold text-text-secondary hover:text-brand transition-colors px-2.5 py-1.5 rounded-lg hover:bg-surface-soft whitespace-nowrap">Admin Portal</a>
+                    <a href="student_login.html" class="nav-link hidden sm:inline-flex whitespace-nowrap">Sign In</a>
+                    <a href="student_login.html" class="btn-primary nav-btn whitespace-nowrap min-w-[120px] btn-tactile">Get Started</a>
+                </div>
+                
+                <!-- Profile Actions (Logged in) -->
+                <div id="user-profile-menu" class="relative hidden items-center ml-2">
+                    <button id="profile-btn" class="flex-shrink-0 flex items-center justify-center cursor-pointer hover:bg-surface-soft rounded-full p-1 transition-colors border-2 border-transparent hover:border-brand">
+                        <div id="profile-avatar" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-medium overflow-hidden text-lg">
+                            <span id="profile-initials">U</span>
+                        </div>
                     </button>
-                    <a href="student_login.html" class="btn-secondary hidden sm:inline-flex whitespace-nowrap flex-shrink-0 min-w-fit">Sign In</a>
-                    <a href="student_login.html" class="btn-primary whitespace-nowrap flex-shrink-0 min-w-fit">Get Started</a>
+                    <!-- Dropdown -->
+                    <div id="profile-dropdown" class="absolute right-0 top-14 w-60 bg-surface border border-border rounded-xl shadow-card hidden flex-col z-50 overflow-hidden">
+                        <!-- Handled by shared-layout.js -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,376 +148,387 @@
         <!-- Mobile Menu -->
         <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
             <div class="flex flex-col py-6 px-6 sm:px-8 space-y-5">
-                <a href="#features" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Features</a>
-                <a href="#how-it-works" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">How It Works</a>
-                <a href="mental_health_assessments.html" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Resources</a>
-                <a href="#about" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">About</a>
-                <a href="#contact" class="text-text-secondary hover:text-brand transition-colors font-medium text-body-m">Contact</a>
-                
+                <div id="mobile-nav-links" class="flex flex-col space-y-5">
+                    <!-- Injected by JS -->
+                </div>
                 <div class="h-px w-full bg-border my-1"></div>
-                
-                <div class="flex flex-col space-y-5">
-                    <div class="flex items-center space-x-2 text-sm text-text-secondary">
-                        <span class="font-medium">Crisis Support:</span>
-                        <a href="tel:1800-599-0019" class="text-error font-medium hover:text-error/80 transition-colors">1800-599-0019</a>
-                    </div>
-                    
-                    <div class="sm:hidden">
-                        <a href="student_login.html" class="btn-secondary w-full justify-center flex">Sign In</a>
+                <div class="flex flex-col space-y-3">
+                    <div class="sm:hidden space-y-2" id="mobile-auth-actions">
+                        <a href="student_login.html" class="btn-primary w-full justify-center flex btn-tactile">Sign In</a>
+                        <a href="student_login.html?role=admin" class="btn-secondary w-full justify-center flex text-body-s btn-tactile">Admin Portal</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Menu Script -->
+    <main class="w-full">
+        <!-- ==========================================
+             HERO SECTION (Rich Visual Depth & Interactive Preview)
+             ========================================== -->
+        <section class="min-h-[88vh] flex items-center relative overflow-hidden pt-8 pb-16 bg-mesh-calm">
+            <!-- Ambient blurred lighting accents -->
+            <div class="absolute -top-32 -right-32 w-[580px] h-[580px] rounded-full bg-secondary/40 dark:bg-secondary/20 blur-3xl pointer-events-none -z-10"></div>
+            <div class="absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full bg-accent/10 dark:bg-accent/10 blur-3xl pointer-events-none -z-10"></div>
+
+            <div class="w-full mx-auto px-[var(--content-padding)] max-w-[var(--content-width)]">
+                <div class="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+                    
+                    <!-- Left Hero Content (Editorial Sanctuary Presentation) -->
+                    <div class="lg:col-span-5 xl:col-span-5 flex flex-col items-start z-10">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-brand-soft/60 text-brand border border-brand/20 mb-6 editorial-fade-1 uppercase tracking-widest">
+                            <span class="w-1.5 h-1.5 rounded-full bg-brand animate-pulse"></span>
+                            A safer space for a brighter you
+                        </div>
+                        
+                        <h1 class="text-display-m sm:text-display-l lg:text-display-xl font-display font-medium text-text mb-6 leading-tight editorial-fade-2">
+                            <span class="block dark:hidden">
+                                You don't have to have it all figured out <span class="italic text-accent font-normal">to begin.</span>
+                            </span>
+                            <span class="hidden dark:block">
+                                A calmer you for <span class="italic text-accent font-normal">brighter days.</span>
+                            </span>
+                        </h1>
+                        
+                        <p class="text-body-l lg:text-h4 text-text-secondary mb-8 max-w-xl leading-relaxed editorial-fade-3">
+                            <span class="block dark:hidden">Take a breath. Explore tools, resources and a supportive community designed for your wellbeing.</span>
+                            <span class="hidden dark:block">Tools, community and care to support you at your own pace.</span>
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-10 editorial-fade-4">
+                            <a href="student_register.html" class="btn-primary text-body-m hover-lift-subtle shadow-soft inline-flex items-center justify-center gap-2">
+                                Begin your check-in <span aria-hidden="true">→</span>
+                            </a>
+                            <a href="resources.html" class="btn-secondary text-body-m hover-lift-subtle inline-flex items-center justify-center">
+                                Explore the space
+                            </a>
+                        </div>
+
+                        <!-- Trust Features Row -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-border/80 w-full editorial-fade-4">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span class="text-caption font-medium text-text-secondary">100% Confidential</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span class="text-caption font-medium text-text-secondary">Zero Triage Waitlist</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span class="text-caption font-medium text-text-secondary">Licensed Providers</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span class="text-caption font-medium text-text-secondary">FERPA / HIPAA Ready</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Visual (Editorial Bedroom Sanctuary Artwork Anchor - Blended Seamlessly) -->
+                    <div class="lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-end editorial-fade-image w-full">
+                        <div class="hero-blend-artwork relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3]">
+                            <!-- Morning Sanctuary Illustration (Light Theme) -->
+                            <img 
+                                src="/public/assets/mindbridge/landing-light.webp" 
+                                alt="Quiet editorial bedroom sanctuary with warm morning sunlight, books, plants, and a sleeping cat"
+                                class="landing-artwork landing-artwork-light hero-parallax-target w-full h-full object-cover object-center block dark:hidden transition-transform duration-700 ease-out"
+                                loading="eager"
+                                fetchpriority="high"
+                            />
+                            <!-- Nighttime Sanctuary Illustration (Dark Theme) -->
+                            <img 
+                                src="/public/assets/mindbridge/landing-dark.webp" 
+                                alt="Quiet nighttime sanctuary bedroom with gentle moonlight, desk lamp, and a sleeping cat"
+                                class="landing-artwork landing-artwork-dark hero-parallax-target w-full h-full object-cover object-center hidden dark:block transition-transform duration-700 ease-out"
+                                loading="eager"
+                            />
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             CAMPUS IMPACT & TRUST STATS BAR
+             ========================================== -->
+        <section class="py-12 bg-surface border-y border-border/80">
+            <div class="w-full mx-auto px-[var(--content-padding)] max-w-[var(--content-width)]">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="space-y-1">
+                        <div class="text-h2 font-display text-brand">12,000+</div>
+                        <div class="text-body-s font-medium text-text-secondary">Students Supported</div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-h2 font-display text-brand">&lt; 2s</div>
+                        <div class="text-body-s font-medium text-text-secondary">Instant AI Reflection</div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-h2 font-display text-brand">24 / 7</div>
+                        <div class="text-body-s font-medium text-text-secondary">Confidential Care & Crisis Link</div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-h2 font-display text-brand">4.9 / 5</div>
+                        <div class="text-body-s font-medium text-text-secondary">Student Trust Rating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             THE FOUR PILLARS OF INTEGRATED CARE
+             ========================================== -->
+        <section id="services" class="py-24 sm:py-32 bg-bg">
+            <div class="w-full mx-auto px-[var(--content-padding)] max-w-[var(--content-width)]">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+                    <span class="inline-block text-label text-brand tracking-widest uppercase mb-3">Holistic Ecosystem</span>
+                    <h2 class="text-h2 font-display mb-4 text-text">Four connected layers of student care.</h2>
+                    <p class="text-body-l text-text-secondary">From immediate late-night de-escalation to clinical campus appointments, MindBridge supports you through every phase of college life.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Pillar 1: MIRA AI Companion -->
+                    <div class="card-interactive p-7 flex flex-col justify-between reveal-on-scroll group">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-brand/10 text-brand flex items-center justify-center mb-6 group-hover:bg-brand group-hover:text-white transition-colors">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-1.5 3-4 6-8 7 3.5 1.5 6 4.5 7 8 1-3.5 3.5-6.5 7-8-4-1-6.5-4-8-7z"/><path d="M12 18c-3-2-6-1-8 1 2 2 5 3 8 1 3 2 6 1 8-1-2-2-5-3-8-1z"/></svg>
+                            </div>
+                            <h3 class="text-h3 font-display mb-2 text-text">MIRA AI Companion</h3>
+                            <p class="text-body-s text-text-secondary leading-relaxed mb-6">
+                                24/7 conversational support trained on CBT reflection techniques. Safe, empathetic, and always anonymous.
+                            </p>
+                        </div>
+                        <a href="ai_mental_health_chatbot.html" class="inline-flex items-center text-body-s font-bold text-brand hover:text-brand-hover gap-1.5 transition-colors">
+                            Try MIRA <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+
+                    <!-- Pillar 2: Clinical Screeners -->
+                    <div class="card-interactive p-7 flex flex-col justify-between reveal-on-scroll group">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-info/10 text-info flex items-center justify-center mb-6 group-hover:bg-info group-hover:text-white transition-colors">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/><path d="M2 20h20"/></svg>
+                            </div>
+                            <h3 class="text-h3 font-display mb-2 text-text">Clinical Screeners</h3>
+                            <p class="text-body-s text-text-secondary leading-relaxed mb-6">
+                                Standardized PHQ-9 and GAD-7 assessments to track depressive symptoms, anxiety levels, and emotional patterns over time.
+                            </p>
+                        </div>
+                        <a href="mental_health_assessments.html" class="inline-flex items-center text-body-s font-bold text-info hover:text-info/80 gap-1.5 transition-colors">
+                            Take Screener <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+
+                    <!-- Pillar 3: Counselor Booking -->
+                    <div class="card-interactive p-7 flex flex-col justify-between reveal-on-scroll group">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-success/10 text-success flex items-center justify-center mb-6 group-hover:bg-success group-hover:text-white transition-colors">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 3v5a5.5 5.5 0 0 0 11 0V3"/><path d="M4.5 5h3"/><path d="M12.5 5h3"/><path d="M10 13.5v3.5a3 3 0 0 0 6 0V14"/><circle cx="18" cy="14" r="2"/></svg>
+                            </div>
+                            <h3 class="text-h3 font-display mb-2 text-text">Licensed Counseling</h3>
+                            <p class="text-body-s text-text-secondary leading-relaxed mb-6">
+                                View certified campus counselors, browse focus areas, and schedule confidential 1-on-1 virtual or in-person sessions.
+                            </p>
+                        </div>
+                        <a href="counselor_appointment_booking.html" class="inline-flex items-center text-body-s font-bold text-success hover:text-success/80 gap-1.5 transition-colors">
+                            Book Session <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+
+                    <!-- Pillar 4: Peer Communities -->
+                    <div class="card-interactive p-7 flex flex-col justify-between reveal-on-scroll group">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-warning/10 text-warning flex items-center justify-center mb-6 group-hover:bg-warning group-hover:text-white transition-colors">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <h3 class="text-h3 font-display mb-2 text-text">Peer Communities</h3>
+                            <p class="text-body-s text-text-secondary leading-relaxed mb-6">
+                                Moderated, topic-specific spaces to connect with fellow students facing similar academic stresses and life transitions.
+                            </p>
+                        </div>
+                        <a href="communities.html" class="inline-flex items-center text-body-s font-bold text-warning hover:text-warning/80 gap-1.5 transition-colors">
+                            Explore Groups <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             STUDENT VOICES (AUTHENTIC EDITORIAL TESTIMONIALS)
+             ========================================== -->
+        <section class="py-20 bg-surface border-t border-border">
+            <div class="w-full mx-auto px-[var(--content-padding)] max-w-[var(--content-width)]">
+                <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll">
+                    <span class="inline-block text-label text-brand tracking-widest uppercase mb-2">Student Experiences</span>
+                    <h2 class="text-h2 font-display text-text">Designed with real campus realities in mind.</h2>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Quote 1 -->
+                    <div class="card-elevated p-8 flex flex-col justify-between reveal-on-scroll">
+                        <p class="text-body-m text-text leading-relaxed italic mb-6">
+                            "During finals week at 2 AM, I was spiraling about an exam. Opening MindBridge and talking through it with MIRA brought my heart rate back to baseline within ten minutes."
+                        </p>
+                        <div class="flex items-center gap-3 pt-4 border-t border-border/70">
+                            <div class="w-10 h-10 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center">S</div>
+                            <div>
+                                <h4 class="text-body-s font-bold text-text">Sarah T.</h4>
+                                <p class="text-caption text-text-secondary">Junior, Computer Science</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quote 2 -->
+                    <div class="card-elevated p-8 flex flex-col justify-between reveal-on-scroll">
+                        <p class="text-body-m text-text leading-relaxed italic mb-6">
+                            "I felt embarrassed to walk into the counseling center. Being able to take a private PHQ-9 screening and book an appointment through the portal removed all the friction."
+                        </p>
+                        <div class="flex items-center gap-3 pt-4 border-t border-border/70">
+                            <div class="w-10 h-10 rounded-full bg-success/10 text-success font-bold flex items-center justify-center">M</div>
+                            <div>
+                                <h4 class="text-body-s font-bold text-text">Marcus K.</h4>
+                                <p class="text-caption text-text-secondary">Sophomore, Biology</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quote 3 -->
+                    <div class="card-elevated p-8 flex flex-col justify-between reveal-on-scroll">
+                        <p class="text-body-m text-text leading-relaxed italic mb-6">
+                            "The Audio Oasis soundscapes with rain and theta binaural frequencies are my absolute go-to while writing research papers in the library."
+                        </p>
+                        <div class="flex items-center gap-3 pt-4 border-t border-border/70">
+                            <div class="w-10 h-10 rounded-full bg-warning/10 text-warning font-bold flex items-center justify-center">A</div>
+                            <div>
+                                <h4 class="text-body-s font-bold text-text">Aisha R.</h4>
+                                <p class="text-caption text-text-secondary">Senior, Economics</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             CALMING CLOSING INVITATION BANNER
+             ========================================== -->
+        <section class="py-20 bg-mesh-calm border-t border-border relative overflow-hidden">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal-on-scroll">
+                <h2 class="text-h2 sm:text-display-s font-display mb-5 text-text">Your well-being deserves a calm, private space.</h2>
+                <p class="text-body-l text-text-secondary mb-8 max-w-xl mx-auto">
+                    Join thousands of college students building emotional resilience and finding compassionate support every day.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="student_register.html" class="btn-primary text-body-m px-8 py-3.5 btn-tactile shadow-card hover:shadow-card-hover">
+                        Get Started Free
+                    </a>
+                    <a href="resources.html" class="btn-secondary text-body-m px-8 py-3.5 btn-tactile">
+                        Explore Soundscapes & Guides
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Footer handled automatically by shared-layout.js -->
+    
+    <!-- Scripts -->
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/shared-layout.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.getElementById('mobileMenuBtn');
-            const menu = document.getElementById('mobileMenu');
+        // Interactive Preview Mood Selector
+        function setPreviewMood(label, btn) {
+            const status = document.getElementById('previewMoodStatus');
+            if (status) status.textContent = `Logged: ${label}`;
             
-            if (btn && menu) {
-                // Toggle menu
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    menu.classList.toggle('hidden');
+            // Remove active classes from all siblings
+            const parent = btn.parentElement;
+            if (parent) {
+                parent.querySelectorAll('button').forEach(b => {
+                    b.classList.remove('border-brand/50', 'ring-2', 'ring-brand/20', 'bg-brand/5');
+                    const span = b.querySelector('span');
+                    if (span) span.classList.remove('text-brand');
                 });
-                
-                // Close on outside click
-                document.addEventListener('click', (e) => {
-                    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) {
-                        menu.classList.add('hidden');
-                    }
-                });
-                
-                // Close on link click
-                menu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        menu.classList.add('hidden');
+            }
+            btn.classList.add('border-brand/50', 'ring-2', 'ring-brand/20', 'bg-brand/5');
+            const span = btn.querySelector('span');
+            if (span) span.classList.add('text-brand');
+        }
+
+        // Clean CSS-Driven Scroll Reveal and Restrained Scroll Parallax (Progressive Enhancement)
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) {
+                document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('is-revealed'));
+                return;
+            }
+
+            // GSAP-powered entrance animations for hero
+            if (window.gsap) {
+                const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+                tl.from('.editorial-fade-1', { y: 16, opacity: 0, duration: 0.5 })
+                  .from('.editorial-fade-2', { y: 18, opacity: 0, duration: 0.6 }, '-=0.35')
+                  .from('.editorial-fade-3', { y: 14, opacity: 0, duration: 0.55 }, '-=0.35')
+                  .from('.editorial-fade-4', { y: 12, opacity: 0, duration: 0.5 }, '-=0.3')
+                  .from('.editorial-fade-image', { scale: 0.97, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.5');
+
+                // ScrollTrigger reveals
+                gsap.registerPlugin(ScrollTrigger);
+                document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                    gsap.from(el, {
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top 88%',
+                            once: true
+                        },
+                        y: 20,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: 'power2.out'
                     });
                 });
+            } else {
+                // Fallback to IntersectionObserver
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-revealed');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    rootMargin: '0px 0px -60px 0px',
+                    threshold: 0.1
+                });
+                document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+            }
+
+            // Extremely subtle restrained parallax on the hero artwork (1-3% translation max)
+            const heroArtworks = document.querySelectorAll('.hero-parallax-target');
+            if (heroArtworks.length > 0) {
+                let isTicking = false;
+                window.addEventListener('scroll', () => {
+                    if (!isTicking) {
+                        window.requestAnimationFrame(() => {
+                            const scrollY = window.scrollY;
+                            if (scrollY < 800) {
+                                const translateY = Math.min(14, scrollY * 0.02);
+                                heroArtworks.forEach(el => {
+                                    el.style.transform = `translateY(${translateY}px)`;
+                                });
+                            }
+                            isTicking = false;
+                        });
+                        isTicking = true;
+                    }
+                }, { passive: true });
             }
         });
     </script>
-
-    <!-- Hero Section -->
-    <section class="py-20 lg:py-32 overflow-hidden bg-bg relative">
-        <!-- Subtle atmospheric background -->
-        <div class="absolute top-0 right-0 w-1/2 h-full bg-surface-soft rounded-l-full blur-3xl opacity-50 -z-10"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <!-- Hero Content -->
-                <div class="fade-in">
-                    <span class="inline-block px-4 py-2 rounded-full bg-surface text-brand text-label border border-border mb-6">STUDENT MENTAL HEALTH SUPPORT</span>
-                    <h1 class="text-display-m sm:text-display-l font-display text-text mb-6">
-                        Your Mental Health<br>
-                        <span class="text-brand">Journey</span> Starts Here
-                    </h1>
-                    <p class="text-body-l text-text-secondary mb-10 max-w-xl">
-                        MindBridge helps college students access confidential mental-health support, screening, AI-guided assistance, and professional counseling in one place.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="student_login.html" class="btn-primary px-8">
-                            Start Your Journey
-                        </a>
-                        <a href="ai_mental_health_chatbot.html" class="btn-secondary px-8">
-                            Try AI Chat
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Hero Visual -->
-                <div class="fade-in">
-                    <div class="card-surface p-12 text-center bg-surface-soft border-0">
-                        <div class="w-24 h-24 mx-auto bg-brand text-white rounded-pill flex items-center justify-center mb-8">
-                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-h3 font-display text-text mb-4">You are not alone</h3>
-                        <p class="text-body-m text-text-secondary mb-8">Many students face academic stress, burnout, and loneliness. Support is here when you need it.</p>
-                        
-                        <div class="flex items-center justify-center space-x-6 text-text-muted">
-                            <span class="flex items-center"><svg class="w-5 h-5 mr-2 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Confidential</span>
-                            <span class="flex items-center"><svg class="w-5 h-5 mr-2 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Privacy-focused</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-24 bg-surface-soft border-t border-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 fade-in">
-                <h2 class="text-h2 font-display text-text mb-4">How it works</h2>
-                <p class="text-body-l text-text-secondary max-w-2xl mx-auto">A simple, calm path to getting the right support.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 fade-in relative">
-                <!-- Connecting line for desktop -->
-                <div class="hidden md:block absolute top-6 left-10 right-10 h-px bg-border-strong z-0"></div>
-                
-                <div class="text-center relative z-10 p-4">
-                    <div class="w-12 h-12 bg-surface text-brand rounded-pill flex items-center justify-center mx-auto mb-4 border border-border font-medium text-lg shadow-light">01</div>
-                    <h4 class="font-display text-text text-h4 mb-2">Create Your Account</h4>
-                    <p class="text-body-s text-text-secondary">Secure, private student registration.</p>
-                </div>
-                
-                <div class="text-center relative z-10 p-4">
-                    <div class="w-12 h-12 bg-surface text-brand rounded-pill flex items-center justify-center mx-auto mb-4 border border-border font-medium text-lg shadow-light">02</div>
-                    <h4 class="font-display text-text text-h4 mb-2">Check In With Yourself</h4>
-                    <p class="text-body-s text-text-secondary">Assess your stress, mood, and sleep.</p>
-                </div>
-                
-                <div class="text-center relative z-10 p-4">
-                    <div class="w-12 h-12 bg-surface text-brand rounded-pill flex items-center justify-center mx-auto mb-4 border border-border font-medium text-lg shadow-light">03</div>
-                    <h4 class="font-display text-text text-h4 mb-2">Choose Support</h4>
-                    <p class="text-body-s text-text-secondary">AI chat, self-guided tools, or human care.</p>
-                </div>
-                
-                <div class="text-center relative z-10 p-4">
-                    <div class="w-12 h-12 bg-surface text-brand rounded-pill flex items-center justify-center mx-auto mb-4 border border-border font-medium text-lg shadow-light">04</div>
-                    <h4 class="font-display text-text text-h4 mb-2">Connect</h4>
-                    <p class="text-body-s text-text-secondary">Book a session or message a professional.</p>
-                </div>
-                
-                <div class="text-center relative z-10 p-4">
-                    <div class="w-12 h-12 bg-surface text-brand rounded-pill flex items-center justify-center mx-auto mb-4 border border-border font-medium text-lg shadow-light">05</div>
-                    <h4 class="font-display text-text text-h4 mb-2">Continue Journey</h4>
-                    <p class="text-body-s text-text-secondary">Follow up and track your wellbeing.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-24 bg-bg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 fade-in">
-                <h2 class="text-h2 font-display text-text mb-4">Complete Student Support</h2>
-                <p class="text-body-l text-text-secondary max-w-2xl mx-auto">Everything you need to navigate college life safely and confidently.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- AI Support -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">AI Support</h3>
-                    <p class="text-body-s text-text-secondary">A conversational first point of support for general mental-health information and emotional guidance.</p>
-                </div>
-
-                <!-- Mental Health Screening -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300 delay-75">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">Mental Health Screening</h3>
-                    <p class="text-body-s text-text-secondary">Structured self-assessments to help you understand your wellbeing and find the right support.</p>
-                </div>
-
-                <!-- Find a Counselor -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300 delay-150">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">Find a Counselor</h3>
-                    <p class="text-body-s text-text-secondary">Discover available mental-health professionals based on your preferences, needs, and availability.</p>
-                </div>
-
-                <!-- Book a Session -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300 delay-200">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">Book a Session</h3>
-                    <p class="text-body-s text-text-secondary">Request or easily schedule counseling sessions online at a time that works for you.</p>
-                </div>
-
-                <!-- Secure Chat -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">Secure Chat</h3>
-                    <p class="text-body-s text-text-secondary">Communicate confidentially with your assigned counselor directly through the platform.</p>
-                </div>
-
-                <!-- Video Sessions -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300 delay-75">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">Video Sessions</h3>
-                    <p class="text-body-s text-text-secondary">Attend scheduled online counseling sessions securely from your dorm or home.</p>
-                </div>
-
-                <!-- Resources -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300 delay-150">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">Resources</h3>
-                    <p class="text-body-s text-text-secondary">Access useful materials tailored for students dealing with academic stress, exam anxiety, and loneliness.</p>
-                </div>
-
-                <!-- Progress & Follow-up -->
-                <div class="card-surface fade-in hover:-translate-y-1 transition-transform duration-300 delay-200">
-                    <div class="w-10 h-10 bg-brand-soft text-brand rounded-md flex items-center justify-center mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                    </div>
-                    <h3 class="text-h4 font-display text-text mb-2">Progress & Follow-up</h3>
-                    <p class="text-body-s text-text-secondary">Keep track of appointments, screening history, and follow-up activities securely.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-24 bg-surface border-t border-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="fade-in">
-                    <h2 class="text-h2 font-display text-text mb-6">About MindBridge</h2>
-                    <p class="text-body-l text-text-secondary mb-6">
-                        MindBridge is a student-focused digital mental-health support platform designed to make mental-health resources and professional support easier to access.
-                    </p>
-                    <p class="text-body-m text-text-secondary mb-8">
-                        The platform brings together AI assistance, mental-health check-ins, professional counseling, appointments, secure communication, and wellbeing resources into one unified experience tailored for college life.
-                    </p>
-                    
-                    <ul class="space-y-4">
-                        <li class="flex items-start text-body-m text-text-secondary">
-                            <svg class="w-5 h-5 text-success mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                            Dedicated strictly to university students and young adults
-                        </li>
-                        <li class="flex items-start text-body-m text-text-secondary">
-                            <svg class="w-5 h-5 text-success mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                            Designed around privacy and secure communication
-                        </li>
-                        <li class="flex items-start text-body-m text-text-secondary">
-                            <svg class="w-5 h-5 text-success mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                            Calm, minimal, and pressure-free environment
-                        </li>
-                    </ul>
-                </div>
-                <div class="fade-in bg-surface-soft p-12 rounded-xl border border-border flex items-center justify-center">
-                    <div class="text-center">
-                        <img src="../images/logo_light.png" alt="MindBridge Logo" class="h-24 mx-auto mb-6 dark:hidden opacity-80">
-                        <img src="../images/logo_dark.png" alt="MindBridge Logo" class="h-24 mx-auto mb-6 hidden dark:block opacity-80">
-                        <p class="text-h4 font-display text-text-secondary italic">"Quiet confidence, safety, and human warmth."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-bg border-t border-border">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
-            <h2 class="text-h2 font-display text-text mb-4">Get in touch</h2>
-            <p class="text-body-l text-text-secondary mb-12">Whether you need technical support or have general inquiries, we're here to help.</p>
-            
-            <form class="card-surface text-left">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-label text-text mb-2 font-medium">Name</label>
-                        <input type="text" class="input-field w-full" placeholder="Jane Doe">
-                    </div>
-                    <div>
-                        <label class="block text-label text-text mb-2 font-medium">Email Address</label>
-                        <input type="email" class="input-field w-full" placeholder="jane@university.edu">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-label text-text mb-2 font-medium">Inquiry Type</label>
-                    <select class="input-field w-full bg-transparent">
-                        <option>General Support</option>
-                        <option>Technical Support</option>
-                        <option>Professional / Counselor Inquiries</option>
-                    </select>
-                </div>
-                <div class="mb-8">
-                    <label class="block text-label text-text mb-2 font-medium">Message</label>
-                    <textarea class="input-field w-full h-32 py-3" placeholder="How can we help?"></textarea>
-                </div>
-                <button type="button" class="btn-primary w-full md:w-auto">Send Message</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-surface-soft py-16 border-t border-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8 mb-12">
-                <div class="md:col-span-1">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="../images/logo_light.png" class="h-8 dark:hidden opacity-80" alt="MindBridge Logo">
-                        <img src="../images/logo_dark.png" class="h-8 hidden dark:block opacity-80" alt="MindBridge Logo">
-                        <h2 class="text-h4 font-display text-text">MindBridge</h2>
-                    </div>
-                    <p class="text-body-s text-text-secondary mb-4">Mental Health Support for Students</p>
-                </div>
-                
-                <div>
-                    <h3 class="text-label text-text font-medium mb-4">Platform</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#features" class="text-body-s text-text-secondary hover:text-brand transition-colors">Features</a></li>
-                        <li><a href="#services" class="text-body-s text-text-secondary hover:text-brand transition-colors">Services</a></li>
-                        <li><a href="#about" class="text-body-s text-text-secondary hover:text-brand transition-colors">About</a></li>
-                        <li><a href="#contact" class="text-body-s text-text-secondary hover:text-brand transition-colors">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-label text-text font-medium mb-4">Support</h3>
-                    <ul class="space-y-3">
-                        <li><a href="ai_mental_health_chatbot.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">AI Support</a></li>
-                        <li><a href="mental_health_assessments.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Resources</a></li>
-                        <li><span class="text-body-s text-error font-medium">Kiran Helpline: Call 1800-599-0019</span></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-label text-text font-medium mb-4">Legal</h3>
-                    <ul class="space-y-3">
-                        <li><a href="privacy_policy.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Privacy Policy</a></li>
-                        <li><a href="terms_of_service.html" class="text-body-s text-text-secondary hover:text-brand transition-colors">Terms of Service</a></li>
-                        <li><a href="#" class="text-body-s text-text-secondary hover:text-brand transition-colors">AI Disclaimer</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between">
-                <p class="text-caption text-text-muted mb-4 md:mb-0">© 2024 MindBridge. MindBridge is not an emergency medical service.</p>
-                <div class="flex space-x-6 text-caption text-text-muted">
-                    <span>Privacy-focused</span>
-                    <span>•</span>
-                    <span>Secure communication</span>
-                    <span>•</span>
-                    <span>Confidential support</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-        document.querySelectorAll('.fade-in').forEach(element => {
-            observer.observe(element);
-        });
-    </script>
-<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
 </body>
 </html>

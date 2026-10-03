@@ -6,8 +6,22 @@ class MindBridgeChatAPI {
     }
 
     // Send message via REST API
-    async sendMessage(message, personality = "supportive") {
+    async sendMessage(message, personality = "supportive", provider = "openrouter") {
         try {
+            if (provider === "huggingface" || provider === "gemini" || provider === "ollama" || provider === "openrouter") {
+                const response = await fetch(`/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, provider: provider })
+                });
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error || `HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            }
+
+            // Existing backend logic
             const response = await fetch(`${this.baseUrl}/chat`, {
                 method: 'POST',
                 headers: {
@@ -104,29 +118,41 @@ class MindBridgeChatAPI {
 
     // Clear chat history
     async clearChatHistory() {
-        if (!this.threadId) return;
-
         try {
-            await fetch(`${this.baseUrl}/chat/history/${this.threadId}`, {
-                method: 'DELETE'
-            });
-            
+            if (this.threadId) {
+                await fetch(`${this.baseUrl}/chat/history/${this.threadId}`, {
+                    method: 'DELETE'
+                }).catch(e => console.warn('Could not clear remote history:', e));
+            }
+        } catch (error) {
+            console.error('Error clearing chat history:', error);
+        } finally {
             // Clear local storage and reset thread
             localStorage.removeItem('mindbridge_thread_id');
             this.threadId = null;
             
-            // Clear chat UI but keep welcome message
+            // Clear chat UI and restore single canonical welcome message
+            const messagesList = document.getElementById('messagesList');
             const chatMessages = document.getElementById('chatMessages');
-            if (chatMessages) {
-                // Keep only the welcome message (first child)
+            if (messagesList) {
+                messagesList.innerHTML = `
+                    <div id="initialWelcome" class="flex items-start gap-3.5 msg-enter w-full justify-start">
+                        <img src="../images/mira_avatar.png" alt="MIRA" class="w-9 h-9 rounded-full object-cover border border-brand/30 flex-shrink-0 shadow-sm" />
+                        <div class="flex flex-col gap-1 max-w-[85%] sm:max-w-[80%]">
+                            <span class="text-caption text-text-secondary ml-1 font-medium">MIRA • Just now</span>
+                            <div class="chat-bubble-ai p-4 rounded-2xl shadow-sm text-body-m text-text leading-relaxed">
+                                Hi! I'm MIRA. I'm here to listen and help you navigate whatever is on your mind. We can talk about academics, stress, relationships, or anything else.<br><br>How are you feeling today?
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (chatMessages) {
                 const welcomeMessage = chatMessages.firstElementChild;
                 chatMessages.innerHTML = '';
                 if (welcomeMessage) {
                     chatMessages.appendChild(welcomeMessage);
                 }
             }
-        } catch (error) {
-            console.error('Error clearing chat history:', error);
         }
     }
 
@@ -135,50 +161,54 @@ class MindBridgeChatAPI {
         return 'thread_' + Math.random().toString(36).substr(2, 9);
     }
 
+    escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     appendMessage(content, role, timestamp) {
+        const messagesList = document.getElementById('messagesList') || document.getElementById('chatMessages');
         const chatMessages = document.getElementById('chatMessages');
-        if (!chatMessages) return;
+        if (!messagesList) return;
 
         const messageDiv = document.createElement('div');
-        const currentTime = new Date(timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const timeObj = timestamp ? new Date(timestamp) : new Date();
+        const currentTime = isNaN(timeObj.getTime()) ? 'Just now' : timeObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         
         if (role === 'user') {
+            messageDiv.className = 'flex items-start gap-3.5 msg-enter w-full justify-end';
             messageDiv.innerHTML = `
-                <div class="flex items-start space-x-3 justify-end">
-                    <div class="flex-1 flex justify-end">
-                        <div class="bg-primary text-white rounded-lg p-4 max-w-md">
-                            <p>${content}</p>
-                        </div>
-                    </div>
-                    <div class="w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
+                <div class="flex flex-col gap-1 items-end max-w-[85%] sm:max-w-[80%]">
+                    <span class="text-caption text-text-secondary mr-1 font-medium">You • ${currentTime}</span>
+                    <div class="chat-bubble-user p-4 rounded-2xl shadow-sm text-body-m leading-relaxed">
+                        <p class="whitespace-pre-wrap">${this.escapeHtml(content)}</p>
                     </div>
                 </div>
             `;
         } else {
+            messageDiv.className = 'flex items-start gap-3.5 msg-enter w-full justify-start';
             messageDiv.innerHTML = `
-                <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="bg-gray-50 rounded-lg p-4 max-w-md">
-                            <p class="text-text-primary">${content}</p>
-                        </div>
-                        <p class="text-xs text-text-secondary mt-1">Today, ${currentTime}</p>
+                <img src="../images/mira_avatar.png" class="w-9 h-9 rounded-full object-cover border border-brand/20 flex-shrink-0 shadow-sm" alt="MIRA">
+                <div class="flex flex-col gap-1 max-w-[85%] sm:max-w-[80%]">
+                    <span class="text-caption text-text-secondary ml-1 font-medium">MIRA • ${currentTime}</span>
+                    <div class="chat-bubble-ai p-4 rounded-2xl shadow-sm text-body-m text-text leading-relaxed">
+                        <p class="whitespace-pre-wrap">${this.escapeHtml(content)}</p>
                     </div>
                 </div>
             `;
         }
         
-        chatMessages.appendChild(messageDiv);
+        messagesList.appendChild(messageDiv);
         
         // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     }
 }
 
@@ -190,12 +220,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendButton = document.getElementById('sendMessage');
     const messageInput = document.getElementById('messageInput');
     const chatMessages = document.getElementById('chatMessages');
+    const messagesList = document.getElementById('messagesList') || chatMessages;
 
     // Load chat history on page load
     chatAPI.getChatHistory().then(messages => {
-        messages.forEach(msg => {
-            chatAPI.appendMessage(msg.content, msg.role, msg.timestamp);
-        });
+        if (messages && messages.length > 0) {
+            // Remove initial placeholder welcome if there is existing history to show
+            const initialWelcome = document.getElementById('initialWelcome');
+            if (initialWelcome) initialWelcome.remove();
+
+            messages.forEach(msg => {
+                chatAPI.appendMessage(msg.content, msg.role, msg.timestamp);
+            });
+        }
+        // If empty, keep the single initialWelcome message already present in HTML!
     });
 
     // Connect WebSocket for real-time updates
@@ -209,31 +247,30 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add user message to UI immediately
         chatAPI.appendMessage(message, 'user', new Date().toISOString());
         messageInput.value = '';
+        messageInput.style.height = 'auto';
 
         // Show typing indicator
         const typingDiv = document.createElement('div');
         typingDiv.id = 'typing-indicator';
-        typingDiv.className = 'flex justify-start mb-4';
+        typingDiv.className = 'flex items-start gap-3.5 msg-enter w-full justify-start';
         typingDiv.innerHTML = `
-            <div class="bg-surface-soft text-text-primary px-4 py-3 rounded-2xl flex items-center space-x-3 shadow-sm border border-border">
-                <div class="newtons-cradle" style="--uib-size: 28px; --uib-color: var(--color-brand, #6E5B8F);">
-                    <div class="newtons-cradle__dot"></div>
-                    <div class="newtons-cradle__dot"></div>
-                    <div class="newtons-cradle__dot"></div>
-                    <div class="newtons-cradle__dot"></div>
-                </div>
-                <p class="text-xs text-text-secondary font-medium">MindBridge AI is thinking...</p>
+            <img src="../images/mira_avatar.png" class="w-9 h-9 rounded-full object-cover border border-brand/20 flex-shrink-0 opacity-80" alt="MIRA">
+            <div class="bg-surface border border-border text-text px-4 py-3 rounded-2xl flex items-center space-x-2 shadow-sm">
+                <span class="inline-block w-2 h-2 rounded-full bg-brand animate-ping"></span>
+                <p class="text-caption text-text-secondary font-medium">MIRA is reflecting...</p>
             </div>
         `;
-        chatMessages.appendChild(typingDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        messagesList.appendChild(typingDiv);
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
 
         try {
             const personalitySelect = document.getElementById('chatPersonality');
             const personality = personalitySelect ? personalitySelect.value : "supportive";
             
             // Send message to API
-            const response = await chatAPI.sendMessage(message, personality);
+            const response = await chatAPI.sendMessage(message, personality, 'openrouter');
             
             // Handle crisis alert
             if (response.crisis_alert) {

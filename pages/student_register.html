@@ -4,172 +4,107 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account - MindBridge</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <style>
-        /* Dark Mode CSS Variables */
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-surface: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-light: #e2e8f0;
-            --primary-50: #eff6ff;
-            --primary-500: #3b82f6;
-            --secondary-50: #f8fafc;
-            --secondary-500: #6366f1;
-            --secondary-600: #4f46e5;
-            --accent: #10b981;
-            --error: #ef4444;
-        }
-        
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-surface: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border-light: #475569;
-            --primary-50: #1e293b;
-            --primary-500: #60a5fa;
-            --secondary-50: #1e293b;
-            --secondary-500: #818cf8;
-            --secondary-600: #6366f1;
-            --accent: #34d399;
-            --error: #f87171;
-        }
-        
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .card-surface {
-            background-color: var(--bg-surface);
-            border-color: var(--border-light);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex flex-col">
-    <!-- Header -->
-    <header class="bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="landing.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-shrink-0">
-                    <img src="../images/logo_light.png" id="logo-light" class="h-10 dark:hidden object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <img src="../images/logo_dark.png" id="logo-dark" class="h-10 hidden dark:block object-contain flex-shrink-0" alt="MindBridge Logo">
-                    <div>
-                        <h1 class="text-h4 font-display text-text whitespace-nowrap">MindBridge</h1>
-                    </div>
-                </a>
+<body class="bg-bg text-text selection:bg-brand selection:text-white min-h-screen flex flex-col md:flex-row-reverse">
 
-                <!-- Right Section -->
-                <div class="flex items-center space-x-4 flex-shrink-0">
-                    <!-- Theme Switch -->
-                    <label class="switch" id="darkModeToggle" aria-label="Toggle light and dark theme" title="Toggle Theme">
-                        <input type="checkbox" id="darkModeCheckbox">
-                        <span class="slider">
-                            <span class="star star_1"></span>
-                            <span class="star star_2"></span>
-                            <span class="star star_3"></span>
-                            <svg class="cloud" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
-                            </svg>
-                        </span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Right Side: Registration Form -->
+    <div class="w-full md:w-1/2 flex flex-col justify-between p-8 md:p-16 lg:p-24 relative z-10 bg-bg">
+        
+        <!-- Logo -->
+        <a href="landing.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity w-max mb-12 md:mb-0 ml-auto md:ml-0 md:mr-auto">
+            <img src="../images/logo_light.png" id="logo-light" class="w-8 h-8 dark:hidden" alt="MindBridge Logo">
+            <img src="../images/logo_dark.png" id="logo-dark" class="w-8 h-8 hidden dark:block" alt="MindBridge Logo">
+            <span class="text-h4 font-display font-medium">MindBridge</span>
+        </a>
 
-    <!-- Main Content -->
-    <main class="flex-1 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full">
-            <div class="card-surface p-8 lg:p-10 rounded-xl shadow-lg border border-border-light">
-                <div id="registerStep1">
-                    <h3 class="text-3xl font-heading font-semibold text-text-primary mb-2 text-center">Create Account</h3>
-                    <p class="text-text-secondary mb-6 text-center text-sm">Join MindBridge to start your mental wellness journey.</p>
-                    
-                    <form id="registerForm" onsubmit="handleRegisterNext(event)">
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-text-primary mb-1">First Name</label>
-                                <input type="text" id="regFirstName" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-text-primary mb-1">Last Name</label>
-                                <input type="text" id="regLastName" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-text-primary mb-1">Email</label>
-                                <input type="email" id="regEmail" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-text-primary mb-1">Password</label>
-                                <input type="password" id="regPassword" required class="w-full border border-border-light rounded p-2 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full bg-primary-500 text-white font-medium rounded-lg p-3 mt-8 hover:bg-primary-600 transition shadow-md hover:shadow-lg">Next</button>
-                    </form>
-                    
-                    <div class="mt-6 text-center">
-                        <p class="text-sm text-text-secondary">
-                            Already have an account? 
-                            <a href="student_login.html" class="text-primary-500 hover:text-primary-700 font-medium transition-colors">
-                                Sign In
-                            </a>
-                        </p>
-                    </div>
-                </div>
+        <!-- Form Container -->
+        <div class="w-full max-w-sm mx-auto">
+            
+            <div id="registerStep1">
+                <h1 class="text-h2 font-display mb-2">Create Account</h1>
+                <p class="text-body-m text-text-secondary mb-10">Join MindBridge to start your mental wellness journey.</p>
                 
-                <div id="registerStep2" class="hidden">
-                    <h3 class="text-2xl font-heading font-semibold text-text-primary mb-2 text-center">Brief Assessment</h3>
-                    <p class="text-text-secondary mb-6 text-center text-sm">Help us understand how to support you better. You can skip this.</p>
-                    
-                    <div class="space-y-5 mb-8">
+                <form id="registerForm" class="space-y-6" onsubmit="handleRegisterNext(event)">
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-text-primary mb-2">How are you feeling today?</label>
-                            <select id="regFeeling" class="w-full border border-border-light rounded-lg p-3 bg-transparent text-text-primary focus:ring-primary focus:border-primary">
-                                <option value="good">Good / Stable</option>
-                                <option value="anxious">Anxious / Stressed</option>
-                                <option value="down">Feeling Down</option>
-                                <option value="overwhelmed">Overwhelmed</option>
-                            </select>
+                            <label class="block text-caption font-bold uppercase tracking-wider mb-2">First Name</label>
+                            <input type="text" id="regFirstName" required class="w-full bg-surface border border-border rounded-xl p-4 text-body-m focus:outline-none focus:border-brand transition-colors">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-text-primary mb-2">What brings you here?</label>
-                            <textarea id="regReason" rows="3" class="w-full border border-border-light rounded-lg p-3 bg-transparent text-text-primary focus:ring-primary focus:border-primary placeholder-gray-400" placeholder="Optional brief note..."></textarea>
+                            <label class="block text-caption font-bold uppercase tracking-wider mb-2">Last Name</label>
+                            <input type="text" id="regLastName" required class="w-full bg-surface border border-border rounded-xl p-4 text-body-m focus:outline-none focus:border-brand transition-colors">
                         </div>
                     </div>
-                    <div class="flex space-x-4">
-                        <button onclick="finishRegistration(true)" class="flex-1 border border-border-light text-text-secondary font-medium rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition">Skip</button>
-                        <button onclick="finishRegistration(false)" class="flex-1 bg-primary-500 text-white font-medium rounded-lg p-3 hover:bg-primary-600 transition shadow-md">Complete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="bg-surface border-t border-border-light py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <div class="text-sm text-text-secondary">
-                    &copy; 2025 MindBridge. All Rights Reserved.
-                </div>
-                <div class="flex items-center space-x-6 text-sm">
-                    <a href="privacy_policy.html" class="text-text-secondary hover:text-brand transition-colors">Privacy Policy</a>
-                    <a href="terms_of_service.html" class="text-text-secondary hover:text-brand transition-colors">Terms of Service</a>
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Email Address</label>
+                        <input type="email" id="regEmail" required class="w-full bg-surface border border-border rounded-xl p-4 text-body-m focus:outline-none focus:border-brand transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Password</label>
+                        <input type="password" id="regPassword" required class="w-full bg-surface border border-border rounded-xl p-4 text-body-m focus:outline-none focus:border-brand transition-colors">
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full">Continue</button>
+                </form>
+
+                <div class="mt-8 text-center text-body-s text-text-secondary">
+                    Already have an account? <a href="student_login.html" class="font-bold text-text hover:text-brand transition-colors">Sign In</a>
                 </div>
             </div>
+            
+            <div id="registerStep2" class="hidden opacity-0 transition-opacity duration-500">
+                <h1 class="text-h2 font-display mb-2">Brief Check-In</h1>
+                <p class="text-body-m text-text-secondary mb-10">Help us understand how to support you better. You can skip this.</p>
+                
+                <div class="space-y-6 mb-8">
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">How are you feeling today?</label>
+                        <select id="regFeeling" class="w-full bg-surface border border-border rounded-xl p-4 text-body-m focus:outline-none focus:border-brand transition-colors appearance-none">
+                            <option value="good">Good / Stable</option>
+                            <option value="anxious">Anxious / Stressed</option>
+                            <option value="down">Feeling Down</option>
+                            <option value="overwhelmed">Overwhelmed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">What brings you here?</label>
+                        <textarea id="regReason" rows="3" class="w-full bg-surface border border-border rounded-xl p-4 text-body-m focus:outline-none focus:border-brand transition-colors resize-none placeholder-text-secondary/50" placeholder="Optional brief note..."></textarea>
+                    </div>
+                </div>
+                <div class="flex flex-col-reverse sm:flex-row gap-4">
+                    <button onclick="finishRegistration(true)" class="btn-secondary w-full sm:w-1/2">Skip</button>
+                    <button onclick="finishRegistration(false)" class="btn-primary w-full sm:w-1/2">Complete</button>
+                </div>
+            </div>
+
         </div>
-    </footer>
+
+        <div class="mt-12 md:mt-0 text-caption text-text-secondary flex gap-4 md:justify-end">
+            <a href="privacy_policy.html" class="hover:text-text transition-colors">Privacy</a>
+            <a href="terms_of_service.html" class="hover:text-text transition-colors">Terms</a>
+        </div>
+    </div>
+
+    <!-- Left Side: Image / Quote -->
+    <div class="w-full md:w-1/2 relative min-h-[400px] md:min-h-screen bg-secondary overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=2940&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-multiply" alt="Calm environment">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#201F1B]/90 to-transparent flex items-end p-8 md:p-16">
+            <div class="text-[#F3EEE5] max-w-lg">
+                <h2 class="text-h3 font-display mb-4">"The journey of a thousand miles begins with one step."</h2>
+                <p class="text-body-m opacity-80">— Lao Tzu</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         let tempUser = {};
@@ -185,7 +120,9 @@
             };
             
             document.getElementById('registerStep1').classList.add('hidden');
-            document.getElementById('registerStep2').classList.remove('hidden');
+            const step2 = document.getElementById('registerStep2');
+            step2.classList.remove('hidden');
+            setTimeout(() => step2.classList.remove('opacity-0'), 10);
         }
 
         function finishRegistration(skipped) {
@@ -209,10 +146,7 @@
                 profilePic: null 
             }));
             
-            // set a flag so dashboard shows the quote
             sessionStorage.setItem('showWelcomeQuote', 'true');
-            
-            alert('Account created successfully! Redirecting to dashboard...');
             
             setTimeout(() => {
                 if(tempUser.role === 'admin') {
@@ -220,13 +154,11 @@
                 } else if(tempUser.role === 'counselor') {
                     window.location.href = 'counselor_dashboard.html';
                 } else {
-                    window.location.href = 'student_dashboard.html';
+                    window.location.href = 'onboarding.html';
                 }
-            }, 1000);
+            }, 500);
         }
     </script>
-    <script src="../js/dark-mode.js"></script>
-    <script src="../js/language.js"></script>
-<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+    <script src="../js/accessibility.js"></script>
 </body>
 </html>

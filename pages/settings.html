@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings & Preferences - MindBridge</title>
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+    <meta name="description" content="Manage your MindBridge account profile, theme appearance, accessibility controls, privacy consent, and data export.">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/icons.js"></script>
+    <script src="../js/skeleton-loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-bg text-text selection:bg-brand selection:text-white min-h-screen flex flex-col">
+
+    <!-- Navigation Header -->
+    <header class="navbar bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="navbar__container">
+            <a href="landing.html" class="navbar__brand hover:opacity-80 transition-opacity">
+                <img src="../images/logo_light.png" id="logo-light" class="nav-logo dark:hidden" alt="MindBridge Logo">
+                <img src="../images/logo_dark.png" id="logo-dark" class="nav-logo hidden dark:block" alt="MindBridge Logo">
+                <span class="text-h4 font-display text-text whitespace-nowrap">MindBridge</span>
+            </a>
+
+            <nav class="navbar__main-nav hidden xl:flex">
+                <ul class="nav-list" id="main-nav-links">
+                    <!-- Populated dynamically by shared-layout.js -->
+                </ul>
+            </nav>
+
+            <div class="navbar__user-actions">
+                <div class="toggle-switch">
+                    <input type="checkbox" class="checkbox" id="darkModeCheckbox">
+                    <label class="switch-label" for="darkModeCheckbox" title="Toggle light and dark theme">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <button id="mobileMenuBtn" class="xl:hidden p-2 rounded-lg text-text-secondary hover:bg-surface-soft transition-colors flex-shrink-0" title="Open Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                
+                <div id="auth-actions" class="hidden items-center gap-4">
+                    <a href="student_login.html" class="btn-secondary nav-btn whitespace-nowrap">Sign In</a>
+                    <a href="student_login.html" class="btn-primary nav-btn whitespace-nowrap">Get Started</a>
+                </div>
+
+                <div id="user-profile-menu" class="relative hidden items-center ml-2">
+                    <button id="profile-btn" class="flex-shrink-0 flex items-center justify-center cursor-pointer hover:bg-surface-soft rounded-full p-1 transition-colors border-2 border-transparent hover:border-brand">
+                        <div id="profile-avatar" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-medium overflow-hidden text-lg">
+                            <span id="profile-initials">U</span>
+                        </div>
+                    </button>
+                    <div id="profile-dropdown" class="absolute right-0 top-14 w-64 bg-surface border border-border rounded-xl shadow-elevated hidden flex-col z-50 overflow-hidden">
+                        <!-- Populated by shared-layout.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden border-b border-border bg-surface shadow-light absolute w-full left-0 top-full z-50 rounded-b-2xl transition-all duration-300 ease-in-out">
+            <div class="flex flex-col py-6 px-6 sm:px-8 space-y-4" id="mobile-nav-links">
+                <!-- Injected by shared-layout.js -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 w-full mx-auto max-w-[var(--content-width)] px-[var(--content-padding)] py-10 lg:py-14 space-y-10">
+        
+        <!-- Header -->
+        <header class="space-y-2 border-b border-border pb-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 border border-brand/20 rounded-full text-caption text-brand font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Personalization & Privacy Controls
+            </div>
+            <h1 class="text-display-m font-display text-text">Account Settings</h1>
+            <p class="text-body-m text-text-secondary leading-relaxed">
+                Manage your student profile, visual preferences, accessibility controls, and data privacy rights.
+            </p>
+        </header>
+
+        <!-- Notification Toast -->
+        <div id="saveToast" class="fixed bottom-6 right-6 bg-surface border border-success/30 shadow-2xl p-4 rounded-2xl hidden items-center gap-3 z-50">
+            <div class="w-8 h-8 rounded-full bg-success/20 text-success flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+                <p class="text-body-s font-medium text-text">Settings Saved</p>
+                <p class="text-caption text-text-secondary">Your preferences have been updated successfully.</p>
+            </div>
+        </div>
+
+        <div class="space-y-12">
+
+            <!-- 1. ACCOUNT & PROFILE -->
+            <section class="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+                <div class="flex items-center gap-3 pb-4 border-b border-border">
+                    <span class="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-sm">1</span>
+                    <div>
+                        <h2 class="text-h4 font-display text-text">Account & Profile</h2>
+                        <p class="text-caption text-text-secondary">Manage your student display identity</p>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">First Name</label>
+                        <input type="text" id="settingFirstName" class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand" />
+                    </div>
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Last Name</label>
+                        <input type="text" id="settingLastName" class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand" />
+                    </div>
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Email Address</label>
+                        <input type="email" id="settingEmail" disabled class="w-full bg-surface-soft border border-border rounded-xl p-3 text-body-s text-text-secondary cursor-not-allowed" />
+                        <span class="text-[11px] text-text-secondary mt-1 block">Institutional email cannot be edited directly.</span>
+                    </div>
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Department / Major</label>
+                        <input type="text" id="settingDepartment" placeholder="e.g. Computer Science, Liberal Arts" class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. APPEARANCE & THEME -->
+            <section class="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+                <div class="flex items-center gap-3 pb-4 border-b border-border">
+                    <span class="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-sm">2</span>
+                    <div>
+                        <h2 class="text-h4 font-display text-text">Appearance & Theme</h2>
+                        <p class="text-caption text-text-secondary">Configure color palettes and interface luminosity</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="block text-caption font-bold uppercase tracking-wider">Theme Mode</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <button type="button" onclick="setThemeMode('light')" id="themeBtnLight" class="p-5 rounded-2xl border border-border bg-surface-soft flex flex-col items-center gap-2.5 hover:border-brand transition-all btn-tactile">
+                            <div class="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                            </div>
+                            <span class="text-body-s font-medium text-text">Light Theme</span>
+                        </button>
+                        <button type="button" onclick="setThemeMode('dark')" id="themeBtnDark" class="p-5 rounded-2xl border border-border bg-surface-soft flex flex-col items-center gap-2.5 hover:border-brand transition-all btn-tactile">
+                            <div class="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                            </div>
+                            <span class="text-body-s font-medium text-text">Dark Theme</span>
+                        </button>
+                        <button type="button" onclick="setThemeMode('system')" id="themeBtnSystem" class="p-5 rounded-2xl border border-border bg-surface-soft flex flex-col items-center gap-2.5 hover:border-brand transition-all btn-tactile">
+                            <div class="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-brand">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21h8m-4-4v4"/></svg>
+                            </div>
+                            <span class="text-body-s font-medium text-text">System Match</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. ACCESSIBILITY CONTROLS (END-TO-END) -->
+            <section class="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm" id="accessibility">
+                <div class="flex items-center gap-3 pb-4 border-b border-border">
+                    <span class="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-sm">3</span>
+                    <div>
+                        <h2 class="text-h4 font-display text-text">Accessibility & Reading Comfort</h2>
+                        <p class="text-caption text-text-secondary">High contrast, Text-to-Speech audio, and font scaling</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- High Contrast Mode -->
+                    <div class="flex items-center justify-between p-4 bg-surface-soft/60 rounded-2xl border border-border">
+                        <div class="space-y-1">
+                            <h4 class="text-body-m font-bold text-text">High-Contrast Mode (WCAG AAA)</h4>
+                            <p class="text-caption text-text-secondary max-w-md">Maximizes foreground/background contrast with distinct borders and pure monochrome tones for low vision.</p>
+                        </div>
+                        <input type="checkbox" id="settingHighContrastCheck" onchange="toggleHighContrastSetting(this.checked)" class="w-5 h-5 rounded text-brand focus:ring-brand border-border cursor-pointer" />
+                    </div>
+
+                    <!-- Text-to-Speech Speed -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-surface-soft/60 rounded-2xl border border-border">
+                        <div class="space-y-1">
+                            <h4 class="text-body-m font-bold text-text">Text-to-Speech Reading Pace</h4>
+                            <p class="text-caption text-text-secondary">Controls audio narration speed for quotes, articles, and guides.</p>
+                        </div>
+                        <select id="settingTTSRate" onchange="changeTTSRate(this.value)" class="bg-surface border border-border rounded-xl px-3 py-2 text-body-s text-text font-medium focus:outline-none focus:border-brand">
+                            <option value="0.8">0.8x (Slower & Gentle)</option>
+                            <option value="1.0" selected>1.0x (Standard)</option>
+                            <option value="1.2">1.2x (Faster)</option>
+                            <option value="1.5">1.5x (Speed Reading)</option>
+                        </select>
+                    </div>
+
+                    <!-- Reading Font Size Scale -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-surface-soft/60 rounded-2xl border border-border">
+                        <div class="space-y-1">
+                            <h4 class="text-body-m font-bold text-text">Interface Font Scaling</h4>
+                            <p class="text-caption text-text-secondary">Enlarge default body typography across the application.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="changeFontScale('normal')" class="scale-btn px-3 py-1.5 rounded-xl border border-brand bg-brand/10 text-brand text-caption font-bold" data-scale="normal">Standard (16px)</button>
+                            <button type="button" onclick="changeFontScale('large')" class="scale-btn px-3 py-1.5 rounded-xl border border-border bg-surface text-caption font-medium" data-scale="large">Large (18px)</button>
+                            <button type="button" onclick="changeFontScale('xlarge')" class="scale-btn px-3 py-1.5 rounded-xl border border-border bg-surface text-caption font-medium" data-scale="xlarge">Extra Large (20px)</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. PRIVACY, CONSENT & DATA ARCHIVE -->
+            <section class="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm" id="privacy">
+                <div class="flex items-center gap-3 pb-4 border-b border-border">
+                    <span class="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-sm">4</span>
+                    <div>
+                        <h2 class="text-h4 font-display text-text">Privacy & Personal Data Rights</h2>
+                        <p class="text-caption text-text-secondary">Review consent grants, download all stored data, or wipe your history</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="consentEssential" checked disabled class="w-4 h-4 rounded text-brand border-border" />
+                            <span class="text-body-s font-medium text-text">Essential Service Processing <span class="text-caption text-text-secondary">(Required for account authentication & session security)</span></span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="consentPersonalization" checked class="w-4 h-4 rounded text-brand focus:ring-brand border-border" />
+                            <span class="text-body-s font-medium text-text">Personalized Recommendations <span class="text-caption text-text-secondary">(Curates resources and check-in prompts based on mood)</span></span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="consentReminders" class="w-4 h-4 rounded text-brand focus:ring-brand border-border" />
+                            <span class="text-body-s font-medium text-text">Gentle Wellness Reminders <span class="text-caption text-text-secondary">(Optional browser prompts for daily check-in)</span></span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="consentAnalytics" class="w-4 h-4 rounded text-brand focus:ring-brand border-border" />
+                            <span class="text-body-s font-medium text-text">Anonymous Campus Trend Statistics <span class="text-caption text-text-secondary">(Helps counseling center aggregate de-identified wellness trends)</span></span>
+                        </label>
+                    </div>
+
+                    <div class="p-3.5 bg-surface-soft/40 rounded-xl border border-border text-[11px] text-text-secondary flex flex-wrap justify-between items-center gap-2">
+                        <span><strong>Policy Version:</strong> 2026.1-STUDENT-WELLNESS</span>
+                        <span id="consentRecordedSpan"><strong>Consent Timestamp:</strong> Active</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-border flex flex-wrap gap-4 items-center justify-between">
+                        <div>
+                            <button type="button" onclick="exportAllUserData()" class="btn-secondary text-body-s flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Export Personal Data (JSON Archive)
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" onclick="wipeLocalApplicationData()" class="btn-secondary text-error hover:bg-error/10 border-error/40 text-body-s flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                Clear All Local Activity History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. WELLNESS PROFILE & PERSONALIZATION PREFERENCES (PART 10.5) -->
+            <section class="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm" id="wellness-profile">
+                <div class="flex items-center justify-between pb-4 border-b border-border flex-wrap gap-2">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-sm">5</span>
+                        <div>
+                            <h2 class="text-h4 font-display text-text">Wellness Profile & Personalization</h2>
+                            <p class="text-caption text-text-secondary">Self-reported focus areas, standing, and check-in cadence</p>
+                        </div>
+                    </div>
+                    <a href="onboarding.html" class="btn-secondary text-caption py-1.5 px-3 flex items-center gap-1.5" title="Re-run the guided step-by-step onboarding">
+                        <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        Rerun Onboarding Flow
+                    </a>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Academic Standing</label>
+                        <select id="settingAcademicYear" class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand">
+                            <option value="">Select standing (optional)</option>
+                            <option value="First Year / Freshman">First Year / Freshman</option>
+                            <option value="Second Year / Sophomore">Second Year / Sophomore</option>
+                            <option value="Third Year / Junior">Third Year / Junior</option>
+                            <option value="Senior / Final Year">Senior / Final Year</option>
+                            <option value="Graduate / Post-Graduate">Graduate / Post-Graduate</option>
+                            <option value="Doctoral / Researcher">Doctoral / Researcher</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-caption font-bold uppercase tracking-wider mb-2">Preferred Language</label>
+                        <select id="settingLanguage" class="w-full bg-surface border border-border rounded-xl p-3 text-body-s text-text focus:outline-none focus:border-brand">
+                            <option value="English">English</option>
+                            <option value="Hindi">हिन्दी (Hindi)</option>
+                            <option value="Spanish">Español (Spanish)</option>
+                            <option value="French">Français (French)</option>
+                            <option value="Mandarin">中文 (Mandarin)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Focus Areas -->
+                <div class="space-y-3">
+                    <label class="block text-caption font-bold uppercase tracking-wider">Current Focus Areas</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="settingsFocusAreasGrid">
+                        <button type="button" onclick="toggleSettingFocus(this, 'Stress Management')" class="setting-focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex items-center gap-2.5 btn-tactile">
+                            <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                            <span class="text-caption font-medium text-text">Stress Relief</span>
+                        </button>
+                        <button type="button" onclick="toggleSettingFocus(this, 'Sleep Hygiene')" class="setting-focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex items-center gap-2.5 btn-tactile">
+                            <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                            <span class="text-caption font-medium text-text">Sleep & Rest</span>
+                        </button>
+                        <button type="button" onclick="toggleSettingFocus(this, 'Academic Pressure')" class="setting-focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex items-center gap-2.5 btn-tactile">
+                            <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            <span class="text-caption font-medium text-text">Exam & Study</span>
+                        </button>
+                        <button type="button" onclick="toggleSettingFocus(this, 'Emotional Regulation')" class="setting-focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex items-center gap-2.5 btn-tactile">
+                            <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3m-15 6c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3"/></svg>
+                            <span class="text-caption font-medium text-text">Emotions</span>
+                        </button>
+                        <button type="button" onclick="toggleSettingFocus(this, 'Social Well-being')" class="setting-focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex items-center gap-2.5 btn-tactile">
+                            <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                            <span class="text-caption font-medium text-text">Connection</span>
+                        </button>
+                        <button type="button" onclick="toggleSettingFocus(this, 'Mindfulness & Audio')" class="setting-focus-pill p-3.5 rounded-2xl border border-border bg-surface-soft text-left hover:border-brand transition-all flex items-center gap-2.5 btn-tactile">
+                            <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 18v-6a9 9 0 0118 0v6M3 18a3 3 0 003 3h1a1 1 0 001-1v-4a1 1 0 00-1-1H4v3zm17 0a3 3 0 01-3 3h-1a1 1 0 01-1-1v-4a1 1 0 011-1h3v3z"/></svg>
+                            <span class="text-caption font-medium text-text">Audio Calm</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cadence -->
+                <div class="space-y-2">
+                    <label class="block text-caption font-bold uppercase tracking-wider">Reflection Cadence</label>
+                    <div class="flex flex-wrap gap-4">
+                        <label class="inline-flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="settingCadenceRadio" value="daily" class="text-brand">
+                            <span class="text-body-s text-text">Daily Check-ins</span>
+                        </label>
+                        <label class="inline-flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="settingCadenceRadio" value="weekly" class="text-brand">
+                            <span class="text-body-s text-text">Weekly Reflection</span>
+                        </label>
+                        <label class="inline-flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="settingCadenceRadio" value="as_needed" class="text-brand">
+                            <span class="text-body-s text-text">As Needed Only</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Save Changes Bar -->
+            <div class="flex justify-end gap-4">
+                <a href="student_dashboard.html" class="btn-secondary text-body-s">Cancel</a>
+                <button type="button" onclick="saveAllSettings()" class="btn-primary text-body-s px-8">Save All Preferences</button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Dependencies -->
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/shared-layout.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            
+            // Populate account fields
+            if (currentUser.firstName) document.getElementById('settingFirstName').value = currentUser.firstName;
+            if (currentUser.lastName) document.getElementById('settingLastName').value = currentUser.lastName;
+            if (currentUser.email) document.getElementById('settingEmail').value = currentUser.email;
+            if (currentUser.department) document.getElementById('settingDepartment').value = currentUser.department;
+
+            // Populate high-contrast check
+            const contrast = localStorage.getItem('contrast');
+            document.getElementById('settingHighContrastCheck').checked = (contrast === 'high');
+
+            // Populate TTS rate
+            const rate = localStorage.getItem('ttsRate') || '1.0';
+            document.getElementById('settingTTSRate').value = rate;
+
+            // Populate Font Scale
+            const fontScale = localStorage.getItem('fontScale') || 'normal';
+            updateScaleButtonStyles(fontScale);
+
+            // Populate Consent Checkboxes
+            const consent = currentUser.consent || {};
+            if (consent.personalization !== undefined) {
+                document.getElementById('consentPersonalization').checked = consent.personalization;
+            }
+            if (consent.reminders !== undefined) {
+                document.getElementById('consentReminders').checked = consent.reminders;
+            }
+            if (consent.campusAnalytics !== undefined) {
+                document.getElementById('consentAnalytics').checked = consent.campusAnalytics;
+            }
+            if (consent.consentTimestamp) {
+                const dateStr = new Date(consent.consentTimestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+                document.getElementById('consentRecordedSpan').innerHTML = `<strong>Consent Timestamp:</strong> Recorded ${dateStr}`;
+            }
+
+            // Populate Wellness Profile
+            const wp = currentUser.wellnessProfile || {};
+            if (wp.academicYear) {
+                document.getElementById('settingAcademicYear').value = wp.academicYear;
+            }
+            if (wp.language) {
+                document.getElementById('settingLanguage').value = wp.language;
+            }
+            if (wp.cadence) {
+                const radio = document.querySelector(`input[name="settingCadenceRadio"][value="${wp.cadence}"]`);
+                if (radio) radio.checked = true;
+            }
+            if (wp.focusAreas && Array.isArray(wp.focusAreas)) {
+                userSettingFocusAreas = wp.focusAreas;
+                document.querySelectorAll('.setting-focus-pill').forEach(btn => {
+                    const text = btn.innerText;
+                    if (userSettingFocusAreas.some(fa => text.includes(fa.slice(0, 5)))) {
+                        btn.classList.add('border-brand', 'bg-brand/10', 'font-bold');
+                    }
+                });
+            }
+        });
+
+        let userSettingFocusAreas = [];
+        window.toggleSettingFocus = function(btn, area) {
+            const idx = userSettingFocusAreas.indexOf(area);
+            if (idx > -1) {
+                userSettingFocusAreas.splice(idx, 1);
+                btn.classList.remove('border-brand', 'bg-brand/10', 'font-bold');
+            } else {
+                userSettingFocusAreas.push(area);
+                btn.classList.add('border-brand', 'bg-brand/10', 'font-bold');
+            }
+        };
+
+        // Theme Mode Control
+        window.setThemeMode = function(mode) {
+            if (mode === 'system') {
+                localStorage.removeItem('theme');
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+                if (prefersDark) document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', mode);
+                localStorage.setItem('theme', mode);
+                if (mode === 'dark') document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+            }
+            showToast();
+        };
+
+        // High Contrast Control
+        window.toggleHighContrastSetting = function(checked) {
+            if (window.applyContrast) {
+                window.applyContrast(checked ? 'high' : 'normal');
+            }
+            showToast();
+        };
+
+        // TTS Rate Control
+        window.changeTTSRate = function(val) {
+            localStorage.setItem('ttsRate', val);
+            showToast();
+        };
+
+        // Font Scale Control
+        window.changeFontScale = function(scale) {
+            if (window.MindBridgeSpeechInstance) {
+                window.MindBridgeSpeechInstance.applyFontScale(scale);
+            }
+            updateScaleButtonStyles(scale);
+            showToast();
+        };
+
+        function updateScaleButtonStyles(scale) {
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+                if (btn.getAttribute('data-scale') === scale) {
+                    btn.classList.add('border-brand', 'bg-brand/10', 'text-brand', 'font-bold');
+                    btn.classList.remove('border-border', 'bg-surface');
+                } else {
+                    btn.classList.remove('border-brand', 'bg-brand/10', 'text-brand', 'font-bold');
+                    btn.classList.add('border-border', 'bg-surface');
+                }
+            });
+        }
+
+        // Export All Personal Data
+        window.exportAllUserData = function() {
+            const exportArchive = {
+                exportDate: new Date().toISOString(),
+                userProfile: JSON.parse(localStorage.getItem('currentUser') || '{}'),
+                dailyMoodCheckins: JSON.parse(localStorage.getItem('mb_daily_checkin') || '[]'),
+                assessmentHistory: JSON.parse(localStorage.getItem('mb_assessment_history') || '[]'),
+                bookedAppointments: JSON.parse(localStorage.getItem('mb_appointments') || '[]'),
+                journalEntries: JSON.parse(localStorage.getItem('mb_journal_entries') || '[]'),
+                savedResources: JSON.parse(localStorage.getItem('mb_saved_resources') || '[]'),
+                wellnessGroups: JSON.parse(localStorage.getItem('mb_user_groups') || '[]')
+            };
+
+            const blob = new Blob([JSON.stringify(exportArchive, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mindbridge_personal_data_export_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        // Wipe Data
+        window.wipeLocalApplicationData = function() {
+            if (confirm('Are you sure you want to clear your local mood logs, journal entries, and assessment history? This cannot be undone.')) {
+                localStorage.removeItem('mb_daily_checkin');
+                localStorage.removeItem('mb_journal_entries');
+                localStorage.removeItem('mb_assessment_history');
+                localStorage.removeItem('mb_saved_resources');
+                localStorage.removeItem('mb_user_groups');
+                alert('Local activity data has been wiped.');
+                window.location.reload();
+            }
+        };
+
+        // Save All Settings
+        window.saveAllSettings = function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            currentUser.firstName = document.getElementById('settingFirstName').value.trim();
+            currentUser.lastName = document.getElementById('settingLastName').value.trim();
+            currentUser.department = document.getElementById('settingDepartment').value.trim();
+            
+            const cadenceEl = document.querySelector('input[name="settingCadenceRadio"]:checked');
+            currentUser.wellnessProfile = {
+                academicYear: document.getElementById('settingAcademicYear').value,
+                language: document.getElementById('settingLanguage').value,
+                focusAreas: userSettingFocusAreas,
+                cadence: cadenceEl ? cadenceEl.value : 'daily'
+            };
+
+            currentUser.consent = {
+                essential: true,
+                personalization: document.getElementById('consentPersonalization').checked,
+                reminders: document.getElementById('consentReminders').checked,
+                campusAnalytics: document.getElementById('consentAnalytics').checked,
+                consentTimestamp: (currentUser.consent && currentUser.consent.consentTimestamp) || new Date().toISOString(),
+                policyVersion: '2026.1-STUDENT-WELLNESS'
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Sync with backend API
+            fetch('/api/user/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: currentUser.email || 'guest@campus.edu',
+                    firstName: currentUser.firstName,
+                    lastName: currentUser.lastName,
+                    department: currentUser.department,
+                    wellnessProfile: currentUser.wellnessProfile,
+                    consent: currentUser.consent
+                })
+            }).catch(() => {/* offline tolerant */});
+
+            showToast();
+        };
+
+        function showToast() {
+            const toast = document.getElementById('saveToast');
+            if (toast) {
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
