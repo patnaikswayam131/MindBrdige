@@ -54,45 +54,70 @@ const MIME_TYPES = {
     '.wav': 'audio/wav',
 };
 
+async function parseRequestBody(req) {
+    if (req.body !== undefined && req.body !== null) {
+        if (typeof req.body === 'object') return req.body;
+        if (typeof req.body === 'string' && req.body.length > 0) {
+            try { return JSON.parse(req.body); } catch (e) { return {}; }
+        }
+    }
+    return new Promise((resolve) => {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            if (!body) return resolve({});
+            try { resolve(JSON.parse(body)); } catch (e) { resolve({}); }
+        });
+        req.on('error', () => resolve({}));
+    });
+}
+
 async function handleRequest(req, res) {
     try {
         const cleanUrl = decodeURI(req.url.split('?')[0]);
         
+        // Health check for API routes
+        if (cleanUrl === '/api' || cleanUrl === '/api/health') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'ok', service: 'mindbridge-api' }));
+            return;
+        }
+
         // Handle User Profile, Wellness Preferences and Consent API
         if (cleanUrl === '/api/user/profile' && req.method === 'POST') {
-            let body = '';
-            req.on('data', chunk => body += chunk.toString());
-            req.on('end', () => {
-                try {
-                    const profileData = JSON.parse(body);
-                    const profilesFile = getProfilesFilePath();
-                    let profiles = {};
-                    if (fs.existsSync(profilesFile)) {
-                        try {
-                            profiles = JSON.parse(fs.readFileSync(profilesFile, 'utf8'));
-                        } catch (e) {
-                            profiles = {};
-                        }
+            try {
+                const profileData = await parseRequestBody(req);
+                const profilesFile = getProfilesFilePath();
+                let profiles = {};
+                if (fs.existsSync(profilesFile)) {
+                    try {
+                        profiles = JSON.parse(fs.readFileSync(profilesFile, 'utf8'));
+                    } catch (e) {
+                        profiles = {};
                     }
-                    const userKey = (profileData.email || 'guest@campus.edu').toLowerCase();
-                    profiles[userKey] = {
-                        ...profiles[userKey],
-                        ...profileData,
-                        updatedAt: new Date().toISOString()
-                    };
-                    fs.writeFileSync(profilesFile, JSON.stringify(profiles, null, 2), 'utf8');
-
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({
-                        status: 'success',
-                        message: 'User profile and consent preferences persisted successfully.',
-                        updatedAt: new Date().toISOString()
-                    }));
-                } catch (err) {
-                    res.writeHead(400, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ error: 'Invalid profile data payload: ' + err.message }));
                 }
-            });
+                const userKey = (profileData.email || 'guest@campus.edu').toLowerCase();
+                profiles[userKey] = {
+                    ...profiles[userKey],
+                    ...profileData,
+                    updatedAt: new Date().toISOString()
+                };
+                try {
+                    fs.writeFileSync(profilesFile, JSON.stringify(profiles, null, 2), 'utf8');
+                } catch (writeErr) {
+                    console.warn('Could not persist profile file (read-only filesystem):', writeErr.message);
+                }
+
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                    status: 'success',
+                    message: 'User profile and consent preferences persisted successfully.',
+                    updatedAt: new Date().toISOString()
+                }));
+            } catch (err) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Invalid profile data payload: ' + err.message }));
+            }
             return;
         }
 
@@ -141,11 +166,8 @@ async function handleRequest(req, res) {
 
         // Handle API routes
         if (cleanUrl === '/api/chat' && req.method === 'POST') {
-            let body = '';
-            req.on('data', chunk => body += chunk.toString());
-            req.on('end', async () => {
-                try {
-                    const data = JSON.parse(body);
+            try {
+                const data = await parseRequestBody(req);
                     const userMessage = data.message;
                     const provider = data.provider || 'gemini'; // Default to gemini
 
@@ -368,13 +390,12 @@ async function handleRequest(req, res) {
                         message = error.message;
                     }
 
-                    console.error('Hugging Face API Error:', message);
+                    console.error('Chat API Error:', message);
                     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ error: message }));
                 }
-            });
-            return;
-        }
+                return;
+            }
 
         let relativePath = cleanUrl === '/' ? '/index.html' : cleanUrl;
         let filePath = path.join(ROOT, relativePath);
@@ -480,7 +501,7 @@ process.on('SIGTERM', () => {
     process.exit();
 });
 
-if (require.main === module || !process.env.VERCEL) {
+if (require.main === module) {
     startServer(DEFAULT_PORT);
 }
 
