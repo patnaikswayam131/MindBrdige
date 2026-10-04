@@ -83,16 +83,31 @@
             else linksToUse = loggedInStudentLinks;
         }
 
+        const currentHash = window.location.hash || '';
         if (mainNavLinks) {
             mainNavLinks.innerHTML = linksToUse.map(link => {
-                const isActive = (currentPage === link.page) ? 'active font-semibold text-text' : 'text-text-secondary hover:text-text';
+                let isCurrent = false;
+                if (link.href.includes('#')) {
+                    const linkHash = '#' + link.href.split('#')[1];
+                    isCurrent = (currentPage === link.page) && (currentHash === linkHash || (!currentHash && linkHash === '#approach'));
+                } else {
+                    isCurrent = (currentPage === link.page) && !currentHash;
+                }
+                const isActive = isCurrent ? 'active font-semibold text-text' : 'text-text-secondary hover:text-text';
                 return `<li><a href="${link.href}" class="nav-link text-body-s font-medium transition-colors ${isActive}">${link.text}</a></li>`;
             }).join('');
         }
 
         if (mobileNavLinks) {
             mobileNavLinks.innerHTML = linksToUse.map(link => {
-                const isActive = (currentPage === link.page) ? 'text-primary font-bold bg-secondary/50' : 'text-text-secondary hover:text-primary';
+                let isCurrent = false;
+                if (link.href.includes('#')) {
+                    const linkHash = '#' + link.href.split('#')[1];
+                    isCurrent = (currentPage === link.page) && (currentHash === linkHash || (!currentHash && linkHash === '#approach'));
+                } else {
+                    isCurrent = (currentPage === link.page) && !currentHash;
+                }
+                const isActive = isCurrent ? 'text-primary font-bold bg-secondary/50' : 'text-text-secondary hover:text-primary';
                 return `<a href="${link.href}" class="px-3 py-2 rounded-lg font-medium text-body-m transition-colors ${isActive}">${link.text}</a>`;
             }).join('');
         }
@@ -385,6 +400,20 @@
 
             // Intercept internal page transitions
             const targetPage = getNormalizedPageName(targetUrl.pathname);
+            const thisPage = getNormalizedPageName(window.location.pathname);
+
+            // If it's a hash link on the current page, smooth-scroll and update active indicator
+            if (targetPage === thisPage && targetUrl.hash) {
+                const targetEl = document.querySelector(targetUrl.hash);
+                if (targetEl) {
+                    e.preventDefault();
+                    targetEl.scrollIntoView({ behavior: 'smooth' });
+                    window.history.pushState(null, '', targetUrl.hash);
+                    initSharedLayout();
+                    return;
+                }
+            }
+
             const standardPages = [
                 'landing.html', 'student_dashboard.html', 'resources.html',
                 'communities.html', 'journal.html', 'mental_health_assessments.html',
@@ -397,6 +426,10 @@
                 e.preventDefault();
                 navigateSeamlessly(targetUrl.href, true);
             }
+        });
+
+        window.addEventListener('hashchange', function() {
+            initSharedLayout();
         });
 
         window.addEventListener('popstate', function() {
