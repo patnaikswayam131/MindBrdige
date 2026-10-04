@@ -26,8 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+DB_PATH = os.path.join('/tmp', 'chat_history.db') if os.getenv('VERCEL') else os.path.join(os.path.dirname(__file__), 'chat_history.db')
+
 def init_db():
-    conn = sqlite3.connect('chat_history.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS messages (
@@ -44,7 +46,7 @@ def init_db():
 init_db()
 
 def save_message(thread_id, role, content, timestamp):
-    conn = sqlite3.connect('chat_history.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('INSERT INTO messages (thread_id, role, content, timestamp) VALUES (?, ?, ?, ?)',
                    (thread_id, role, content, timestamp))
@@ -52,28 +54,43 @@ def save_message(thread_id, role, content, timestamp):
     conn.close()
 
 def get_messages(thread_id):
-    conn = sqlite3.connect('chat_history.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('SELECT role, content, timestamp FROM messages WHERE thread_id = ? ORDER BY id ASC', (thread_id,))
     rows = cursor.fetchall()
     conn.close()
     return [{"role": r[0], "content": r[1], "timestamp": r[2]} for r in rows]
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={GEMINI_API_KEY}"
+def clear_messages(thread_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM messages WHERE thread_id = ?', (thread_id,))
+    conn.commit()
+    conn.close()
+
+def get_gemini_api_url():
+    key = os.getenv("GEMINI_API_KEY", "")
+    return f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={key}"
 
 # Load some dataset context for training/better risk identification
 dataset_context = ""
-try:
-    with open("../dataset/Student Mental health.csv", "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        header = next(reader)
-        dataset_context += f"Student Mental Health columns: {header}\n"
-        # read first 5 lines
-        for _ in range(5):
-            dataset_context += f"{next(reader)}\n"
-except Exception as e:
-    dataset_context += f"Could not load mental health data: {e}\n"
+dataset_candidates = [
+    os.path.join(os.path.dirname(__file__), "..", "dataset", "Student Mental health.csv"),
+    os.path.join(os.path.dirname(__file__), "dataset", "Student Mental health.csv"),
+    "dataset/Student Mental health.csv"
+]
+for candidate in dataset_candidates:
+    if os.path.exists(candidate):
+        try:
+            with open(candidate, "r", encoding="utf-8") as f:
+                reader = csv.reader(f)
+                header = next(reader)
+                dataset_context += f"Student Mental Health columns: {header}\n"
+                for _ in range(5):
+                    dataset_context += f"{next(reader)}\n"
+            break
+        except Exception as e:
+            dataset_context += f"Could not load mental health data: {e}\n"
 
 async def call_gemini_api(messages: List[Dict], personality: str) -> Dict:
     contents = []
@@ -103,7 +120,7 @@ async def call_gemini_api(messages: List[Dict], personality: str) -> Dict:
     headers = {"Content-Type": "application/json"}
     
     async with httpx.AsyncClient(timeout=30.0) as client:
-        response = await client.post(GEMINI_API_URL, headers=headers, json=payload)
+        response = await client.post(get_gemini_api_url(), headers=headers, json=payload)
         response.raise_for_status()
         result = response.json()
         if "candidates" in result and result["candidates"]:
@@ -329,10 +346,20 @@ async def chat_endpoint(chat_message: ChatMessage):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing chat: {str(e)}")
 
+@app.get("/")
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "service": "backend"}
+
 @app.get("/chat/history/{thread_id}")
 async def get_chat_history(thread_id: str):
     messages = get_messages(thread_id)
     return {"messages": messages}
+
+@app.delete("/chat/history/{thread_id}")
+async def delete_chat_history(thread_id: str):
+    clear_messages(thread_id)
+    return {"status": "cleared", "thread_id": thread_id}
 
 @app.websocket("/ws/{thread_id}")
 async def websocket_endpoint(websocket: WebSocket, thread_id: str):

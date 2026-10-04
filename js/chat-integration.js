@@ -1,5 +1,6 @@
 class MindBridgeChatAPI {
-    constructor(baseUrl = 'http://127.0.0.1:8000') {
+    constructor(baseUrl = '') {
+        // Routed via public app service gateway with internal backend service binding
         this.baseUrl = baseUrl;
         this.threadId = localStorage.getItem('mindbridge_thread_id') || null;
         this.websocket = null;
@@ -8,41 +9,29 @@ class MindBridgeChatAPI {
     // Send message via REST API
     async sendMessage(message, personality = "supportive", provider = "openrouter") {
         try {
-            if (provider === "huggingface" || provider === "gemini" || provider === "ollama" || provider === "openrouter") {
-                const response = await fetch(`/api/chat`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, provider: provider })
-                });
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    throw new Error(errData.error || `HTTP error! status: ${response.status}`);
-                }
-                return await response.json();
-            }
-
-            // Existing backend logic
-            const response = await fetch(`${this.baseUrl}/chat`, {
+            const response = await fetch(`/api/chat`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: message,
+                    provider: provider,
                     thread_id: this.threadId,
                     personality: personality
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error || `HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
             
-            // Store thread ID
-            this.threadId = data.thread_id;
-            localStorage.setItem('mindbridge_thread_id', this.threadId);
+            // Store thread ID if provided by the backend response
+            if (data.thread_id) {
+                this.threadId = data.thread_id;
+                localStorage.setItem('mindbridge_thread_id', this.threadId);
+            }
             
             return data;
         } catch (error) {
@@ -51,33 +40,40 @@ class MindBridgeChatAPI {
         }
     }
 
-    // Connect to WebSocket for real-time chat
+    // Connect to WebSocket for real-time chat (in local environments)
     connectWebSocket() {
+        const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        if (!isLocal) {
+            return;
+        }
+
         if (!this.threadId) {
             this.threadId = this.generateThreadId();
             localStorage.setItem('mindbridge_thread_id', this.threadId);
         }
 
-        this.websocket = new WebSocket(`ws://127.0.0.1:8000/ws/${this.threadId}`);
-        
-        this.websocket.onopen = () => {
-            console.log('WebSocket connected');
-        };
+        try {
+            this.websocket = new WebSocket(`ws://127.0.0.1:8000/ws/${this.threadId}`);
+            
+            this.websocket.onopen = () => {
+                console.log('WebSocket connected');
+            };
 
-        this.websocket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            this.handleIncomingMessage(data);
-        };
+            this.websocket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                this.handleIncomingMessage(data);
+            };
 
-        this.websocket.onclose = () => {
-            console.log('WebSocket disconnected');
-            // Attempt to reconnect after 3 seconds
-            setTimeout(() => this.connectWebSocket(), 3000);
-        };
+            this.websocket.onclose = () => {
+                console.log('WebSocket disconnected');
+            };
 
-        this.websocket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
+            this.websocket.onerror = (error) => {
+                console.warn('WebSocket connection not available (REST fallback active)');
+            };
+        } catch (e) {
+            console.warn('WebSocket init skipped:', e);
+        }
     }
 
     // Send message via WebSocket
@@ -105,10 +101,10 @@ class MindBridgeChatAPI {
         if (!this.threadId) return [];
 
         try {
-            const response = await fetch(`${this.baseUrl}/chat/history/${this.threadId}`);
+            const response = await fetch(`/api/chat/history/${encodeURIComponent(this.threadId)}`);
             if (response.ok) {
                 const data = await response.json();
-                return data.messages;
+                return data.messages || [];
             }
         } catch (error) {
             console.error('Error fetching chat history:', error);
@@ -120,7 +116,7 @@ class MindBridgeChatAPI {
     async clearChatHistory() {
         try {
             if (this.threadId) {
-                await fetch(`${this.baseUrl}/chat/history/${this.threadId}`, {
+                await fetch(`/api/chat/history/${encodeURIComponent(this.threadId)}`, {
                     method: 'DELETE'
                 }).catch(e => console.warn('Could not clear remote history:', e));
             }

@@ -18,6 +18,23 @@ const geminiClient = new GoogleGenAI({
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const ROOT = __dirname;
 
+// Vercel Service Binding for internal FastAPI backend service
+const BACKEND_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
+
+function getProfilesFilePath() {
+    const defaultPath = path.join(ROOT, 'user_profiles.json');
+    if (process.env.VERCEL) {
+        const tmpPath = path.join('/tmp', 'user_profiles.json');
+        if (!fs.existsSync(tmpPath) && fs.existsSync(defaultPath)) {
+            try {
+                fs.copyFileSync(defaultPath, tmpPath);
+            } catch (e) {}
+        }
+        return tmpPath;
+    }
+    return defaultPath;
+}
+
 const MIME_TYPES = {
     '.html': 'text/html; charset=UTF-8',
     '.css': 'text/css; charset=UTF-8',
@@ -37,7 +54,7 @@ const MIME_TYPES = {
     '.wav': 'audio/wav',
 };
 
-function handleRequest(req, res) {
+async function handleRequest(req, res) {
     try {
         const cleanUrl = decodeURI(req.url.split('?')[0]);
         
@@ -48,7 +65,7 @@ function handleRequest(req, res) {
             req.on('end', () => {
                 try {
                     const profileData = JSON.parse(body);
-                    const profilesFile = path.join(ROOT, 'user_profiles.json');
+                    const profilesFile = getProfilesFilePath();
                     let profiles = {};
                     if (fs.existsSync(profilesFile)) {
                         try {
@@ -81,7 +98,7 @@ function handleRequest(req, res) {
 
         if (cleanUrl === '/api/user/profile' && req.method === 'GET') {
             const queryEmail = (req.url.includes('email=') ? req.url.split('email=')[1].split('&')[0] : '').toLowerCase();
-            const profilesFile = path.join(ROOT, 'user_profiles.json');
+            const profilesFile = getProfilesFilePath();
             let profiles = {};
             if (fs.existsSync(profilesFile)) {
                 try {
@@ -91,6 +108,34 @@ function handleRequest(req, res) {
             const userProfile = profiles[queryEmail] || null;
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ profile: userProfile }));
+            return;
+        }
+
+        // Proxy chat history requests to the internal Python FastAPI backend via BACKEND_URL binding
+        if (cleanUrl.startsWith('/api/chat/history')) {
+            const threadId = cleanUrl.replace(/^\/api\/chat\/history\/?/, '').split('?')[0];
+            if (!threadId) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Thread ID required' }));
+                return;
+            }
+            try {
+                const targetUrl = new URL(`/chat/history/${encodeURIComponent(threadId)}`, BACKEND_URL);
+                const backendRes = await fetch(targetUrl.toString(), {
+                    method: req.method,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const resBody = await backendRes.text();
+                res.writeHead(backendRes.status, {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                });
+                res.end(resBody);
+            } catch (err) {
+                console.error('Error forwarding chat history request to BACKEND_URL:', err.message);
+                res.writeHead(502, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Failed to communicate with internal backend service: ' + err.message }));
+            }
             return;
         }
 
@@ -105,6 +150,34 @@ function handleRequest(req, res) {
                     const provider = data.provider || 'gemini'; // Default to gemini
 
                     const systemPrompt = 'You are MIRA (Mindful Interactive Reflection Assistant), an empathetic, warm, and grounding AI companion for MindBridge. You support students through academic stress, emotional overwhelm, and everyday challenges with active listening and CBT-informed gentle reflection. You must clearly inform the user that you are an AI companion, not a licensed medical professional or therapist, and you guide them to professional care when appropriate.';
+
+                    // Forward to internal Python FastAPI backend via Vercel service binding BACKEND_URL
+                    if (provider === 'backend' || provider === 'langgraph' || provider === 'fastapi') {
+                        try {
+                            const targetUrl = new URL('/chat', BACKEND_URL);
+                            const backendRes = await fetch(targetUrl.toString(), {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    message: userMessage,
+                                    thread_id: data.thread_id,
+                                    personality: data.personality || 'supportive'
+                                })
+                            });
+                            const result = await backendRes.text();
+                            res.writeHead(backendRes.status, {
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': '*'
+                            });
+                            res.end(result);
+                            return;
+                        } catch (backendErr) {
+                            console.error('Error forwarding chat to internal backend via BACKEND_URL:', backendErr.message);
+                            res.writeHead(502, { 'Content-Type': 'application/json' });
+                            res.end(JSON.stringify({ error: 'Internal backend service unavailable: ' + backendErr.message }));
+                            return;
+                        }
+                    }
 
                     if (provider === 'gemini') {
                         if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'missing') {
@@ -247,7 +320,7 @@ function handleRequest(req, res) {
                             headers: {
                                 'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
                                 'Content-Type': 'application/json',
-                                'HTTP-Referer': 'http://localhost:3000',
+                                'HTTP-Referer': (req.headers && (req.headers.referer || req.headers.host)) || 'http://localhost:3000',
                                 'X-Title': 'MindBridge Chatbot'
                             },
                             body: JSON.stringify({
@@ -365,8 +438,8 @@ function startServer(port) {
         console.log(`👉 Landing:   ${url}/pages/landing.html`);
         console.log(`==================================================\n`);
 
-        // Start tailwind watcher in parallel if not disabled
-        if (!process.env.NO_WATCH) {
+        // Start tailwind watcher in parallel if not disabled and in local dev
+        if (!process.env.NO_WATCH && !process.env.VERCEL && process.env.NODE_ENV !== 'production') {
             console.log('⚡ Starting Tailwind CSS watcher...');
             tailwindProcess = spawn('npx', ['tailwindcss', '-i', './css/tailwind.css', '-o', './css/main.css', '--watch'], {
                 shell: true,
@@ -384,8 +457,8 @@ function startServer(port) {
             });
         }
 
-        // Open browser automatically
-        if (!process.env.NO_OPEN) {
+        // Open browser automatically only in local development
+        if (!process.env.NO_OPEN && !process.env.VERCEL && process.env.NODE_ENV !== 'production') {
             const startCommand = process.platform === 'win32' ? `start "" "${url}"` :
                                  process.platform === 'darwin' ? `open "${url}"` : `xdg-open "${url}"`;
             exec(startCommand, (err) => {
@@ -407,4 +480,8 @@ process.on('SIGTERM', () => {
     process.exit();
 });
 
-startServer(DEFAULT_PORT);
+if (require.main === module || !process.env.VERCEL) {
+    startServer(DEFAULT_PORT);
+}
+
+module.exports = handleRequest;
